@@ -1,1 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+ 
+body {
+  overflow-x: hidden;
+}
+
+/* Hide number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Remove borders and adjust appearance */
+input[type="number"].form-control {
+  border: none;
+  box-shadow: none;
+  text-align: center;
+  padding: 0.25rem;
+}
+
+/* Optional: Add a subtle underline for better readability */
+input[type="number"].form-control:focus {
+  outline: none;
+  border-bottom: 1px solid #333;
+}
+
+
+.table-responsive {
+  overflow-x: auto;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.scroll-container {
+  max-width: 100%;
+  overflow-x: auto;
+  cursor: grab;
+  padding-bottom: 1rem; /* add some space below */
+}
+
+/* Smooth scroll bar */
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

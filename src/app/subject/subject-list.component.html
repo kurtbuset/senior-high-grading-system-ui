@@ -1,0 +1,35 @@
+<h1>Subjects</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th style="width:5%;">ID</th>
+      <th style="width:20%">Subject Title</th>
+      <th style="width:10%">School Year</th>
+      <th style="width:5%">Level</th>
+      <th style="width:10%">Section</th>
+      <th style="width:10%">Semester</th>
+      <th style="width:15%">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of subjects; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ a.subjectName }}</td>
+      <td>{{ a.school_year }}</td>
+      <td>{{ a.grade_level }}</td>
+      <td>{{ a.section }}</td>
+      <td>{{ a.semester }}</td>
+      <td>
+        <div class="d-flex p-1 gap-1">
+          <button class="btn btn-primary">ECR</button>
+          <a routerLink="students" routerLinkActive="active" class="btn btn-success">View Students</a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noData>
+  <p>No subjects assigned yet.</p>
+</ng-template>
