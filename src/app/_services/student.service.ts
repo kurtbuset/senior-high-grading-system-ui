@@ -8,3 +8,16 @@ import { environment } from '@environments/environment';
 import { Student } from '@app/_models/student';
 
 const baseUrl = `${environment.apiUrl}/enrollments`
+
+@Injectable({ providedIn: 'root' })
+export class StudentService {
+  private studentSubject = new BehaviorSubject<Student[]>([]);
+  public subjects$ = this.studentSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  getStudentsByTeacherSubjectId(id: number){
+    return this.http.get<Student[]>(`${baseUrl}/${id}`)
+  }
+  
+}

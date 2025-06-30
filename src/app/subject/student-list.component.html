@@ -13,13 +13,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>kurt</td>
-      <td>gwapo</td>
-    </tr>
-    <tr>
-      <td>kurt</td>
-      <td>gwapo</td>
+    <tr *ngFor="let student of students; let i = index">
+      <td>{{ student.firstName }}</td>
+      <td>{{ student.lastName }}</td>
     </tr>
   </tbody>
 </table>
