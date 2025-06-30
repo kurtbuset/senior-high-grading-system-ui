@@ -23,7 +23,7 @@
       <td>
         <div class="d-flex p-1 gap-1">
           <button class="btn btn-primary">ECR</button>
-          <a routerLink="students" routerLinkActive="active" class="btn btn-success">View Students</a>
+          <a [routerLink]="['./students', a.id]" routerLinkActive="active" class="btn btn-success">View Students</a>
         </div>
       </td>
     </tr>
@@ -33,3 +33,5 @@
 <ng-template #noData>
   <p>No subjects assigned yet.</p>
 </ng-template>
+
+<!-- <p>{{ teacher.id }}</p> -->

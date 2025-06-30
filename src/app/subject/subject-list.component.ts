@@ -12,16 +12,17 @@ import { RouterModule } from '@angular/router';
 })
 export class SubjectListComponent implements OnInit {
   subjects: any[];
-
+  teacher = this.accountService.accountValue;
   constructor(
     private subjectService: SubjectService,
     private accountService: AccountService
   ) {  }  
   
   ngOnInit() {  
-    const teacher = this.accountService.accountValue;
+    // get all subject by the teacher using the account.id of teacher
+    // then returning the id of subject_teacher_assignment
     this.subjectService
-      .getAllSubjects(Number(teacher.id))
+      .getAllSubjects(Number(this.teacher.id))
       .pipe(first())
       .subscribe((subjects) => (this.subjects = subjects));
   }
