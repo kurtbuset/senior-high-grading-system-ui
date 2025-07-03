@@ -1,21 +1,28 @@
-<h1>Student partially enrolled in subjectName   </h1>
-<!-- <p>{{ account.firstName }}</p>
-<p>{{ account.id }}</p> -->
+<h1>Student partially enrolled in subjectName </h1>
 
-<!-- <p>id of this subject: {{ id }}</p> -->
+<form (ngSubmit)="submitEnrollmentDecisions()">
+  
+  <table class="table table-hover table-sm"> 
+    <thead>
+      <tr>
+       
+        <th style="width: 10%;"><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" name="selectAll" /></th>
+        <th style="width: 5%;">id</th>
+        <th style="width: 40%">First Name</th>
+        <th style="width: 40%">Last Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students; let i = index">
+        <td>
+          <input type="checkbox" [(ngModel)]="student.selected" name="selected{{i}}" />
+        </td>
+        <td>{{ student.enrollment_id }}</td>
+        <td>{{ student.firstName }}</td>
+        <td>{{ student.lastName }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th style="width: 30%">First Name</th>
-      <th style="width: 30%">Last Name</th>
-      <th style="width: 10%;">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let student of students; let i = index">
-      <td>{{ student.firstName }}</td>
-      <td>{{ student.lastName }}</td>
-    </tr>
-  </tbody>
-</table>
+  <button type="submit" class="btn btn-sm btn-primary mt-3">Submit Selected</button>
+</form>

@@ -4,59 +4,57 @@ body {
   overflow-x: hidden;
 }
 
-/* Hide number input arrows */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+
+.nav-tabs {
+  background-color: white; /* Bootstrap primary blue */
+  border-bottom: none;
 }
 
-/* Remove borders and adjust appearance */
-input[type="number"].form-control {
-  border: none;
-  box-shadow: none;
+.nav-tabs .nav-item {
+  position: relative;
+}
+
+.nav-tabs .nav-link {
+  color: rgb(79, 79, 255);
+  font-weight: 500;
+  border-radius: 0;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  background-color: rgb(0, 0, 70); /* Darker blue on hover */
+  color: white;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: rgb(0, 0, 70);
+  color: white;
+}
+
+/* SHOW DROPDOWN ON HOVER */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* DROPDOWN STYLING */
+.dropdown-menu {
+  width: 100%;
+  top: 100%;
+  left: 0;
+  padding: .5em;
+  border-radius: 5px;
+  background-color: #ffffff; /* light blue */
+  border: 1px solid rgb(229, 229, 255);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
   text-align: center;
-  padding: 0.25rem;
+  color: #0056b3;
+  border: 1px solid rgb(218, 218, 218);
 }
 
-/* Optional: Add a subtle underline for better readability */
-input[type="number"].form-control:focus {
-  outline: none;
-  border-bottom: 1px solid #333;
+.dropdown-item:hover {
+  background-color: rgb(0, 0, 70);
+  color: white;
 }
-
-
-.table-responsive {
-  overflow-x: auto;
-  max-width: 100%;
-  white-space: nowrap;
-}
-
-.scroll-container {
-  max-width: 100%;
-  overflow-x: auto;
-  cursor: grab;
-  padding-bottom: 1rem; /* add some space below */
-}
-
-/* Smooth scroll bar */
-.scroll-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.scroll-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.scroll-container::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-.scroll-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-

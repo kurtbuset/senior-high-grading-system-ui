@@ -1,6 +1,6 @@
 <h1>Subjects</h1>
 
-<table class="table table-striped">
+<table class="table table-hover table-sm">
   <thead>
     <tr>
       <th style="width:5%;">ID</th>
@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let a of subjects; let i = index">
-      <td>{{ i + 1 }}</td>
+      <td>{{ a.id }}</td>
       <td>{{ a.subjectName }}</td>
       <td>{{ a.school_year }}</td>
       <td>{{ a.grade_level }}</td>
@@ -22,11 +22,12 @@
       <td>{{ a.semester }}</td>
       <td>
         <div class="d-flex p-1 gap-1">
-          <button class="btn btn-primary">ECR</button>
-          <a [routerLink]="['./students', a.id]" routerLinkActive="active" class="btn btn-success">View Students</a>
+          <a [routerLink]="['./grading-summary', a.id]" routerLinkActive="active" class="btn btn-sm btn-primary">ECR</a>
+          <a [routerLink]="['./students', a.id]" routerLinkActive="active" class="btn btn-sm btn-success">View Students</a>
         </div>
       </td>
     </tr>
+    
   </tbody>
 </table>
 

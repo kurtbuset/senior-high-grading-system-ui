@@ -12,16 +12,28 @@ const baseUrl = `${environment.apiUrl}/teacher-subject-assignment`;
 
 @Injectable({ providedIn: 'root' })
 export class SubjectService {
-  private subjectsSubject = new BehaviorSubject<Subject[]>([]);
-  public subjects$ = this.subjectsSubject.asObservable();
+  public subjectSubject: BehaviorSubject<Subject>;
+  public subject: Observable<Subject>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.subjectSubject = new BehaviorSubject<Subject>(null)
+    this.subject = this.subjectSubject.asObservable()
+  }
+
+  public get subjectValue(): Subject{
+    return this.subjectSubject.value
+  }
+
 
   getAllSubjects(teacherId: number) {
-    return this.http.get<Subject[]>(`${baseUrl}/${teacherId}`);
+    return this.http.get<Subject[]>(`${baseUrl}/list/${teacherId}`)
+  }
+
+  getOneSubject(teacherId: number){
+    return this.http.get<Subject>(`${baseUrl}/${teacherId}`)
   }
 
   eraseSubjects() {
-    this.subjectsSubject.next([]);
+    this.subjectSubject.next(null);
   }
 }

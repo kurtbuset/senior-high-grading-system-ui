@@ -1,0 +1,78 @@
+<!-- <h1>test grading summary</h1> -->
+
+<div class="py-4 d-flex justify-content-between" *ngIf="subject$ | async as subject">
+  <strong>Subject: {{subject.subjectName}}</strong>
+  <strong>School Year: {{subject.school_year}}</strong>
+  <strong>Grade: {{subject.grade_level}}</strong>
+  <strong>Section: {{subject.section}}</strong>
+  <strong>Semester: {{ subject.semester }}</strong>
+</div>
+
+<ul class="nav nav-tabs rounded-0 py-4">
+  <li class="nav-item flex-grow-1 text-center">
+    <a class="nav-link active" href="#">GRADES</a>
+  </li>
+
+  <li class="nav-item dropdown flex-grow-1 text-center">
+    <a
+      class="nav-link dropdown-toggle"
+      href="first quarter"
+      id="firstQuarter"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      FIRST QUARTER
+    </a>
+    <div class="dropdown-menu" aria-labelledby="firstQuarter">
+      <a class="dropdown-item" href="1st ww">Written Work</a>
+      <a class="dropdown-item" href="1st pt">Performance Tasks</a>
+      <a class="dropdown-item" href="1st qa">Quarterly Examination</a>
+    </div>
+  </li>
+
+  <li class="nav-item dropdown flex-grow-1 text-center">
+    <a
+      class="nav-link dropdown-toggle"
+      href="2nd quarter"
+      id="secondQuarter"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false" 
+    >
+      SECOND QUARTER
+    </a>
+    <div class="dropdown-menu" aria-labelledby="secondQuarter">
+      <a class="dropdown-item" href="2nd ww">Written Work</a>
+      <a class="dropdown-item" href="2nd pt">Performance Tasks</a>
+      <a class="dropdown-item" href="2nd qa">Quarterly Examination</a>
+    </div>
+  </li>
+</ul>
+
+<table class="table table-bordered table-hover table-sm">
+  <thead>
+    <tr>
+      <th style="width: 20%">Firstname</th>
+      <th style="width: 20%;">Lastname</th>
+      <th style="width: 5%" class="text-center">First Quarter</th>
+      <th style="width: 5%" class="text-center">Second Quarter</th>
+      <th style="width: 5%" class="text-center">Average</th>
+      <th style="width: 5%" class="text-center">Final Grade</th>
+      <th style="width: 10%" class="text-center">Remarks</th>
+      <th style="width: 20%" class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Kurt</td>
+      <td>Buset</td>
+      <td class="text-center">90</td>
+      <td class="text-center">87</td>
+      <td class="text-center">96</td>
+      <td class="text-center">96</td>
+      <td class="text-center text-danger font-weight-bold">Failed</td>
+      <td class="text-center">Did Not Meet Expectations</td>
+    </tr>
+  </tbody>
+</table>
