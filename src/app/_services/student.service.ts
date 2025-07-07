@@ -20,4 +20,12 @@ export class StudentService {
     return this.http.get<Student[]>(`${baseUrl}/${id}`)
   }
   
+  updateStudentEnrollment(id: number, params: Object){
+    // console.log('asd')
+    return this.http.put(`${baseUrl}/${id}`, params)
+  }
+
+  getEnrolledStudents(id: number){
+    return this.http.get<Student[]>(`${baseUrl}/enrolled/${id}`)
+  }
 }

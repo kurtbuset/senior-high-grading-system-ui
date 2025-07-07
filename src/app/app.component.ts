@@ -7,11 +7,12 @@ import { AccountService } from './_services/account.service';
 import { SubjectService } from './_services/subject.service';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from './_components/alert.component';
+import { BreadcrumbNavComponent } from "./subject/breadcrumb-nav.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AlertComponent, RouterModule],
+  imports: [CommonModule, RouterOutlet, AlertComponent, RouterModule, BreadcrumbNavComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {

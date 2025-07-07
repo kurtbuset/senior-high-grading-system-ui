@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
 
-
+import { SubjectService } from './subject.service';
 import { environment } from '@environments/environment';
 import { Account } from '@app/_models/account';
 
@@ -15,7 +15,7 @@ export class AccountService {
   private accountSubject: BehaviorSubject<Account>;
   public account: Observable<Account>;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private subjectService: SubjectService) {
     this.accountSubject = new BehaviorSubject<Account>(null);
     this.account = this.accountSubject.asObservable();
   }
@@ -56,7 +56,9 @@ export class AccountService {
       .pipe(
         map((account) => {
           // console.log('yeah')
+          // console.log(account.id)
           this.accountSubject.next(account);
+          // this.subjectService.getOneSubject(account.id).subscribe(())
           this.startRefreshTokenTimer();
           return account;
         })

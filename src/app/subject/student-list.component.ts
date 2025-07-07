@@ -28,11 +28,18 @@ export class StudentListComponent implements OnInit {
   ngOnInit() {
     // teacher_subject_id
     this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id)
+    // console.log(this.id)
     this.studentService
       .getStudentsByTeacherSubjectId(Number(this.id)) 
       .pipe(first())
       .subscribe((students) => (this.students = students));
+
+
+    this.subjectService.getOneSubject(Number(this.id)).subscribe((subject) => {
+      console.log('before: ', this.subjectService.subjectValue)
+      this.subjectService.subjectSubject.next(subject);
+      console.log('after: ', this.subjectService.subjectValue)
+    });
   }
 
   selectAll = false;
@@ -45,21 +52,31 @@ export class StudentListComponent implements OnInit {
 
   submitEnrollmentDecisions() {
     const selected = this.students.filter((s) => s.selected);
-    console.log(JSON.stringify(selected, null, 2))
+    // console.log(JSON.stringify(selected, null, 2))
     if (selected.length === 0) {
-      this.alertService.warn('Please select at least one student.')
+      this.alertService.error('Please select at least one student.')
       return;
     }
     
     const payload = selected.map((student) => ({
-      id: student.enrollment_id,
-      name: student.firstName
+      id: student.enrollment_id
     }));
 
-    this.alertService.success('student succesfully enrolled boii')
-    console.log('Submitting enrollment decisions:', payload);
+    // this.alertService.success('student succesfully enrolled boii')
+    // console.log('Submitting enrollment decisions:', payload);
 
-    // Call your backend API here
-    // this.studentService.submitDecisions(payload).subscribe(...)
+    this.studentService
+      .updateStudentEnrollment(Number(this.id), payload)
+      .subscribe({
+        next: (res: any) => {
+          console.log(res.message)
+          this.alertService.success(res.message)
+          this.ngOnInit()
+        },
+        error: error => {
+          this.alertService.error(error)
+          this.ngOnInit()
+        }
+      });
   }
 }

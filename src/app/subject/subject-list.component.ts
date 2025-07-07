@@ -21,12 +21,14 @@ export class SubjectListComponent implements OnInit {
   ngOnInit() {  
     // get all subject by the teacher using the account.id of teacher
     const teacher = this.accountService.accountValue;
+    // console.log(teacher.id)
     // then returning the id of subject_teacher_assignment
     this.subjectService
       .getAllSubjects(Number(teacher.id))
       .pipe(first())
       .subscribe((subjects) =>{
         this.subjects = subjects
+        // console.log(this.subjectService.subjectValue)
         this.subjectService.subjectSubject.next(null)
       });
   }

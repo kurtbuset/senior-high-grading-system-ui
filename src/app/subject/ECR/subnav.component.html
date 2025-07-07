@@ -1,0 +1,49 @@
+<ul class="nav nav-tabs rounded-0 py-4">
+  <!-- GRADES TAB -->
+  <li class="nav-item flex-grow-1 text-center">
+    <a 
+      class="nav-link" 
+      routerLink="./" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      GRADES
+    </a>
+  </li>
+
+  <!-- FIRST QUARTER DROPDOWN -->
+  <li class="nav-item dropdown flex-grow-1 text-center">
+    <a 
+      class="nav-link dropdown-toggle" 
+      routerLink="1st-quarter" 
+      routerLinkActive="active" 
+      id="firstQuarter" 
+      role="button"
+    >
+      FIRST QUARTER
+    </a>
+    <div class="dropdown-menu" aria-labelledby="firstQuarter">
+      <a class="dropdown-item" routerLink="/1st-quarter/written-work" routerLinkActive="active">Written Work</a>
+      <a class="dropdown-item" routerLink="/1st-quarter/performance-tasks" routerLinkActive="active">Performance Tasks</a>
+      <a class="dropdown-item" routerLink="/1st-quarter/quarterly-exam" routerLinkActive="active">Quarterly Examination</a>
+    </div>
+  </li>
+
+  <!-- SECOND QUARTER DROPDOWN -->
+  <li class="nav-item dropdown flex-grow-1 text-center">
+    <a 
+      class="nav-link dropdown-toggle" 
+      routerLink="/2nd-quarter" 
+      routerLinkActive="active" 
+      id="secondQuarter"
+      role="button"
+    >
+      SECOND QUARTER
+    </a>
+    <div class="dropdown-menu" aria-labelledby="secondQuarter">
+      <a class="dropdown-item" routerLink="/2nd-quarter/written-work" routerLinkActive="active">Written Work</a>
+      <a class="dropdown-item" routerLink="/2nd-quarter/performance-tasks" routerLinkActive="active">Performance Tasks</a>
+      <a class="dropdown-item" routerLink="/2nd-quarter/quarterly-exam" routerLinkActive="active">Quarterly Examination</a>
+    </div>
+  </li>
+</ul>
