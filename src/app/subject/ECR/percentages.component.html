@@ -1,0 +1,68 @@
+<div *ngIf="subject$ | async as subject">
+  <form [formGroup]="form" *ngIf="isEditing; else readOnlyView" class="p-3 border rounded shadow-sm bg-light">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input
+            type="number"
+            id="ww"
+            class="form-control"
+            formControlName="custom_ww_percent"
+            placeholder="Written Work"
+          />
+          <label for="ww">Written Work (%)</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input
+            type="number"
+            id="pt"
+            class="form-control"
+            formControlName="custom_pt_percent"
+            placeholder="Performance Task"
+          />
+          <label for="pt">Performance Task (%)</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-floating">
+          <input
+            type="number"
+            id="qa"
+            class="form-control"
+            formControlName="custom_qa_percent"
+            placeholder="Quarterly Assessment"
+          />
+          <label for="qa">Quarterly Assessment (%)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button type="button" class="btn btn-success" (click)="saveChanges()">💾 Save</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">✖ Cancel</button>
+    </div>
+  </form>
+
+  <ng-template #readOnlyView>
+    <div class="p-3 border rounded shadow-sm bg-white">
+      <div class="d-flex justify-content-between flex-wrap">
+        <div class="mb-2">
+          <h4>Written Work: {{ subject.custom_ww_percent }}%</h4> 
+        </div>
+        <div class="mb-2">
+          <h4>Performance Tasks: {{ subject.custom_pt_percent }}%</h4>
+        </div>
+        <div class="mb-2">
+          <h4>Quarterly Assessment: {{ subject.custom_qa_percent }}%</h4>
+        </div>
+      </div>
+      <div class="text-end mt-3">
+        <button class="btn btn-primary" (click)="startEditing(subject)">✏️ Customize Percentages</button>
+      </div>
+    </div>
+  </ng-template>
+</div>

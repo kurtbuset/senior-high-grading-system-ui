@@ -25,18 +25,12 @@ export class GradingSummaryComponent implements OnInit {
 
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.id)
-    this.subjectService.getOneSubject(Number(this.id)).subscribe((subject) => {
-      // console.log('before: ', this.subjectService.subjectValue)
-      this.subjectService.subjectSubject.next(subject);
-    });
-
+    this.id = this.route.snapshot.paramMap.get('id')
     this.studentService
       .getEnrolledStudents(Number(this.id))
       .pipe(first())
       .subscribe((students) => {
-        // console.log(students);
+        console.log(students);
         this.students = students;
       });
 

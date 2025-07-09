@@ -5,7 +5,7 @@ export class Subject {
   section: string
   school_year: string
   semester: string
-  default_ww_percent: number
-  default_pt_percent: number
-  default_qa_percent: number
+  custom_ww_percent: number
+  custom_pt_percent: number
+  custom_qa_percent: number
 }
