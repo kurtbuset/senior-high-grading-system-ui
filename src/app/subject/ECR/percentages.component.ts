@@ -7,6 +7,10 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { SubjectService } from '@app/_services/subject.service';
+import { AlertService } from '@app/_services/alert.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GradingService } from '@app/_services/grading.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'percentages',
@@ -15,17 +19,24 @@ import { SubjectService } from '@app/_services/subject.service';
   imports: [CommonModule, ReactiveFormsModule],
 })
 export class PercentagesComponent {
+  teacher_subject_id: string;
   subject$ = this.subjectService.subject;
-  form!: UntypedFormGroup;
+  form: UntypedFormGroup;
   isEditing = false;
+  loading = false;
+  submitted = false;
 
   constructor(
     private subjectService: SubjectService,
-    private fb: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private alertService: AlertService,
+    private route: ActivatedRoute,
+    private gradingService: GradingService,
+    private router: Router
   ) {}
 
   startEditing(subject: any) {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       custom_ww_percent: [
         subject.custom_ww_percent,
         [Validators.required, Validators.min(0), Validators.max(100)],
@@ -39,22 +50,46 @@ export class PercentagesComponent {
         [Validators.required, Validators.min(0), Validators.max(100)],
       ],
     });
+    this.loading = false;
     this.isEditing = true;
   }
 
-  saveChanges() {
-    if (this.form.valid) {
-      const updated = this.form.value;  
-      console.log('Saving: ', updated); 
-      
-      // TODO: Optionally call API to persist changes
-      this.subjectService.subjectSubject.next({
-        ...this.subjectService.subjectValue,
-        ...updated,
-      });
+  get f() {
+    return this.form.controls;
+  }
 
-      this.isEditing = false;
+  onSubmit() {
+    this.route.parent?.paramMap.subscribe((params) => {
+      this.teacher_subject_id = params.get('id')!;
+    });
+    this.submitted = true;
+    if (this.form.invalid) {
+      return;
     }
+
+    console.log(this.form.value);
+
+    this.loading = true;
+
+    this.gradingService
+      .updatePercentages(this.teacher_subject_id, this.form.value)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.isEditing = false;
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate([`/subject/${this.teacher_subject_id}`]);
+              this.alertService.success('percentages successfully updated boii');
+            });
+          
+        },
+        error: (error) => {
+          this.alertService.error(error);
+          this.loading = false;
+        },
+      });
   }
 
   cancelEdit() {

@@ -1,16 +1,19 @@
 <div *ngIf="subject$ | async as subject">
-  <form [formGroup]="form" *ngIf="isEditing; else readOnlyView" class="p-3 border rounded shadow-sm bg-light">
+  <form [formGroup]="form" *ngIf="isEditing; else readOnlyView" class="p-3 border rounded shadow-sm bg-light" (ngSubmit)="onSubmit()">
     <div class="row g-3">
       <div class="col-md-4">
         <div class="form-floating">
           <input
             type="number"
-            id="ww"
             class="form-control"
             formControlName="custom_ww_percent"
             placeholder="Written Work"
+            [ngClass]="{ 'is-invalid': submitted && f.custom_ww_percent.errors }"
           />
           <label for="ww">Written Work (%)</label>
+          <div *ngIf="submitted && f.custom_ww_percent.errors" class="invalid-feedback">
+                <div *ngIf="f.custom_ww_percent.errors.required">WW percent is required</div>
+          </div>
         </div>
       </div>
 
@@ -18,12 +21,15 @@
         <div class="form-floating">
           <input
             type="number"
-            id="pt"
             class="form-control"
             formControlName="custom_pt_percent"
             placeholder="Performance Task"
+            [ngClass]="{ 'is-invalid': submitted && f.custom_pt_percent.errors }"
           />
           <label for="pt">Performance Task (%)</label>
+          <div *ngIf="submitted && f.custom_pt_percent.errors" class="invalid-feedback">
+                <div *ngIf="f.custom_pt_percent.errors.required">PT percent is required</div>
+          </div>
         </div>
       </div>
 
@@ -31,18 +37,21 @@
         <div class="form-floating">
           <input
             type="number"
-            id="qa"
             class="form-control"
             formControlName="custom_qa_percent"
             placeholder="Quarterly Assessment"
+            [ngClass]="{ 'is-invalid': submitted && f.custom_qa_percent.errors }"
           />
           <label for="qa">Quarterly Assessment (%)</label>
+          <div *ngIf="submitted && f.custom_qa_percent.errors" class="invalid-feedback">
+              <div *ngIf="f.custom_qa_percent.errors.required">QA percent is required</div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="d-flex justify-content-end gap-2 mt-4">
-      <button type="button" class="btn btn-success" (click)="saveChanges()">💾 Save</button>
+      <button type="submit" [disabled]="loading" class="btn btn-success">💾 Save</button>
       <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">✖ Cancel</button>
     </div>
   </form>

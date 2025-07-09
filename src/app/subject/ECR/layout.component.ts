@@ -14,7 +14,7 @@ export class LayoutComponent implements OnInit{
     // fetch the teacher_subject_id from url params and use it to fetch single subject to display from backend
     this.route.parent?.paramMap.subscribe((params) => {
       this.teacher_subject_id = params.get('id')!;
-      console.log(this.teacher_subject_id)
+      // console.log(this.teacher_subject_id)
     });    
     
     this.subjectService
