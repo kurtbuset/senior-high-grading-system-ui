@@ -28,7 +28,7 @@ export class StudentService {
     return this.http.get<Student[]>(`${baseUrl}/enrolled/${id}`)
   }
 
-  getFirstQuarterGradeSheet(id: number){
+  getQuarterlyGradeSheet(id: number){
     return this.http.get<any[]>(`${baseUrl}/1st-quarter-grade-sheet/${id}`)
   }
 }

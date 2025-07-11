@@ -8,11 +8,11 @@ import { StudentService } from '@app/_services/student.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  templateUrl: 'grading-summary.component.html',
+  templateUrl: 'final-semester-grade-sheet.component.html',
   standalone: true,
   imports: [CommonModule, RouterModule],
 })
-export class GradingSummaryComponent implements OnInit {
+export class FinalSemesterGradeSheetComponent implements OnInit {
   subject$ = this.subjectService.subject;
   students: any;
 
