@@ -6,13 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { first } from 'rxjs';
 import { AlertService } from '@app/_services/alert.service';
 import { SubjectService } from '@app/_services/subject.service';
-import { Subject } from '@app/_models/Subject';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'students',
   standalone: true,
   templateUrl: 'student-list.component.html',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
 })
 export class StudentListComponent implements OnInit {
   students: any[];
@@ -75,7 +75,6 @@ export class StudentListComponent implements OnInit {
         },
         error: error => {
           this.alertService.error(error)
-          this.ngOnInit()
         }
       });
   }

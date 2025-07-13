@@ -2,13 +2,13 @@
 <!-- <p>Quarter: {{ quarter }}</p>
 <p>type: {{ type }}</p> -->
 
-<div class="border border-1 border-blackp p-2 mb-4 ">
+<div class="border border-1 border-blackp p-2 mb-4">
   <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
 </div>
 
-<div class="d-flex justify-content-between border border-1 border-black">
+<div class="d-flex justify-content-between p-3">
   <!-- table -->
-  <div style="width: 80%;">
+  <div style="width: 75%">
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
@@ -23,10 +23,52 @@
       <tbody>
         <tr *ngFor="let quiz of quizzes">
           <td>{{ quiz.id }}</td>
-          <td>{{ quiz.hps }}</td>
-          <td>{{ quiz.description }}</td>
           <td>
-            <button class="btn btn-sm btn-success">Edit</button>
+            <div *ngIf="editingQuizId !== quiz.id; else editHps">
+              {{ quiz.hps }}
+            </div>
+            <ng-template #editHps>
+              <form [formGroup]="quizForms[quiz.id]">
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  formControlName="hps"
+                />
+              </form>
+            </ng-template>
+          </td>
+          <!-- <td>{{ quiz.description }}</td> -->
+          <td>
+            <div *ngIf="editingQuizId !== quiz.id; else editDesc">
+              {{ quiz.description }}
+            </div>
+            <ng-template #editDesc>
+              <form [formGroup]="quizForms[quiz.id]">
+                <textarea
+                  class="form-control form-control-sm"
+                  formControlName="description"
+                  rows="1"
+                  placeholder="Enter description"
+                ></textarea>
+              </form>
+            </ng-template>
+          </td>
+
+          <td>
+            <button
+              *ngIf="editingQuizId !== quiz.id"
+              class="btn btn-sm btn-info"
+              (click)="onEdit(quiz)"
+            >
+              Edit
+            </button>
+            <button
+              *ngIf="editingQuizId === quiz.id"
+              class="btn btn-sm btn-success"
+              (click)="updateQuiz(quiz)"
+            >
+              Save
+            </button>
           </td>
           <td>
             <button class="btn btn-sm btn-primary">View</button>
@@ -40,13 +82,47 @@
   </div>
 
   <!-- add score -->
-   <div style="width: 15%;">
-    <form>
-      <label for="">Add score:</label>
-      <input class="form-control" type="text" name="" id="">
-      <button type="submit" class="btn btn-sm btn-primary">Add score</button>
+  <div style="width: 20%" class="pb-3 px-3">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h4 class="mb-3">Add quiz</h4>
+      <div class="mb-2 d-flex">
+        <label class="form-label d-inline w-50">Perfect Score:</label>
+        <input
+          type="number"
+          class="form-control form-control-sm w-50"
+          [ngClass]="{ 'is-invalid': submitted && f.hps.errors }"
+          formControlName="hps"
+        />
+      </div>
+      <div *ngIf="submitted && f.hps.errors" class="invalid-feedback d-block">
+        <div *ngIf="f.hps.errors.required">Perfect Score is required</div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label d-inline">Description:</label>
+        <textarea
+          class="form-control form-control-sm"
+          [ngClass]="{
+            'is-invalid': submitted && f.description.errors?.maxlength
+          }"
+          formControlName="description"
+          rows="2"
+          placeholder="Enter description"
+        ></textarea>
+        <div
+          *ngIf="submitted && f.description.errors?.maxlength"
+          class="invalid-feedback d-block"
+        >
+          <div>Description must not exceed 255 characters</div>
+        </div>
+      </div>
+
+      <button [disabled]="loading" class="btn btn-primary">
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm mr-1"
+        ></span>
+        Add quiz
+      </button>
     </form>
-   </div>
+  </div>
 </div>
-
-

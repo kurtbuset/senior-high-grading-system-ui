@@ -15,7 +15,7 @@ export class SubjectListComponent implements OnInit {
  
   constructor(
     private subjectService: SubjectService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {  }  
   
   ngOnInit() {  

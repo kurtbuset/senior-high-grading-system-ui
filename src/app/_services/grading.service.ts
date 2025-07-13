@@ -17,14 +17,18 @@ export class GradingService {
     );
   }
 
-  addHighestPossibleScore(teacher_subject_id, value) {
-    return this.http.post(`${baseUrl}/quizzes/${teacher_subject_id}`, value);
+  addQuiz(value) {
+    return this.http.post(`${baseUrl}/quizzes`, value);
   }
 
-  getHighestPossibleScore(
+  getQuizzes(
     teacher_subject_id: string,
-    values: { quarter: string; type: string }
+    values
   ) {
     return this.http.get<any>(`${baseUrl}/quizzes/${teacher_subject_id}`, { params: values });
+  }
+
+  updateQuiz(id, params){
+    return this.http.put(`${baseUrl}/quizzes/${id}`, params)
   }
 }

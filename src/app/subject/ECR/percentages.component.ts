@@ -62,12 +62,12 @@ export class PercentagesComponent {
     this.route.parent?.paramMap.subscribe((params) => {
       this.teacher_subject_id = params.get('id')!;
     });
+    
     this.submitted = true;
     if (this.form.invalid) {
       return;
     }
 
-    console.log(this.form.value);
 
     this.loading = true;
 

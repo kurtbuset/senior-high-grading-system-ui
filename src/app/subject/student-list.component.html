@@ -23,5 +23,9 @@
     </tbody>
   </table>
 
-  <button type="submit" class="btn btn-sm btn-primary mt-3">Submit Selected</button>
+  <div class="d-flex align-items-center">
+    <button type="submit" class="mr-3 btn btn-sm btn-primary">Submit Selected</button>
+
+  <a class="btn btn-success btn-sm" [routerLink]="['/subject', id]">Go to ECR</a>
+  </div>
 </form>

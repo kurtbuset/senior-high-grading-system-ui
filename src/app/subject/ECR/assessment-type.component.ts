@@ -1,48 +1,161 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { GradingService } from "@app/_services/grading.service";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AlertService } from '@app/_services/alert.service';
+import { GradingService } from '@app/_services/grading.service';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { first } from 'rxjs';
 
-@Component({ templateUrl: 'assessment-type.component.html', standalone: true, imports: [CommonModule] })
-export class AssessmentTypeComponent implements OnInit{
-  teacher_subject_id: string
-  quarter: string
-  type: string
+@Component({
+  templateUrl: 'assessment-type.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+})
+export class AssessmentTypeComponent implements OnInit {
+  teacher_subject_id: string;
+  quarter: string;
+  type: string;
 
-  quizzes: any
+  editingQuizId = null;
+  updatedScore: number;
+
+  form: FormGroup;
+
+  loading = false;
+  submitted = false;
+
+  quizForms: { [key: number]: FormGroup } = {};
+
+  values: Object;
+
+  quizzes: any;
   constructor(
     private route: ActivatedRoute,
-    private gradingService: GradingService
-  ){
-     this.route.parent?.paramMap.subscribe((params) => {
+    private gradingService: GradingService,
+    private alertService: AlertService,
+    private formBuilder: FormBuilder
+  ) {
+    this.route.parent?.paramMap.subscribe((params) => {
       this.teacher_subject_id = params.get('id')!;
-    })
+    });
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
+    this.route.data.subscribe((data) => {
       this.quarter = data['quarter'];
-      this.type = data['type']
+      this.type = data['type'];
+      this.values = {
+        quarter: this.quarter,
+        type: this.type,
+      };
+      this.loadQuizzes();
     });
 
-   ;
+    this.form = this.formBuilder.group({
+      hps: ['', [Validators.required, Validators.min(1)]],
+      description: ['', Validators.maxLength(255)],
+    });
+  }
 
-    const values = {
-      quarter: this.quarter,
-      type: this.type
+  loadQuizzes() {
+    this.gradingService
+      .getQuizzes(this.teacher_subject_id, this.values)
+      .subscribe({
+        next: (quizzes) => {
+          this.quizzes = quizzes;
+          for (let quiz of quizzes) {
+            this.quizForms[quiz.id] = this.formBuilder.group({
+              hps: new FormControl(quiz.hps),
+              description: new FormControl(quiz.description),
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+  }
+
+  onEdit(quiz: any) {
+    // flag variable
+    this.editingQuizId = quiz.id;
+
+    console.log('edit mode');
+  }
+
+  updateQuiz(quiz: any) {
+    const updatedValues = this.quizForms[quiz.id].value;
+
+    const data = {
+      description: updatedValues.description,
+      hps: updatedValues.hps,
+    };
+
+    console.log(data);
+
+    this.gradingService
+      .updateQuiz(quiz.id, data)
+      .pipe(first())
+      .subscribe({
+        next: (_) => {
+          quiz.hps = updatedValues.hps;
+          quiz.description = updatedValues.description;
+          this.alertService.success('sucessfully update');
+          this.editingQuizId = null;
+        },
+        error: (err) => {
+          console.log('update failed: ', err);
+          this.alertService.error(err);
+        },
+      });
+  }
+
+  get f() {
+    return this.form.controls;
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    // reset alerts on submit
+    this.alertService.clear();
+
+    if (this.form.invalid) {
+      return;
     }
 
-    console.log('test')
+    this.loading = true;
 
-    // console.log(values) 
+    const payload = {
+      ...this.form.value,
+      ...this.values,
+      teacher_subject_id: this.teacher_subject_id,
+    };
+
+    console.log(payload);
+
     this.gradingService
-      .getHighestPossibleScore(this.teacher_subject_id, values).subscribe({
-        next: (quizzes) => {
-          this.quizzes = quizzes
+      .addQuiz(payload)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.form.reset();
+          this.alertService.success('quiz added succesfully');
+          this.submitted = false;
+          this.loading = false;
+          this.loadQuizzes();
         },
-        error: error => {
-          console.log(error)
-        }
-      })
+        error: (err) => {
+          this.alertService.error(err);
+          this.loading = false;
+        },
+      });
   }
 }

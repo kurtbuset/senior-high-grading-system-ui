@@ -30,7 +30,7 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
       .getEnrolledStudents(Number(this.id))
       .pipe(first())
       .subscribe((students) => {
-        console.log(students);
+        // console.log(students);
         this.students = students;
       });
 
