@@ -23,9 +23,8 @@ export class QuarterlyGradeSheetComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.quarter = data['quarter'];
-      // console.log('Quarter:', this.quarter);
+     this.route.paramMap.subscribe(params => {
+      this.quarter = params.get('quarter')!;
     });
     
     this.route.parent?.paramMap.subscribe((params) => {

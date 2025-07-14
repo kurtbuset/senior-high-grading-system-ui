@@ -1,13 +1,8 @@
-<p>Teacher subject id: {{ teacher_subject_id }}</p>
-<!-- <p>Quarter: {{ quarter }}</p>
-<p>type: {{ type }}</p> -->
-
 <div class="border border-1 border-blackp p-2 mb-4">
   <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
 </div>
 
 <div class="d-flex justify-content-between p-3">
-  <!-- table -->
   <div style="width: 75%">
     <table class="table table-bordered table-sm">
       <thead>
@@ -37,7 +32,6 @@
               </form>
             </ng-template>
           </td>
-          <!-- <td>{{ quiz.description }}</td> -->
           <td>
             <div *ngIf="editingQuizId !== quiz.id; else editDesc">
               {{ quiz.description }}
@@ -71,7 +65,7 @@
             </button>
           </td>
           <td>
-            <button class="btn btn-sm btn-primary">View</button>
+            <a [routerLink]="['./', quiz.id]" class="btn btn-sm btn-primary">View</a>
           </td>
           <td>
             <button class="btn btn-sm btn-danger">Delete</button>
@@ -81,7 +75,6 @@
     </table>
   </div>
 
-  <!-- add score -->
   <div style="width: 20%" class="pb-3 px-3">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <h4 class="mb-3">Add quiz</h4>
@@ -126,3 +119,4 @@
     </form>
   </div>
 </div>
+
