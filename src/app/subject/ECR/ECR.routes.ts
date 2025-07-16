@@ -30,9 +30,14 @@ export const ecrRoutes: Routes = [
       },  
 
       {
-        path: ':quarter/:type/:id',
-        loadComponent: () => import('./add-score.component').then(m => m.AddScoreComponent),
+        path: ':quarter/:type/add/:id',
+        loadComponent: () => import('./add-edit-score.component').then(m => m.AddEditScoreComponent),
         title: 'Add Score',
+      },    
+      {
+        path: ':quarter/:type/edit/:id',
+        loadComponent: () => import('./add-edit-score.component').then(m => m.AddEditScoreComponent),
+        title: 'Edit Score',
       },    
 
     ],

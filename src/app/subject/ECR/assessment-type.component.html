@@ -7,15 +7,16 @@
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
-          <td style="width: 2%">#</td>
+          <td style="width: 2%" class="text-center">#</td>
           <th style="width: 10%">Perfect Score</th>
           <th style="width: 30%">Description</th>
-          <th style="width: 10%">Edit Perfect Score</th>
-          <th style="width: 10%">Update Scores</th>
+          
+          <th style="width: 10%" class="text-center">Edit Score</th>
+          <th style="width: 20%" class="text-center">Actions</th>
           <th style="width: 10%">Delete Score</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="quizzes && quizzes.length > 0; else noQuizzes">
         <tr *ngFor="let quiz of quizzes">
           <td>{{ quiz.id }}</td>
           <td>
@@ -42,7 +43,7 @@
                   class="form-control form-control-sm"
                   formControlName="description"
                   rows="1"
-                  placeholder="Enter description"
+                  placeholder="description is optional"
                 ></textarea>
               </form>
             </ng-template>
@@ -64,9 +65,20 @@
               Save
             </button>
           </td>
-          <td>
-            <a [routerLink]="['./', quiz.id]" class="btn btn-sm btn-primary">View</a>
+
+          <td class="d-flex">
+            <a
+              [routerLink]="['./add', quiz.id]"
+              [queryParams]="{ hps: quiz.hps }"
+              class="btn btn-sm btn-success mr-3"
+              disabled 
+              >Add Scores</a
+            >
+            <a [routerLink]="['./edit', quiz.id]" class="btn btn-sm btn-primary" [queryParams]="{ hps: quiz.hps }"
+              >Update Scores</a
+            >
           </td>
+          
           <td>
             <button class="btn btn-sm btn-danger">Delete</button>
           </td>
@@ -116,7 +128,14 @@
         ></span>
         Add quiz
       </button>
+
+      <ng-template #noQuizzes>
+    <tbody>
+      <tr>
+        <td colspan="10" class="h1 text-center">No quizzes found.</td>
+      </tr>
+    </tbody>
+  </ng-template>
     </form>
   </div>
 </div>
-

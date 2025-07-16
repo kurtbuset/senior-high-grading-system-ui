@@ -38,6 +38,6 @@ export class QuarterlyGradeSheetComponent implements OnInit {
     //     this.students = students;
     //   });
 
-    console.log('id: ', this.teacher_subject_id);
+    // console.log('id: ', this.teacher_subject_id);
   }
 }

@@ -31,4 +31,20 @@ export class GradingService {
   updateQuiz(id, params){
     return this.http.put(`${baseUrl}/quizzes/${id}`, params)
   }
+
+  getStudentsWithoutScore(params: { teacher_subject_id: string; quiz_id: string }){
+    return this.http.get(`${baseUrl}/quiz-scores`, { params })
+  }
+
+  getStudentsWithScore(id: number){
+    return this.http.get(`${baseUrl}/quiz-scores/${id}`)
+  }
+
+  addStudentScore(params){
+    return this.http.post(`${baseUrl}/quiz-scores`, params)
+  }
+
+  updateStudentScore(params){
+    return this.http.put(`${baseUrl}/quiz-scores/update`, params)
+  }
 }

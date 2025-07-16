@@ -24,7 +24,6 @@ export class AssessmentTypeComponent implements OnInit {
   type: string;
 
   editingQuizId = null;
-  updatedScore: number;
 
   form: FormGroup;
 
@@ -48,24 +47,13 @@ export class AssessmentTypeComponent implements OnInit {
     });
   }
 
-   private capitalize(text: string | null): string {
-    if (!text) return '';
-    return text.replace(/(^|\s|-)\S/g, (t) => t.toUpperCase());
-  }
-
-  private formatType(type: string | null): string {
-    return type?.replace('-', ' ') ?? '';
-  }
-
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.quarter = params.get('quarter')!;
       this.type = params.get('type')!;
 
       // You can now use them to fetch quizzes or show on UI
-      console.log('Quarter:', this.quarter);
-      console.log('Type:', this.type);
-      const pageTitle = `${this.capitalize(this.quarter)} - ${this.formatType(this.type)}`;
+      const pageTitle = `${this.quarter} - ${this.type}`;
       this.titleService.setTitle(pageTitle);
 
       this.values = {

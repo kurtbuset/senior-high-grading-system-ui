@@ -1,5 +1,5 @@
-<div *ngIf="alerts.length">
-    <div class="m-3">
+<div *ngIf="alerts.length" class="position-fixed container fixed-top">
+    <div class="m-3 ">
         <div *ngFor="let alert of alerts" class="{{cssClasses(alert)}}">
             <a class="close" (click)="removeAlert(alert)">&times;</a>
             <span [innerHTML]="alert.message"></span>

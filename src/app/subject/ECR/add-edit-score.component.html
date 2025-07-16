@@ -1,0 +1,53 @@
+<div class="border border-1 border-blackp p-2 mb-4">
+  <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
+</div>
+
+<p>quiz id: {{ id }}</p>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" >
+  <div class="d-flex justify-content-end mb-4">
+    <!-- if it is addMode, change button to Add, else, Update -->
+    <button class="btn btn-primary" type="submit">
+       {{ isAddMode ? 'Add Scores' : 'Update Scores' }}
+    </button> 
+  </div>
+
+  <table class="table table-bordered table-hover table-sm">
+    <thead>
+      <tr>
+        <th style="width: 1%;">Enrollment ID</th>
+        <th style="width: 10%;">Lastname</th>
+        <th style="width: 10%;">Firstname</th>
+        <th style="width: 5%;">Score</th>
+        <th style="width: 5%;">Perfect Score</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="students && students.length > 0; else noStudents">
+      <tr *ngFor="let student of students; let i = index" [formGroup]="scores.at(i)">
+        <td>{{ student.enrollment_id }}</td>
+        <td>{{ student.lastName }}</td>
+        <td>{{ student.firstName }}</td>
+        <td>
+          <input
+            class="form-control"
+            type="number"
+            [ngClass]="{
+              'is-invalid': submitted && scores.at(i).get('raw_score')?.invalid
+            }"
+            formControlName="raw_score"
+            required
+          />
+        </td>
+        <td>{{ hps }}</td>
+      </tr>
+    </tbody>
+
+    <ng-template #noStudents>
+    <tbody>
+      <tr>
+        <td colspan="10" class="h1 text-center">No students found meyn</td>
+      </tr>
+    </tbody>
+  </ng-template>
+  </table>
+</form>
