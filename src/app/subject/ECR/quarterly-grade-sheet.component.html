@@ -1,9 +1,9 @@
 <table class="table table-bordered table-hover table-sm">
   <thead>
     <tr>
-      <th class="text-center" colspan="2">STUDENTS</th>
-      <th class="text-center" colspan="3">PERCENTAGE SCORES</th>
-      <th class="text-center" colspan="3">WEIGHTED SCORES</th>
+      <th class="text-center h4" colspan="2">STUDENTS</th>
+      <th class="text-center h4" colspan="3">PERCENTAGE SCORES</th>
+      <th class="text-center h4" colspan="3">WEIGHTED SCORES</th>
       <th colspan="2"></th>
     </tr>
 
@@ -11,16 +11,16 @@
       <th style="width: 20%;">Lastname</th>
       <th style="width: 20%;">Firstname</th>
 
-      <th class="text-center" style="width: 10%;">Written Work</th>
-      <th class="text-center" style="width: 10%;">Performance Tasks</th>
-      <th class="text-center" style="width: 10%;">Quarterly Assessment</th>
+      <th class="text-center" style="width: 10%;">WRITTEN WORK</th>
+      <th class="text-center" style="width: 10%;">PERFORMANCE TASKS</th>
+      <th class="text-center" style="width: 10%;">QUARTERLY ASSESSMENT</th>
 
-      <th class="text-center" style="width: 10%;">Written Work</th>
-      <th class="text-center" style="width: 10%;">Performance Tasks</th>
-      <th class="text-center" style="width: 10%;">Quarterly Assessment</th>
+      <th class="text-center" style="width: 10%;">WRITTEN WORK</th>
+      <th class="text-center" style="width: 10%;">PERFORMANCE TASKS</th>
+      <th class="text-center" style="width: 10%;">QUARTERLY ASSESSMENT</th>
 
-      <th class="text-center" style="width: 10%;">Initial Grade</th>
-      <th class="text-center" style="width: 10%;">Transmuted Grade</th>
+      <th class="text-center" style="width: 10%;">INITIAL GRADE</th>
+      <th class="text-center" style="width: 10%;">TRANSMUTED GRADE</th>
     </tr>
   </thead>
 
@@ -37,8 +37,8 @@
       <td class="text-center">{{ student.ptWeightedScore }}</td>
       <td class="text-center">{{ student.qaWeightedScore }}</td>
 
-      <td class="text-center">{{ student.initialGrade }}</td>
-      <td class="text-center">{{ student.transmutedGrade }}</td>
+      <td class="text-center font-weight-bold">{{ student.initialGrade }}</td>
+      <td class="text-center font-weight-bold">{{ student.transmutedGrade }}</td>
     </tr>
   </tbody>
 </table>

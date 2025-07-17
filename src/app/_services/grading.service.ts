@@ -55,4 +55,8 @@ export class GradingService {
   getFinalSemesterGradeSheet(id: string){
     return this.http.get(`${baseUrl}/quizzes/semestral-final-grade/${id}`)
   }
+
+  deleteQuiz(id){
+    return this.http.delete(`${baseUrl}/quizzes/${id}`)
+  }
 }

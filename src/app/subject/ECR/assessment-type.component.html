@@ -80,7 +80,10 @@
           </td>
           
           <td>
-            <button class="btn btn-sm btn-danger">Delete</button>
+            <button [disabled]="quiz.isDeleting" (click)="deleteQuiz(quiz.id)" class="btn btn-sm btn-danger btn-delete-account">
+                    <span *ngIf="quiz.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!quiz.isDeleting">Delete</span>
+                </button>
           </td>
         </tr>
       </tbody>

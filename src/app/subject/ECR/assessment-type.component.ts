@@ -164,4 +164,20 @@ export class AssessmentTypeComponent implements OnInit {
         },
       });
   }
+
+  deleteQuiz(id){
+    const confirmed = window.confirm('Are you sure you want to delete this quiz?');
+
+    if (!confirmed) return;
+
+    const quiz = this.quizzes.find(x => x.id === id);
+    quiz.isDeleting = true;
+    this.gradingService 
+      .deleteQuiz(id)
+      .pipe(first())
+      .subscribe(() => {
+        this.quizzes = this.quizzes.filter(x => x.id !== id)
+        this.alertService.success('succesfully deleted!')
+      })
+  }
 }
