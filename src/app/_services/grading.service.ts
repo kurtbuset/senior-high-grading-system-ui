@@ -47,4 +47,12 @@ export class GradingService {
   updateStudentScore(params){
     return this.http.put(`${baseUrl}/quiz-scores/update`, params)
   }
+
+  getQuarterlyGradeSheet(id: string, params: { quarter: string }){
+    return this.http.get(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
+  }
+
+  getFinalSemesterGradeSheet(id: string){
+    return this.http.get(`${baseUrl}/quizzes/semestral-final-grade/${id}`)
+  }
 }

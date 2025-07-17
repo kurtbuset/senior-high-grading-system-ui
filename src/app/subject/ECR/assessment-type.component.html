@@ -7,7 +7,7 @@
     <table class="table table-bordered table-sm">
       <thead>
         <tr>
-          <td style="width: 2%" class="text-center">#</td>
+          <!-- <td style="width: 2%" class="text-center">#</td> -->
           <th style="width: 10%">Perfect Score</th>
           <th style="width: 30%">Description</th>
           
@@ -18,7 +18,7 @@
       </thead>
       <tbody *ngIf="quizzes && quizzes.length > 0; else noQuizzes">
         <tr *ngFor="let quiz of quizzes">
-          <td>{{ quiz.id }}</td>
+          <!-- <td>{{ quiz.id }}</td> -->
           <td>
             <div *ngIf="editingQuizId !== quiz.id; else editHps">
               {{ quiz.hps }}
@@ -130,12 +130,12 @@
       </button>
 
       <ng-template #noQuizzes>
-    <tbody>
-      <tr>
-        <td colspan="10" class="h1 text-center">No quizzes found.</td>
-      </tr>
-    </tbody>
-  </ng-template>
+        <tbody>
+          <tr>
+            <td colspan="10" class="h1 text-center">No quizzes found.</td>
+          </tr>
+        </tbody>
+      </ng-template>
     </form>
   </div>
 </div>

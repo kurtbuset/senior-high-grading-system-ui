@@ -61,6 +61,7 @@ export class AssessmentTypeComponent implements OnInit {
         type: this.type,
       };
       this.loadQuizzes();
+      console.log(this.type)
     });
 
     this.form = this.formBuilder.group({

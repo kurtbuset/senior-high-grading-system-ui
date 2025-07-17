@@ -64,7 +64,6 @@ export class AddEditScoreComponent implements OnInit {
     console.log(this.form.controls)
     
 
-    // get raw scores of students by quiz.id and enrollment_id
     if (this.isAddMode) {
       this.gradingService
       .getStudentsWithoutScore(payLoad)
@@ -139,7 +138,6 @@ export class AddEditScoreComponent implements OnInit {
 
   // add scores
   private addRawScores(values) {
-    // this.alertService.success('score added')
     this.gradingService 
       .addStudentScore(values)
       .pipe(first())

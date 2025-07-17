@@ -6,6 +6,7 @@ import { Subject } from '@app/_models/Subject';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '@app/_services/student.service';
 import { RouterModule } from '@angular/router';
+import { GradingService } from '@app/_services/grading.service';
 
 @Component({
   templateUrl: 'final-semester-grade-sheet.component.html',
@@ -20,20 +21,30 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private subjectService: SubjectService,
-    private studentService: StudentService
+    private studentService: StudentService,
+    private gradingService: GradingService
   ) {}
 
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id')
-    this.studentService
-      .getEnrolledStudents(Number(this.id))
+
+    // this.studentService
+    //   .getEnrolledStudents(Number(this.id))
+    //   .pipe(first())
+    //   .subscribe((students) => {
+    //     // console.log(students);
+        // this.students = students;
+      // });
+
+      // console.log(this.subjectService.subjectValue)
+
+    this.gradingService
+      .getFinalSemesterGradeSheet(this.id)
       .pipe(first())
       .subscribe((students) => {
         // console.log(students);
         this.students = students;
       });
-
-      // console.log(this.subjectService.subjectValue)
   }
 }

@@ -29,20 +29,16 @@
       <td>{{ student.lastName }}</td>
       <td>{{ student.firstName }}</td>
 
-      <td class="text-center">{{ student.percentageScore }}</td>
-      <td class="text-center">89</td>
-      <td class="text-center">90</td>
+      <td class="text-center">{{ student.wwPercentageScore }}</td>
+      <td class="text-center">{{ student.ptPercentageScore }}</td>
+      <td class="text-center">{{ student.qaPercentageScore }}</td>
 
-      <td class="text-center">{{ student.weightedScore }}</td>
-      <td class="text-center">89</td>
-      <td class="text-center">90</td>
+      <td class="text-center">{{ student.wwWeightedScore }}</td>
+      <td class="text-center">{{ student.ptWeightedScore }}</td>
+      <td class="text-center">{{ student.qaWeightedScore }}</td>
 
-      <td class="text-center">10</td>
-      <td class="text-center">89</td>
+      <td class="text-center">{{ student.initialGrade }}</td>
+      <td class="text-center">{{ student.transmutedGrade }}</td>
     </tr>
   </tbody>
 </table>
-
-
-
-<p>quarter right neow: {{ quarter }}</p>
