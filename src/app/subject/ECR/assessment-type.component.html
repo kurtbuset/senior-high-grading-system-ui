@@ -2,6 +2,8 @@
   <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
 </div>
 
+
+
 <div class="d-flex justify-content-between p-3">
   <div style="width: 75%">
     <table class="table table-bordered table-sm">
@@ -12,7 +14,7 @@
           <th style="width: 30%">Description</th>
           
           <th style="width: 10%" class="text-center">Edit Score</th>
-          <th style="width: 20%" class="text-center">Actions</th>
+          <th style="width: 15%" class="text-center">Actions</th>
           <th style="width: 10%">Delete Score</th>
         </tr>
       </thead>
@@ -20,7 +22,7 @@
         <tr *ngFor="let quiz of quizzes">
           <!-- <td>{{ quiz.id }}</td> -->
           <td>
-            <div *ngIf="editingQuizId !== quiz.id; else editHps">
+            <div *ngIf="editingQuizId !== quiz.id; else editHps" class="font-weight-bold text-center">
               {{ quiz.hps }}
             </div>
             <ng-template #editHps>
@@ -66,7 +68,7 @@
             </button>
           </td>
 
-          <td class="d-flex">
+          <td class="d-flex justify-content-between">
             <a
               [routerLink]="['./add', quiz.id]"
               [queryParams]="{ hps: quiz.hps }"

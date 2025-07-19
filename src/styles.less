@@ -59,3 +59,37 @@ body {
   background-color: rgb(0, 0, 70);
   color: white;
 }
+
+#print-header,
+.teacher-name{
+  display: none;
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+
+  .sidebar,
+  .subnav{
+    display: none;
+  }
+
+  .modal,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  .flex-grow-1 {
+    margin-left: 0 !important;
+  }
+
+  #print-header,
+  .teacher-name {
+    display: block;
+  }
+
+  button {
+    display: none !important;
+  }
+}

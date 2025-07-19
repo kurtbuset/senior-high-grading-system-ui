@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule,  UntypedFormBuilder,
   UntypedFormGroup,
   Validators, } from '@angular/forms';
+import { AccountService } from '@app/_services/account.service';
 
 
 @Component({
@@ -17,12 +18,13 @@ export class SubjectInformationComponen{
   // auto assignment when someone is using .next()
   subject$ = this.subjectService.subject;
 
+
   teacher_subject_id: string;
   
   useCustomPercentage = false;
 
   constructor(
-    private subjectService: SubjectService
+    private subjectService: SubjectService,
   ) {}
 
 }
