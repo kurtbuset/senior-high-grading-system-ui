@@ -38,13 +38,8 @@
         >
       </li>
       <li *ngIf="account.role === Role.Admin" class="nav-item">
-        <a routerLink="" routerLinkActive="active" class="nav-link text-white"
-          >Accounts List</a
-        >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Admin">
-        <a routerLink="" routerLinkActive="active" class="nav-link text-white"
-          >Subject List</a
+        <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
+          >Admin</a
         >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Teacher">
@@ -117,11 +112,12 @@
     "
   >
     
+    <router-outlet name="subnav"></router-outlet> 
 
     <!-- global alert -->
     <alert></alert>
     
-    <breadcrumb-nav *ngIf="account" />
+    <!-- <breadcrumb-nav *ngIf="account" /> -->
     
     
     <!-- main router outlet -->

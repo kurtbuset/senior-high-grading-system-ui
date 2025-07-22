@@ -6,7 +6,7 @@
     <thead>
       <tr>
         <th style="width: 10%;"><input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" name="selectAll" /></th>
-        <th style="width: 10%;">Enrollment Id</th>
+        <!-- <th style="width: 10%;">Enrollment Id</th> -->
         <th style="width: 40%">Lastname</th>
         <th style="width: 40%">Firstname</th>
       </tr>
@@ -16,7 +16,7 @@
         <td>
           <input type="checkbox" [(ngModel)]="student.selected" name="selected{{i}}" />
         </td> 
-        <td>{{ student.enrollment_id }}</td>
+        <!-- <td>{{ student.enrollment_id }}</td> -->
         <td>{{ student.lastName }}</td>
         <td>{{ student.firstName }}</td>
       </tr>

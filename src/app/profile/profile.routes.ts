@@ -5,7 +5,7 @@ export const profileRoutes: Routes = [
     children: [
       //  { path: '', pathMatch: 'full', redirectTo: 'test' }, // or any default child
 
-      { path: '', loadComponent: () => import('./test.component').then((m) => m.TestComponent), title: 'Profile' },
+      { path: '', loadComponent: () => import('./details.component').then((m) => m.DetailsComponent), title: 'Profile details' },
     ]
   }
 ];
