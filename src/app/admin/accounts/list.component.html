@@ -1,1 +1,26 @@
-<h1>accounts list test</h1>
+<h1>Subject List</h1>
+
+<a routerLink="/admin/subjects/add">Add Subject</a>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let subject of subjects">
+      <td>{{ subject.id }}</td>
+      <td>{{ subject.name }}</td>
+      <td>{{ subject.code }}</td>
+      <td>
+        <a [routerLink]="['/admin/subjects/edit', subject.id]">Edit</a>
+        |
+        <button (click)="deleteSubject(subject.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

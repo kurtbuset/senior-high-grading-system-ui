@@ -33,6 +33,18 @@ export class SubjectService {
     return this.http.get<Subject>(`${baseUrl}/${teacherId}`)
   }
 
+  createSubject(subject: Subject): Observable<any> {
+    return this.http.post(`${baseUrl}`, subject);
+  }
+
+  updateSubject(id: number, subject: Subject): Observable<any> {
+    return this.http.put(`${baseUrl}/${id}`, subject);
+  }
+
+  deleteSubject(id: number): Observable<any> {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
   eraseSubjects() {
     this.subjectSubject.next(null);
   }
