@@ -26,6 +26,6 @@ export const appConfig: ApplicationConfig = {
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // optional: fake backend
-    // fakeBackendProvider  
+    // fakeBackendProvider      
   ],
 };
