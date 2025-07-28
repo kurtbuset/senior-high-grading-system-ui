@@ -24,9 +24,9 @@ export class AccountService {
     return this.accountSubject.value;
   }
 
-  login(email: string, password: string) {
+  login(username: string, password: string) {
     return this.http
-      .post<any>(`${baseUrl}/authenticate`, { email, password }, { withCredentials: true })
+      .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
       .pipe(
         map((account) => {
           this.accountSubject.next(account);

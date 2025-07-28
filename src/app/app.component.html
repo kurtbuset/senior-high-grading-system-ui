@@ -29,23 +29,43 @@
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link text-white">Dashboard</a
         >
       </li>
+      
+      <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
+        <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
+          >Accounts</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="account.role === Role.Teacher">
+        <a routerLink="/subject" routerLinkActive="active" class="nav-link text-white"
+          >Subjects</a
+        >
+      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
+        >Subjects List</a
+      >
+      </li>
+      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
+        >Subject Assignments</a
+      >
+      </li>
+      <li class="nav-item" *ngIf="account.role === Role.Student">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
+          >Report Card</a
+        >
+      </li>
       <li class="nav-item">
         <a
           routerLink="/profile"
           routerLinkActive="active"
           class="nav-link text-white"
-          >Profile</a
+          >My Profile</a
         >
       </li>
-      <li *ngIf="account.role === Role.Admin" class="nav-item">
-        <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
-          >Admin</a
-        >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Teacher">
-        <a routerLink="/subject" routerLinkActive="active" class="nav-link text-white"
-          >My Subjects</a
-        >
+      <li class="nav-item">
+      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
+        >Modify Account</a
+      >
       </li>
       <li class="nav-item">
         <a

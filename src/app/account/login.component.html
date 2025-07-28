@@ -20,16 +20,16 @@
     <div class="card-body">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label>Email</label>
+          <label>Username</label>
           <input
             type="text"
-            formControlName="email"
+            formControlName="username"
             class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+            [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
           />
-          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-            <div *ngIf="f.email.errors.required">Email is required</div>
-            <div *ngIf="f.email.errors.email">Email is invalid</div>
+          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+            <div *ngIf="f.username.errors.username">Username is invalid</div>
           </div>
         </div>
         <div class="form-group">

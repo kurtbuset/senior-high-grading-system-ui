@@ -49,7 +49,7 @@ export class GradingService {
   }
 
   getQuarterlyGradeSheet(id: string, params: { quarter: string }){
-    return this.http.get(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
+    return this.http.get<any>(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
   }
 
   getFinalSemesterGradeSheet(id: string){
