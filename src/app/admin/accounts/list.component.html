@@ -1,1 +1,72 @@
-<h1>accounts list test</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Account Management</h1>
+  <a routerLink="add" class="btn btn-success">
+    <i class="fa fa-plus"></i> Add New Account
+  </a>
+</div>
+
+<div *ngIf="loading" class="text-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!loading">
+  <table class="table table-hover table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th style="width: 5%;">#</th>
+        <th style="width: 10%;">Title</th>
+        <th style="width: 20%;">Name</th>
+        <th style="width: 25%;">Email</th>
+        <th style="width: 15%;">Role</th>
+        <th style="width: 10%;">Status</th>
+        <th style="width: 15%;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let account of accounts; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ account.title }}</td>
+        <td>{{ account.firstName }} {{ account.lastName }}</td>
+        <td>{{ account.email }}</td>
+        <td>
+          <span class="badge"
+                [ngClass]="{
+                  'badge-primary': account.role === Role.Admin,
+                  'badge-info': account.role === Role.Teacher
+                }">
+            {{ account.role }}
+          </span>
+        </td>
+        <td>
+          <span class="badge"
+                [ngClass]="{
+                  'badge-success': account.isActive,
+                  'badge-secondary': !account.isActive
+                }">
+            {{ account.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+        <td>
+          <div class="btn-group" role="group">
+            <a [routerLink]="['edit', account.id]"
+               class="btn btn-sm btn-outline-primary"
+               title="Edit Account">
+              <i class="fa fa-edit"></i>
+            </a>
+            <button (click)="deleteAccount(account.id)"
+                    class="btn btn-sm btn-outline-danger"
+                    title="Delete Account">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="accounts.length === 0" class="text-center py-4">
+    <p class="text-muted">No accounts found.</p>
+  </div>
+</div>
