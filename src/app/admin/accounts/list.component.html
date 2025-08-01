@@ -1,1 +1,247 @@
-<h1>accounts list test</h1>
+<div class="benedicto-bg">
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1 benedicto-title">
+          <i class="fas fa-users me-2"></i>Account Management
+        </h1>
+        <p class="benedicto-subtitle mb-0">Manage user accounts and permissions</p>
+      </div>
+      <button routerLink="add" class="btn benedicto-btn-primary btn-lg">
+        <i class="fas fa-user-plus me-2"></i>Create Account
+      </button>
+    </div>
+
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+    <div *ngIf="!loading" class="benedicto-card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="benedicto-table-header">
+              <tr>
+                <th class="border-0 fw-bold benedicto-header-text">
+                  <i class="fas fa-user me-2"></i>NAME
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text">
+                  <i class="fas fa-envelope me-2"></i>EMAIL
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text">
+                  <i class="fas fa-toggle-on me-2"></i>STATUS
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text">
+                  <i class="fas fa-user-tag me-2"></i>ROLE
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text text-center">
+                  <i class="fas fa-cogs me-2"></i>ACTIONS
+                </th>
+              </tr>
+            </thead>
+          <tbody>
+            <tr *ngFor="let account of accounts" class="align-middle">
+              <td class="py-3">
+                <div class="d-flex align-items-center">
+                  <div class="avatar-circle me-3">
+                    {{ account.firstName?.charAt(0) }}{{ account.lastName?.charAt(0) }}
+                  </div>
+                  <div>
+                    <div class="fw-semibold">{{ account.title }} {{ account.firstName }} {{ account.lastName }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="py-3">
+                <span class="text-muted">{{ account.email }}</span>
+              </td>
+              <td class="py-3">
+                <span class="badge fs-6 px-3 py-2" [ngClass]="account.isActive ? 'bg-success' : 'bg-secondary'">
+                  <i class="fas" [ngClass]="account.isActive ? 'fa-check-circle' : 'fa-times-circle'" class="me-1"></i>
+                  {{ account.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="py-3">
+                <span class="badge fs-6 px-3 py-2" [ngClass]="{
+                  'benedicto-badge-admin': account.role === 'Admin',
+                  'benedicto-badge-teacher': account.role === 'Teacher',
+                  'benedicto-badge-student': account.role === 'Student'
+                }">
+                  <i class="fas me-1" [ngClass]="{
+                    'fa-crown': account.role === 'Admin',
+                    'fa-chalkboard-teacher': account.role === 'Teacher',
+                    'fa-user-graduate': account.role === 'Student'
+                  }"></i>
+                  {{ account.role }}
+                </span>
+              </td>
+              <td class="py-3 text-center">
+                <div class="btn-group" role="group">
+                  <button [routerLink]="['edit', account.id]" class="btn benedicto-btn-edit btn-sm">
+                    <i class="fas fa-edit me-1"></i>Edit
+                  </button>
+                  <button (click)="deleteAccount(account.id)" class="btn benedicto-btn-delete btn-sm">
+                    <i class="fas fa-trash me-1"></i>Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+    <div *ngIf="accounts.length === 0" class="text-center py-5">
+      <div class="benedicto-card">
+        <div class="card-body py-5">
+          <i class="fas fa-users fa-4x benedicto-icon mb-4"></i>
+          <h4 class="benedicto-empty-title mb-3">No accounts found</h4>
+          <p class="benedicto-empty-text mb-4">Start by creating your first account to manage users and permissions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Benedicto College Theme */
+.benedicto-bg {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #ff6b35 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+.benedicto-title {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.benedicto-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.benedicto-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: none;
+  backdrop-filter: blur(10px);
+}
+
+.benedicto-table-header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+.benedicto-header-text {
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.benedicto-btn-primary {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
+  background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
+}
+
+.benedicto-btn-edit {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-edit:hover {
+  background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+  transform: translateY(-1px);
+  color: white;
+}
+
+.benedicto-btn-delete {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-delete:hover {
+  background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+  transform: translateY(-1px);
+  color: white;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3c72 0%, #ff6b35 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.benedicto-badge-admin {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-teacher {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-student {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-icon {
+  color: #1e3c72;
+  opacity: 0.7;
+}
+
+.benedicto-empty-title {
+  color: #1e3c72;
+  font-weight: 600;
+}
+
+.benedicto-empty-text {
+  color: #6c757d;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(30, 60, 114, 0.05);
+}
+
+.badge {
+  border-radius: 15px;
+}
+
+.btn {
+  border-radius: 8px;
+}
+</style>

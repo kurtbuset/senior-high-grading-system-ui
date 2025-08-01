@@ -1,1 +1,482 @@
-<h1>teacher assignment routes</h1>
+
+<div class="benedicto-bg">
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1 benedicto-title">
+          <i class="fas fa-chalkboard-teacher me-2"></i>Teacher Assignments
+        </h1>
+        <p class="benedicto-subtitle mb-0">Assign teachers to specific subjects and manage teaching assignments</p>
+      </div>
+      <button class="btn benedicto-btn-primary btn-lg" (click)="openAddModal()" *ngIf="teachers.length > 0">
+        <i class="fas fa-plus me-2"></i>Assign Teacher
+      </button>
+    </div>
+
+    <!-- No Teachers Warning -->
+    <div class="benedicto-alert-warning mb-4" *ngIf="teachers.length === 0">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <strong>No teachers available!</strong>
+      Please register teachers first in the <a routerLink="/admin/accounts" class="benedicto-link">Accounts section</a> before creating assignments.
+    </div>
+
+    <!-- Teacher Assignments Table -->
+    <div class="benedicto-card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="benedicto-table-header">
+              <tr>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 5%">#</th>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 20%">
+                  <i class="fas fa-user me-2"></i>TEACHER
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 25%">
+                  <i class="fas fa-book me-2"></i>SUBJECT
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 10%">
+                  <i class="fas fa-graduation-cap me-2"></i>GRADE
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 12%">
+                  <i class="fas fa-layer-group me-2"></i>STRAND
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text" style="width: 13%">
+                  <i class="fas fa-clock me-2"></i>SEMESTER
+                </th>
+                <th class="border-0 fw-bold benedicto-header-text text-center" style="width: 15%">
+                  <i class="fas fa-cogs me-2"></i>ACTIONS
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let assignment of teacherAssignments; let i = index" class="align-middle">
+                <td class="fw-bold py-3">{{ assignment.id }}</td>
+                <td class="py-3">
+                  <div class="d-flex align-items-center">
+                    <div class="teacher-avatar me-3">
+                      {{ assignment.teacherName?.split(' ')[0]?.charAt(0) }}{{ assignment.teacherName?.split(' ')[1]?.charAt(0) }}
+                    </div>
+                    <div class="fw-semibold">{{ assignment.teacherName }}</div>
+                  </div>
+                </td>
+                <td class="py-3">{{ assignment.subjectName }}</td>
+                <td class="py-3">
+                  <span class="benedicto-badge-grade">{{ assignment.grade_level }}</span>
+                </td>
+                <td class="py-3">
+                  <span class="badge fs-6 px-2 py-1" [ngClass]="{
+                    'benedicto-badge-abm': assignment.strand === 'ABM',
+                    'benedicto-badge-humss': assignment.strand === 'HUMSS',
+                    'benedicto-badge-stem': assignment.strand === 'STEM',
+                    'benedicto-badge-gas': assignment.strand === 'GAS',
+                    'benedicto-badge-tvl': assignment.strand === 'TVL',
+                    'benedicto-badge-ict': assignment.strand === 'ICT'
+                  }">{{ assignment.strand }}</span>
+                </td>
+                <td class="py-3">
+                  <span class="benedicto-badge-semester">{{ assignment.semester }}</span>
+                </td>
+                <td class="py-3 text-center">
+                  <div class="btn-group" role="group">
+                    <button class="btn benedicto-btn-edit btn-sm" (click)="editAssignment(assignment)">
+                      <i class="fas fa-edit me-1"></i>Edit
+                    </button>
+                    <button class="btn benedicto-btn-delete btn-sm" (click)="deleteAssignment(assignment.id)">
+                      <i class="fas fa-trash me-1"></i>Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+
+        <div *ngIf="teacherAssignments.length === 0" class="text-center py-5">
+          <i class="fas fa-chalkboard-teacher fa-4x benedicto-icon mb-4"></i>
+          <h4 class="benedicto-empty-title mb-3">No teacher assignments found</h4>
+          <p class="benedicto-empty-text mb-4">Start by assigning teachers to subjects.</p>
+          <div *ngIf="teachers.length === 0" class="benedicto-alert-warning mt-3">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            No teachers available. Please register teachers first in the <strong>Accounts</strong> section.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Assignment Modal -->
+<div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'"
+     tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="benedicto-modal-content">
+      <div class="benedicto-modal-header">
+        <div class="text-center w-100">
+          <div class="benedicto-modal-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h4 class="benedicto-modal-title mt-3">
+            {{ isEditMode ? 'Edit Assignment' : 'Assign Teacher' }}
+          </h4>
+          <p class="benedicto-modal-subtitle">
+            {{ isEditMode ? 'Update teacher assignment' : 'Assign a teacher to a subject' }}
+          </p>
+        </div>
+        <button type="button" class="benedicto-btn-close" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+        <div class="benedicto-modal-body">
+          <div class="mb-4">
+            <label class="benedicto-label">Teacher <span class="text-danger">*</span></label>
+            <div class="benedicto-input-group">
+              <span class="benedicto-input-icon"><i class="fas fa-user"></i></span>
+              <select class="benedicto-input-with-icon" formControlName="teacherId">
+                <option value="">Select Teacher</option>
+                <option *ngFor="let teacher of teachers" [value]="teacher.id">
+                  {{ teacher.firstName }} {{ teacher.lastName }}
+                </option>
+              </select>
+            </div>
+            <div *ngIf="submitted && f.teacherId.errors" class="invalid-feedback d-block">
+              Teacher is required
+            </div>
+            <div *ngIf="teachers.length === 0" class="text-warning mt-2">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              No teachers available. Please create teacher accounts first.
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="benedicto-label">Subject <span class="text-danger">*</span></label>
+            <div class="benedicto-input-group">
+              <span class="benedicto-input-icon"><i class="fas fa-book"></i></span>
+              <select class="benedicto-input-with-icon" formControlName="subjectId">
+                <option value="">Select Subject</option>
+                <option *ngFor="let subject of subjects" [value]="subject.id">
+                  {{ subject.subjectName }} (Grade {{ subject.grade_level }} - {{ subject.strand }} - {{ subject.semester }} Sem)
+                </option>
+              </select>
+            </div>
+            <div *ngIf="submitted && f.subjectId.errors" class="invalid-feedback d-block">
+              Subject is required
+            </div>
+            <div *ngIf="subjects.length === 0" class="text-warning mt-2">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              No subjects available. Subjects are being generated...
+            </div>
+          </div>
+        </div>
+        <div class="benedicto-modal-footer">
+          <button type="button" class="benedicto-btn-cancel" (click)="closeModal()">
+            <i class="fas fa-times me-2"></i>Cancel
+          </button>
+          <button type="submit" class="benedicto-btn-submit" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loading" class="fas fa-save me-2"></i>
+            {{ isEditMode ? 'Update Assignment' : 'Assign Teacher' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
+
+<style>
+/* Benedicto College Teacher Assignments Theme */
+.teacher-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3c72 0%, #ff6b35 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.benedicto-alert-warning {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  color: #856404;
+  font-weight: 500;
+}
+
+.benedicto-link {
+  color: #ff6b35;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.benedicto-link:hover {
+  color: #1e3c72;
+  text-decoration: underline;
+}
+
+/* Additional styles for consistency */
+.benedicto-section-title {
+  color: #1e3c72;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #ff6b35;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.benedicto-label {
+  color: #1e3c72;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.benedicto-input {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.benedicto-input:focus {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+  background: white;
+}
+
+.benedicto-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.benedicto-input-icon {
+  position: absolute;
+  left: 1rem;
+  z-index: 3;
+  color: #1e3c72;
+  font-size: 1.1rem;
+}
+
+.benedicto-input-with-icon {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+}
+
+.benedicto-input-with-icon:focus {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+  background: white;
+}
+
+/* Strand Badges */
+.benedicto-badge-abm {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-humss {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-stem {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-gas {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-tvl {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-ict {
+  background: linear-gradient(135deg, #343a40 0%, #212529 100%);
+  color: white;
+  border-radius: 15px;
+}
+
+.benedicto-badge-grade {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+.benedicto-badge-semester {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Modal Styles */
+.benedicto-modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: none;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.benedicto-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #1e3c72 0%, #ff6b35 100%);
+}
+
+.benedicto-modal-header {
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.05) 0%, rgba(255, 107, 53, 0.05) 100%);
+  padding: 2rem;
+  position: relative;
+}
+
+.benedicto-modal-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3c72 0%, #ff6b35 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
+}
+
+.benedicto-modal-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.benedicto-modal-title {
+  color: #1e3c72;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.benedicto-modal-subtitle {
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.benedicto-btn-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-close:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.benedicto-modal-body {
+  padding: 2rem;
+}
+
+.benedicto-modal-footer {
+  background: rgba(248, 249, 250, 0.5);
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(30, 60, 114, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.benedicto-btn-cancel {
+  background: transparent;
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-cancel:hover {
+  background: #6c757d;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.benedicto-btn-submit {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  border: none;
+  color: white;
+  padding: 0.75rem 2.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-submit:hover {
+  background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+  color: white;
+}
+
+.benedicto-btn-submit:disabled {
+  opacity: 0.7;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.benedicto-header-text {
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+
+</style>
