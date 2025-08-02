@@ -10,7 +10,7 @@ import { adminRoutes } from './admin/admin.routes';
 import { Role } from './_models/role';
 
 export const routes: Routes = [
-  // eagerly loaded component
+  // eagerly loaded component 
   { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
   // lazily loaded
   { path: 'account', children: accountRoutes },
