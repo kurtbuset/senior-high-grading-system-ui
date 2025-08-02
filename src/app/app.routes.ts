@@ -11,11 +11,11 @@ import { Role } from './_models/role';
 
 export const routes: Routes = [
   // eagerly loaded component
-  { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
+  { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'},
   // lazily loaded
   { path: 'account', children: accountRoutes },
   { path: 'profile', children: profileRoutes, canActivate: [authGuard] },
   { path: 'subject', children: subjectRoutes, canActivate: [authGuard] },
-  { path: 'admin', children: adminRoutes, canActivate: [authGuard], data: { roles: [Role.Admin] } },
-  { path: '**', redirectTo: '' }, 
+  { path: 'admin', children: adminRoutes, canActivate: [authGuard], data: { roles: [Role.Admin, Role.SuperAdmin] } },
+  { path: '**', redirectTo: '' },
 ];
