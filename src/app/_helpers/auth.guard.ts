@@ -9,7 +9,9 @@ export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
 
   if (account) {
     if (route.data?.roles && !route.data.roles.includes(account.role)) {
-      return false; // or redirect somewhere else
+      // User doesn't have required role, redirect to home
+      router.navigate(['/']);
+      return false;
     }
     return true;
   }

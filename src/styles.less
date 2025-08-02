@@ -1,7 +1,75 @@
 /* You can add global styles to this file, and also import other style files */
- 
+
+/* Benedicto College Global Theme */
+:root {
+  --benedicto-primary: #1e3c72;
+  --benedicto-secondary: #2a5298;
+  --benedicto-accent: #ff6b35;
+  --benedicto-accent-light: #f7931e;
+  --benedicto-white: #ffffff;
+  --benedicto-light-gray: #f8f9fa;
+  --benedicto-gray: #6c757d;
+}
+
 body {
   overflow-x: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Global Benedicto Theme Classes */
+.benedicto-bg {
+  background: linear-gradient(135deg, var(--benedicto-primary) 0%, var(--benedicto-secondary) 50%, var(--benedicto-accent) 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+.benedicto-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: none;
+  backdrop-filter: blur(10px);
+}
+
+.benedicto-title {
+  color: var(--benedicto-white);
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.benedicto-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.benedicto-btn-primary {
+  background: linear-gradient(135deg, var(--benedicto-accent) 0%, var(--benedicto-accent-light) 100%);
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.benedicto-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
+  background: linear-gradient(135deg, var(--benedicto-accent-light) 0%, var(--benedicto-accent) 100%);
+  color: white;
+}
+
+.benedicto-table-header {
+  background: linear-gradient(135deg, var(--benedicto-primary) 0%, var(--benedicto-secondary) 100%);
+}
+
+.benedicto-header-text {
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-transform: uppercase;
 }
 /* TABS CONTAINER */
 .nav-tabs {
@@ -11,22 +79,25 @@ body {
 
 /* DEFAULT LINK STYLE */
 .nav-tabs .nav-link {
-  color: rgb(79, 79, 255);
+  color: var(--benedicto-primary);
   font-weight: 500;
-  border-radius: 0;
-  transition: all 0.2s ease;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 /* HOVER EFFECT */
 .nav-tabs .nav-link:hover {
-  background-color: rgb(0, 0, 70);
+  background: linear-gradient(135deg, var(--benedicto-primary) 0%, var(--benedicto-secondary) 100%);
   color: white;
+  transform: translateY(-2px);
 }
 
 /* ACTIVE (SELECTED) TAB */
 .nav-tabs .nav-link.active {
-  background-color: rgb(0, 0, 70);
+  background: linear-gradient(135deg, var(--benedicto-primary) 0%, var(--benedicto-secondary) 100%);
   color: white;
+  border: none;
 }
 
 /* DROPDOWN ON HOVER */
@@ -56,8 +127,9 @@ body {
 
 .dropdown-item:hover,
 .dropdown-item.active {
-  background-color: rgb(0, 0, 70);
+  background: linear-gradient(135deg, var(--benedicto-primary) 0%, var(--benedicto-secondary) 100%);
   color: white;
+  border-radius: 6px;
 }
 
 #print-header,

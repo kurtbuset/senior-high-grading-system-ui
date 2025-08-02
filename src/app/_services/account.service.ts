@@ -24,6 +24,11 @@ export class AccountService {
     return this.accountSubject.value;
   }
 
+  // Development helper method to set a mock account
+  setMockAccount(account: Account) {
+    this.accountSubject.next(account);
+  }
+
   login(username: string, password: string) {
     return this.http
       .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
@@ -67,6 +72,22 @@ export class AccountService {
 
   verifyEmail(token: string) {
     return this.http.post(`${baseUrl}/verify-email`, { token });
+  }
+
+  getAll() {
+    return this.http.get<Account[]>(`${baseUrl}`);
+  }
+
+  getById(id: string) {
+    return this.http.get<Account>(`${baseUrl}/${id}`);
+  }
+
+  update(id: string, params: any) {
+    return this.http.put(`${baseUrl}/${id}`, params);
+  }
+
+  delete(id: string) {
+    return this.http.delete(`${baseUrl}/${id}`);
   }
 
   private refreshTokenTimeout;

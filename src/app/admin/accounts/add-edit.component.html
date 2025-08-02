@@ -1,0 +1,400 @@
+<div class="benedicto-bg-form">
+  <div class="container-fluid py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-7">
+        <div class="benedicto-form-card">
+          <div class="benedicto-form-header">
+            <div class="text-center mb-4">
+              <div class="benedicto-logo-circle">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h2 class="benedicto-form-title mt-3">
+                {{ isAddMode ? 'Create New Account' : 'Edit Account' }}
+              </h2>
+              <p class="benedicto-form-subtitle">
+                {{ isAddMode ? 'Join the Benedicto College community' : 'Update account information' }}
+              </p>
+            </div>
+          </div>
+          <div class="card-body p-5">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Personal Information Section -->
+            <div class="mb-5">
+              <h5 class="benedicto-section-title mb-4">
+                <i class="fas fa-user me-2"></i>Personal Information
+              </h5>
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label class="benedicto-label">Title <span class="text-danger">*</span></label>
+                  <select formControlName="title" class="benedicto-input" [ngClass]="{ 'is-invalid': submitted && f.title.errors }">
+                    <option value="">Select Title</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Miss">Miss</option>
+                    <option value="Ms">Ms</option>
+                    <option value="Dr">Dr</option>
+                    <option value="Prof">Prof</option>
+                  </select>
+                  <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+                    <div *ngIf="f.title.errors.required">Title is required</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label class="benedicto-label">First Name <span class="text-danger">*</span></label>
+                  <input type="text" formControlName="firstName" class="benedicto-input" placeholder="Enter first name" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                  <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                    <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <label class="benedicto-label">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" formControlName="lastName" class="benedicto-input" placeholder="Enter last name" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                  <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                    <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="mb-5">
+              <h5 class="benedicto-section-title mb-4">
+                <i class="fas fa-envelope me-2"></i>Contact Information
+              </h5>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="benedicto-label">Email Address <span class="text-danger">*</span></label>
+                  <div class="benedicto-input-group">
+                    <span class="benedicto-input-icon"><i class="fas fa-envelope"></i></span>
+                    <input type="email" formControlName="email" class="benedicto-input-with-icon" placeholder="Enter email address" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                      <div *ngIf="f.email.errors.required">Email is required</div>
+                      <div *ngIf="f.email.errors.email">Please enter a valid email address</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div class="mb-5">
+              <h5 class="benedicto-section-title mb-4">
+                <i class="fas fa-cog me-2"></i>Account Settings
+              </h5>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="benedicto-label">Role <span class="text-danger">*</span></label>
+                  <select formControlName="role" class="benedicto-input" [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
+                    <option value="Admin">Administrator</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Student">Student</option>
+                  </select>
+                  <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
+                    <div *ngIf="f.role.errors.required">Role is required</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="benedicto-label">Account Status</label>
+                  <select formControlName="isActive" class="benedicto-input">
+                    <option [ngValue]="true">Active</option>
+                    <option [ngValue]="false">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Security Section (Only for new accounts) -->
+            <div class="mb-5" *ngIf="isAddMode">
+              <h5 class="benedicto-section-title mb-4">
+                <i class="fas fa-lock me-2"></i>Security
+              </h5>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="benedicto-label">Password <span class="text-danger">*</span></label>
+                  <div class="benedicto-input-group">
+                    <span class="benedicto-input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" formControlName="password" class="benedicto-input-with-icon" placeholder="Enter password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                      <div *ngIf="f.password.errors.required">Password is required</div>
+                      <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                    </div>
+                  </div>
+                  <small class="form-text text-muted">Minimum 6 characters required</small>
+                </div>
+                <div class="col-md-6">
+                  <label class="benedicto-label">Confirm Password <span class="text-danger">*</span></label>
+                  <div class="benedicto-input-group">
+                    <span class="benedicto-input-icon"><i class="fas fa-lock"></i></span>
+                    <input type="password" formControlName="confirmPassword" class="benedicto-input-with-icon" placeholder="Confirm password" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" />
+                    <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback">
+                      <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
+                      <div *ngIf="f.confirmPassword.errors.mustMatch">Passwords must match</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-between align-items-center pt-4 mt-4 benedicto-form-actions">
+              <button type="button" routerLink="../" class="benedicto-btn-cancel">
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </button>
+              <button type="submit" [disabled]="loading" class="benedicto-btn-submit">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!loading" class="fas fa-save me-2"></i>
+                {{ isAddMode ? 'Create Account' : 'Update Account' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Benedicto College Registration Form Theme */
+.benedicto-bg-form {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #ff6b35 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.benedicto-bg-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.benedicto-form-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: none;
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.benedicto-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #1e3c72 0%, #ff6b35 100%);
+}
+
+.benedicto-form-header {
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.05) 0%, rgba(255, 107, 53, 0.05) 100%);
+  padding: 2rem 2rem 1rem;
+  border-radius: 20px 20px 0 0;
+}
+
+.benedicto-logo-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3c72 0%, #ff6b35 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
+}
+
+.benedicto-logo-circle i {
+  font-size: 2rem;
+  color: white;
+}
+
+.benedicto-form-title {
+  color: #1e3c72;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.benedicto-form-subtitle {
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.benedicto-section-title {
+  color: #1e3c72;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #ff6b35;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.benedicto-label {
+  color: #1e3c72;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.benedicto-input {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.benedicto-input:focus {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+  background: white;
+}
+
+.benedicto-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.benedicto-input-icon {
+  position: absolute;
+  left: 1rem;
+  z-index: 3;
+  color: #1e3c72;
+  font-size: 1.1rem;
+}
+
+.benedicto-input-with-icon {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+}
+
+.benedicto-input-with-icon:focus {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+  background: white;
+}
+
+.benedicto-form-actions {
+  border-top: 2px solid rgba(30, 60, 114, 0.1);
+  background: rgba(248, 249, 250, 0.5);
+  margin: 0 -3rem -3rem;
+  padding: 2rem 3rem;
+  border-radius: 0 0 20px 20px;
+}
+
+.benedicto-btn-cancel {
+  background: transparent;
+  border: 2px solid #6c757d;
+  color: #6c757d;
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-cancel:hover {
+  background: #6c757d;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.benedicto-btn-submit {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  border: none;
+  color: white;
+  padding: 0.75rem 3rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  transition: all 0.3s ease;
+}
+
+.benedicto-btn-submit:hover {
+  background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+  color: white;
+}
+
+.benedicto-btn-submit:disabled {
+  opacity: 0.7;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* Role and Status Select Styling */
+.benedicto-input option {
+  padding: 0.5rem;
+  background: white;
+  color: #1e3c72;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .benedicto-form-card {
+    margin: 1rem;
+    border-radius: 15px;
+  }
+
+  .benedicto-form-header {
+    padding: 1.5rem 1rem 0.5rem;
+  }
+
+  .card-body {
+    padding: 2rem 1.5rem !important;
+  }
+
+  .benedicto-form-actions {
+    margin: 0 -1.5rem -2rem;
+    padding: 1.5rem;
+  }
+
+  .benedicto-logo-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .benedicto-logo-circle i {
+    font-size: 1.5rem;
+  }
+
+  .benedicto-form-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Animation for form appearance */
+.benedicto-form-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>

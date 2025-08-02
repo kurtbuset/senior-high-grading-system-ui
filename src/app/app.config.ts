@@ -14,7 +14,6 @@ import {
   HttpClientModule,
 } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { fakeBackendProvider } from './_helpers/fake-backend';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +24,6 @@ export const appConfig: ApplicationConfig = {
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService], },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    // optional: fake backend
-    // fakeBackendProvider  
+    // Fake backend disabled - using real backend
   ],
 };

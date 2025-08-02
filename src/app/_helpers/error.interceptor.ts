@@ -17,8 +17,17 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
 
             const error = (err && err.error && err.error.message) || err.statusText;
-            console.error(err);
-            return throwError(error);
+
+            // Only log errors that aren't expected authentication failures
+            if (!(err.status === 401 && request.url.includes('refresh-token'))) {
+                console.error('HTTP Error:', {
+                    status: err.status,
+                    url: request.url,
+                    message: error
+                });
+            }
+
+            return throwError(() => error);
         }))
     }
 }
