@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:4000'
+  apiUrl: 'https://senior-high-grading-system-api.onrender.com'
 };
