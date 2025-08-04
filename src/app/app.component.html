@@ -1,3 +1,8 @@
+<p class="text-center text-sm text-gray-600">
+  🚧 We appreciate your time in using this system during its beta phase.
+Your feedback is valuable in helping us refine and enhance the experience.
+</p>
+
 <div class="app-container d-flex" [ngClass]="{ 'bg-light': account }">
   <!-- main nav -->
   <nav
@@ -50,8 +55,8 @@
       >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Student">
-        <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-          >Report Card</a
+        <a routerLink="/egrade" routerLinkActive="active" class="nav-link text-white"
+          >E-Grade</a
         >
       </li>
       <li class="nav-item">

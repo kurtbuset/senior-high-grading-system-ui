@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
+  // prod mode
   apiUrl: 'https://senior-high-grading-system-api.onrender.com'
+
+  // apiUrl: 'http://localhost:4000'
 };
 
 /*
