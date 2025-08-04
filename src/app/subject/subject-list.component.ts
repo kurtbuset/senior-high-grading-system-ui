@@ -12,13 +12,15 @@ import { RouterModule } from '@angular/router';
 })
 export class SubjectListComponent implements OnInit {
   subjects: any[];
- 
+  loading: boolean = false;
+
   constructor(
     private subjectService: SubjectService,
-    private accountService: AccountService,
-  ) {  }  
-  
-  ngOnInit() {  
+    private accountService: AccountService
+  ) {}
+
+  ngOnInit() {
+    this.loading = true;
     // get all subject by the teacher using the account.id of teacher
     const teacher = this.accountService.accountValue;
     // console.log(teacher.id)
@@ -26,11 +28,17 @@ export class SubjectListComponent implements OnInit {
     this.subjectService
       .getAllSubjects(Number(teacher.id))
       .pipe(first())
-      .subscribe((subjects) =>{
-        this.subjects = subjects
-        // console.log(this.subjectService.subjectValue)
-        this.subjectService.subjectSubject.next(null)
+      .subscribe({
+        next: (subjects) => {
+          this.subjects = subjects;
+          this.subjectService.subjectSubject.next(null);
+        },
+        error: (error) => {
+          console.error('Error loading subjects:', error);
+        },
+        complete: () => {
+          this.loading = false; // Stop loading when done
+        },
       });
   }
-
 }

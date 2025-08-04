@@ -14,7 +14,7 @@ import { AccountService } from '@app/_services/account.service';
   standalone: true,
   imports: [CommonModule, FormsModule, CommonModule],
 })
-export class SubjectInformationComponen{
+export class SubjectInformationComponent{
   // auto assignment when someone is using .next()
   subject$ = this.subjectService.subject;
 
