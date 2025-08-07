@@ -143,7 +143,7 @@ export class AddEditScoreComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: _ => {
-          this.router.navigate([`/subject/${this.teacher_subject_id}/${this.quarter}/${this.type}`])
+          this.router.navigate([`/teacher/${this.teacher_subject_id}/${this.quarter}/${this.type}`])
           this.alertService.success('Scored added succesfully')
         }
       })
@@ -157,7 +157,7 @@ export class AddEditScoreComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: _ => {
-          this.router.navigate([`/subject/${this.teacher_subject_id}/${this.quarter}/${this.type}`])
+          this.router.navigate([`/teacher/${this.teacher_subject_id}/${this.quarter}/${this.type}`])
           this.alertService.success('Scored updated succesfully')
         },
         error: err => {

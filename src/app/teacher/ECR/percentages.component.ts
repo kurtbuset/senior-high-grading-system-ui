@@ -80,8 +80,8 @@ export class PercentagesComponent {
           this.router
             .navigateByUrl('/', { skipLocationChange: true })
             .then(() => {
-              this.router.navigate([`/subject/${this.teacher_subject_id}`]);
-              this.alertService.success('percentages successfully updated boii');
+              this.router.navigate([`/teacher/${this.teacher_subject_id}`]);
+              this.alertService.success('Percentages are successfully updated');
             });
           
         },

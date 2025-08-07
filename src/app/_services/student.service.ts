@@ -28,4 +28,7 @@ export class StudentService {
     return this.http.get<Student[]>(`${baseUrl}/enrolled/${id}`)
   }
 
+  getSubjectGrades(id: number){
+    return this.http.get<any>(`${baseUrl}/egrades/${id}`)
+  }
 }

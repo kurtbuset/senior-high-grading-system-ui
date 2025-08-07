@@ -31,7 +31,7 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-talWhvqHshpEQw5Kf10LV9vno1j6fbwWUQ&s" width="100" alt="">
+        <img src="../assets/images/bc logo.png" width="100" alt="">
       </h4>
     </div>
     <ul class="nav flex-column">
@@ -46,7 +46,7 @@
         >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Teacher">
-        <a routerLink="/subject" routerLinkActive="active" class="nav-link text-white"
+        <a routerLink="/teacher" routerLinkActive="active" class="nav-link text-white"
           >Subjects</a
         >
       <li class="nav-item" *ngIf="account.role === Role.Admin">

@@ -1,10 +1,6 @@
 <h1>Subjects</h1>
 
-<div *ngIf="loading" class="text-center my-4">
-  <div class="spinner-border text-primary" role="status">
-    <!-- <span class="visually-hidden">Loading...</span> -->
-  </div>
-</div>
+
 
 <table class="table table-hover table-sm">
   <thead>
@@ -19,6 +15,7 @@
     </tr>
   </thead>
   <tbody>
+
     <tr *ngFor="let a of subjects; let i = index">
       <td>{{ a.id }}</td>
       <td>{{ a.subjectName }}</td>
@@ -37,8 +34,11 @@
   </tbody>
 </table>
 
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
 <ng-template #noData>
   <p>No subjects assigned yet.</p>
 </ng-template>
-
-<!-- <p>{{ teacher.id }}</p> -->

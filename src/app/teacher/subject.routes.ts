@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { ecrRoutes } from './ECR/ECR.routes';
 
-export const subjectRoutes: Routes = [
+export const teacherRoutes: Routes = [
   { path: '', loadComponent: () => import('./layout.component').then(m => m.LayoutComponent),
     children: [
       { path: '', loadComponent: () => import('./subject-list.component').then(m => m.SubjectListComponent), title: 'Subjects' },
