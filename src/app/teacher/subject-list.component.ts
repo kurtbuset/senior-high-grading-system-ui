@@ -32,13 +32,11 @@ export class SubjectListComponent implements OnInit {
         next: (subjects) => {
           this.subjects = subjects;
           this.subjectService.subjectSubject.next(null);
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error loading subjects:', error);
-        },
-        complete: () => {
-          this.loading = false; // Stop loading when done
-        },
+        }
       });
   }
 }

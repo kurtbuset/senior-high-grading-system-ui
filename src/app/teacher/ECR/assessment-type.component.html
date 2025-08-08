@@ -12,7 +12,7 @@
           <!-- <td style="width: 2%" class="text-center">#</td> -->
           <th style="width: 10%">Perfect Score</th>
           <th style="width: 30%">Description</th>
-          
+          <th style="width: 20%">Quiz Created</th>
           <th style="width: 10%" class="text-center">Edit Score</th>
           <th style="width: 15%" class="text-center">Actions</th>
           <th style="width: 10%">Delete Score</th>
@@ -50,7 +50,7 @@
               </form>
             </ng-template>
           </td>
-
+          <td>{{ quiz.createdAt }}</td>
           <td>
             <button
               *ngIf="editingQuizId !== quiz.id"
@@ -116,7 +116,7 @@
           }"
           formControlName="description"
           rows="2"
-          placeholder="Enter description"
+          placeholder="description is optional :)"
         ></textarea>
         <div
           *ngIf="submitted && f.description.errors?.maxlength"

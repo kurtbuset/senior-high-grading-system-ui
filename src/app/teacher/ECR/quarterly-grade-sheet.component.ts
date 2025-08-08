@@ -14,7 +14,7 @@ import { first } from 'rxjs';
 })
 export class QuarterlyGradeSheetComponent implements OnInit {
   quarter: string;
-
+  loading: boolean = false;
   students: any;
   teacher_subject_id: string;
   account = this.accountService.accountValue;
@@ -26,11 +26,12 @@ export class QuarterlyGradeSheetComponent implements OnInit {
     private accountService: AccountService
   ) {
     this.route.parent?.paramMap.subscribe((params) => {
-        this.teacher_subject_id = params.get('id')!;
-      });
+      this.teacher_subject_id = params.get('id')!;
+    });
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.route.paramMap.subscribe((params) => {
       this.quarter = params.get('quarter')!;
 
@@ -39,15 +40,20 @@ export class QuarterlyGradeSheetComponent implements OnInit {
           quarter: this.quarter,
         })
         .pipe(first())
-        .subscribe(((students) => {
-            // console.log(params);
-            this.students = students
-          }));
+        .subscribe({
+          next: (students) => {
+            this.students = students;
+            this.loading = false
+          },
+          error: (error) => {
+            console.error('Error loading student:', error);
+          },
+        });
     });
   }
 
   printGradeSheet() {
-    console.log('print time')
+    console.log('print time');
     window.print();
   }
 }

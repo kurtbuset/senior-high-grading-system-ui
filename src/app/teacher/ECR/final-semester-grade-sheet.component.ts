@@ -19,6 +19,8 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
   students: any;
   id: string;
   account = this.accountService.accountValue;
+  loading: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private subjectService: SubjectService,
@@ -26,21 +28,26 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
     private accountService: AccountService
   ) {}
 
-
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id')
+    this.loading = true;
+    this.id = this.route.snapshot.paramMap.get('id');
 
     this.gradingService
       .getFinalSemesterGradeSheet(this.id)
       .pipe(first())
-      .subscribe((students) => {
-        // console.log(students);
-        this.students = students;
+      .subscribe({
+        next: (students) => {
+          this.students = students;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading student:', error);
+        },
       });
   }
 
   printGradeSheet() {
-    console.log('print time')
+    console.log('print time');
     window.print();
   }
 }

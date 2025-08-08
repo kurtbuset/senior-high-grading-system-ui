@@ -52,6 +52,11 @@
   </tbody>
 </table>
 
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+
 <div class="teacher-name">
   Subject Teacher: <strong> {{ account.firstName }} {{ account.lastName }} </strong>
 </div>
