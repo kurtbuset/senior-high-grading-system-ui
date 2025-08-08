@@ -15,9 +15,9 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class StudentListComponent implements OnInit {
-  students: any[];
+  students: any[] = [];
   id: string;
-  
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,18 +28,27 @@ export class StudentListComponent implements OnInit {
 
   ngOnInit() {
     // teacher_subject_id
+    this.isLoading = true;
     this.id = this.route.snapshot.paramMap.get('id');
     // console.log(this.id)
     this.studentService
-      .getStudentsByTeacherSubjectId(Number(this.id)) 
+      .getStudentsByTeacherSubjectId(Number(this.id))
       .pipe(first())
-      .subscribe((students) => (this.students = students));
-
+      .subscribe({
+        next: (students) => {
+          this.students = students;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.alertService.error(err);
+          this.isLoading = false;
+        },
+      });
 
     this.subjectService.getOneSubject(Number(this.id)).subscribe((subject) => {
-      console.log('before: ', this.subjectService.subjectValue)
+      console.log('before: ', this.subjectService.subjectValue);
       this.subjectService.subjectSubject.next(subject);
-      console.log('after: ', this.subjectService.subjectValue)
+      console.log('after: ', this.subjectService.subjectValue);
     });
   }
 
@@ -55,12 +64,12 @@ export class StudentListComponent implements OnInit {
     const selected = this.students.filter((s) => s.selected);
     // console.log(JSON.stringify(selected, null, 2))
     if (selected.length === 0) {
-      this.alertService.error('Please select at least one student.')
+      this.alertService.error('Please select at least one student.');
       return;
     }
-    
+
     const payload = selected.map((student) => ({
-      id: student.enrollment_id
+      id: student.enrollment_id,
     }));
 
     // this.alertService.success('student succesfully enrolled boii')
@@ -70,13 +79,13 @@ export class StudentListComponent implements OnInit {
       .updateStudentEnrollment(Number(this.id), payload)
       .subscribe({
         next: (res: any) => {
-          console.log(res.message)
-          this.alertService.success(res.message)
-          this.ngOnInit()
+          console.log(res.message);
+          this.alertService.success(res.message);
+          this.ngOnInit();
         },
-        error: error => {
-          this.alertService.error(error)
-        }
+        error: (error) => {
+          this.alertService.error(error);
+        },
       });
   }
 }

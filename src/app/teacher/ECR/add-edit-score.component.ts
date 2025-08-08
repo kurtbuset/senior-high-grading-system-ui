@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray } from '@angular/forms';
 import { first } from 'rxjs';
 import {
   ReactiveFormsModule,
