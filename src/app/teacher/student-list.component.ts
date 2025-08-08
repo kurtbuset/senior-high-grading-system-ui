@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 export class StudentListComponent implements OnInit {
   students: any[];
   id: string;
+  
 
   constructor(
     private route: ActivatedRoute,
