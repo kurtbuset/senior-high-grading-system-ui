@@ -1,4 +1,4 @@
-<div *ngIf="subject$ | async as subject">
+<div *ngIf="subject$ | async as subject" class="mt-5">
   <form [formGroup]="form" *ngIf="isEditing; else readOnlyView" class="p-3 border rounded shadow-sm bg-light" (ngSubmit)="onSubmit()">
     <div class="row g-3">
       <div class="col-md-4">
@@ -56,8 +56,8 @@
     </div>
   </form>
 
-  <ng-template #readOnlyView>
-    <div class="p-3 border rounded shadow-sm bg-white">
+  <ng-template #readOnlyView >
+    <div id="hideOnPrint" class="p-3 border rounded shadow-sm bg-white">
       <div class="d-flex justify-content-between flex-wrap">
         <div class="mb-2">
           <h4>Written Work: {{ subject.custom_ww_percent }}%</h4> 

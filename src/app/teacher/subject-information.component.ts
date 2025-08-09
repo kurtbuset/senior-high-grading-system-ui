@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { SubjectService } from '@app/_services/subject.service';
-import { ActivatedRoute } from '@angular/router';
-import { FormsModule,  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators, } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { AccountService } from '@app/_services/account.service';
 
 
@@ -17,14 +14,14 @@ import { AccountService } from '@app/_services/account.service';
 export class SubjectInformationComponent{
   // auto assignment when someone is using .next()
   subject$ = this.subjectService.subject;
-
-
+  account = this.accountService.accountValue;
   teacher_subject_id: string;
   
   useCustomPercentage = false;
 
   constructor(
     private subjectService: SubjectService,
+    private accountService: AccountService
   ) {}
 
 }

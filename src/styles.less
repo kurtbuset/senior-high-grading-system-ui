@@ -61,8 +61,8 @@ body {
 }
 
 #print-header,
-.teacher-name{
-  display: none;
+.hideOnPage{
+  display: none !important;
 }
 
 @media print {
@@ -84,12 +84,16 @@ body {
     margin-left: 0 !important;
   }
 
-  #print-header,
-  .teacher-name {
-    display: block;
+  #print-header {
+    display: block !important;
   }
 
-  button {
+  .hideOnPage{
+    display: flex !important;
+  }
+
+  button,
+  #hideOnPrint {
     display: none !important;
   }
 }

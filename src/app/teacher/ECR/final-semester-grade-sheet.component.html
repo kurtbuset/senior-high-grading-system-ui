@@ -3,8 +3,8 @@
   <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">Print Grade</button>
 </div>
 
-<div id="print-header" class="mb-4">
-  <h3 class="text-center">Semestral Final Grade</h3>
+<div id="print-header" class="mb-4" *ngIf="subject$ | async as subject">
+  <strong class="text-center">Grading Period: {{ subject.semester }} FINAL GRADE</strong>
 </div>
 
 <table class="table table-bordered table-hover table-sm">
@@ -42,6 +42,3 @@
   <div class="spinner-border text-primary" role="status"></div>
 </div>
 
-<div class="teacher-name">
-  Subject Teacher: <strong> {{ account.firstName }} {{ account.lastName }} </strong>
-</div>
