@@ -4,10 +4,7 @@
 
 export const environment = {
   production: false,
-  // prod mode
-  apiUrl: 'https://capstone-backend-buvt.onrender.com'
-
-  // apiUrl: 'http://localhost:4000'
+  apiUrl: 'http://localhost:4000'
 };
 
 /*
