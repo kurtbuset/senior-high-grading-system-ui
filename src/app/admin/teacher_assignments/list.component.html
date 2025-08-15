@@ -1,104 +1,87 @@
 
-<div class="benedicto-bg">
-  <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h1 class="mb-1 benedicto-title">
-          <i class="fas fa-chalkboard-teacher me-2"></i>Teacher Assignments
-        </h1>
-        <p class="benedicto-subtitle mb-0">Assign teachers to specific subjects and manage teaching assignments</p>
+<div class="page-container">
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-info">
+        <h1 class="page-title">Teacher Assignments</h1>
+        <p class="page-subtitle">Assign teachers to specific subjects and manage teaching assignments</p>
       </div>
-      <button class="btn benedicto-btn-primary btn-lg" (click)="openAddModal()" *ngIf="teachers.length > 0">
-        <i class="fas fa-plus me-2"></i>Assign Teacher
+      <button class="btn btn-primary" (click)="openAddModal()" *ngIf="teachers.length > 0">
+        Assign Teacher
       </button>
     </div>
+  </div>
 
-    <!-- No Teachers Warning -->
-    <div class="benedicto-alert-warning mb-4" *ngIf="teachers.length === 0">
-      <i class="fas fa-exclamation-triangle me-2"></i>
-      <strong>No teachers available!</strong>
-      Please register teachers first in the <a routerLink="/admin/accounts" class="benedicto-link">Accounts section</a> before creating assignments.
+  <!-- No Teachers Warning -->
+  <div class="warning-alert" *ngIf="teachers.length === 0">
+    <strong>No teachers available!</strong>
+    Please register teachers first in the <a routerLink="/admin/accounts" class="alert-link">Accounts section</a> before creating assignments.
+  </div>
+
+  <!-- Teacher Assignments Table -->
+  <div class="content-card">
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Teacher</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Strand</th>
+            <th>Semester</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let assignment of teacherAssignments; let i = index">
+            <td>{{ assignment.id }}</td>
+            <td>
+              <div class="teacher-info">
+                <div class="teacher-avatar">
+                  {{ assignment.teacherName?.split(' ')[0]?.charAt(0) }}{{ assignment.teacherName?.split(' ')[1]?.charAt(0) }}
+                </div>
+                <div class="teacher-name">{{ assignment.teacherName }}</div>
+              </div>
+            </td>
+            <td>{{ assignment.subjectName }}</td>
+            <td>
+              <span class="grade-badge">Grade {{ assignment.grade_level }}</span>
+            </td>
+            <td>
+              <span class="strand-badge" [ngClass]="{
+                'strand-abm': assignment.strand === 'ABM',
+                'strand-humss': assignment.strand === 'HUMSS',
+                'strand-stem': assignment.strand === 'STEM',
+                'strand-gas': assignment.strand === 'GAS',
+                'strand-tvl': assignment.strand === 'TVL',
+                'strand-ict': assignment.strand === 'ICT'
+              }">{{ assignment.strand }}</span>
+            </td>
+            <td>
+              <span class="semester-badge">{{ assignment.semester }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn btn-edit" (click)="editAssignment(assignment)">
+                  Edit
+                </button>
+                <button class="btn btn-delete" (click)="deleteAssignment(assignment.id)">
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- Teacher Assignments Table -->
-    <div class="benedicto-card">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover mb-0">
-            <thead class="benedicto-table-header">
-              <tr>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 5%">#</th>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 20%">
-                  <i class="fas fa-user me-2"></i>TEACHER
-                </th>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 25%">
-                  <i class="fas fa-book me-2"></i>SUBJECT
-                </th>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 10%">
-                  <i class="fas fa-graduation-cap me-2"></i>GRADE
-                </th>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 12%">
-                  <i class="fas fa-layer-group me-2"></i>STRAND
-                </th>
-                <th class="border-0 fw-bold benedicto-header-text" style="width: 13%">
-                  <i class="fas fa-clock me-2"></i>SEMESTER
-                </th>
-                <th class="border-0 fw-bold benedicto-header-text text-center" style="width: 15%">
-                  <i class="fas fa-cogs me-2"></i>ACTIONS
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let assignment of teacherAssignments; let i = index" class="align-middle">
-                <td class="fw-bold py-3">{{ assignment.id }}</td>
-                <td class="py-3">
-                  <div class="d-flex align-items-center">
-                    <div class="teacher-avatar me-3">
-                      {{ assignment.teacherName?.split(' ')[0]?.charAt(0) }}{{ assignment.teacherName?.split(' ')[1]?.charAt(0) }}
-                    </div>
-                    <div class="fw-semibold">{{ assignment.teacherName }}</div>
-                  </div>
-                </td>
-                <td class="py-3">{{ assignment.subjectName }}</td>
-                <td class="py-3">
-                  <span class="benedicto-badge-grade">{{ assignment.grade_level }}</span>
-                </td>
-                <td class="py-3">
-                  <span class="badge fs-6 px-2 py-1" [ngClass]="{
-                    'benedicto-badge-abm': assignment.strand === 'ABM',
-                    'benedicto-badge-humss': assignment.strand === 'HUMSS',
-                    'benedicto-badge-stem': assignment.strand === 'STEM',
-                    'benedicto-badge-gas': assignment.strand === 'GAS',
-                    'benedicto-badge-tvl': assignment.strand === 'TVL',
-                    'benedicto-badge-ict': assignment.strand === 'ICT'
-                  }">{{ assignment.strand }}</span>
-                </td>
-                <td class="py-3">
-                  <span class="benedicto-badge-semester">{{ assignment.semester }}</span>
-                </td>
-                <td class="py-3 text-center">
-                  <div class="btn-group" role="group">
-                    <button class="btn benedicto-btn-edit btn-sm" (click)="editAssignment(assignment)">
-                      <i class="fas fa-edit me-1"></i>Edit
-                    </button>
-                    <button class="btn benedicto-btn-delete btn-sm" (click)="deleteAssignment(assignment.id)">
-                      <i class="fas fa-trash me-1"></i>Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-        </table>
-      </div>
-
-        <div *ngIf="teacherAssignments.length === 0" class="text-center py-5">
-          <i class="fas fa-chalkboard-teacher fa-4x benedicto-icon mb-4"></i>
-          <h4 class="benedicto-empty-title mb-3">No teacher assignments found</h4>
-          <p class="benedicto-empty-text mb-4">Start by assigning teachers to subjects.</p>
-          <div *ngIf="teachers.length === 0" class="benedicto-alert-warning mt-3">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            No teachers available. Please register teachers first in the <strong>Accounts</strong> section.
-          </div>
+    <div *ngIf="teacherAssignments.length === 0" class="empty-state">
+      <div class="empty-content">
+        <h4>No teacher assignments found</h4>
+        <p>Start by assigning teachers to subjects.</p>
+        <div *ngIf="teachers.length === 0" class="warning-note">
+          No teachers available. Please register teachers first in the <strong>Accounts</strong> section.
         </div>
       </div>
     </div>
@@ -479,4 +462,197 @@
 }
 
 
+</style>
+
+<style>
+/* Clean Original Design for Teacher Assignments */
+.page-container {
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a237e;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+.warning-alert {
+  background: #fff3cd;
+  color: #856404;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border-left: 4px solid #ffc107;
+}
+
+.alert-link {
+  color: #1a237e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.alert-link:hover {
+  text-decoration: underline;
+}
+
+.content-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  background: #1a237e;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.data-table tr:hover {
+  background: #f8f9fa;
+}
+
+.teacher-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teacher-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1a237e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.teacher-name {
+  font-weight: 500;
+  color: #212529;
+}
+
+.grade-badge {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.strand-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.strand-abm { background: #fff3e0; color: #e65100; }
+.strand-humss { background: #f3e5f5; color: #7b1fa2; }
+.strand-stem { background: #e8f5e8; color: #2e7d32; }
+.strand-gas { background: #e1f5fe; color: #0277bd; }
+.strand-tvl { background: #fff8e1; color: #f57c00; }
+.strand-ict { background: #fce4ec; color: #c2185b; }
+
+.semester-badge {
+  background: #f3e5f5;
+  color: #7b1fa2;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  background: #1a237e;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #151f6b;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-content h4 {
+  color: #1a237e;
+  margin-bottom: 8px;
+}
+
+.empty-content p {
+  color: #6c757d;
+  margin: 0 0 16px 0;
+}
+
+.warning-note {
+  background: #fff3cd;
+  color: #856404;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 16px;
+}
 </style>

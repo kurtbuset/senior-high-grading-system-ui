@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
@@ -14,14 +14,14 @@ import { Role } from '@app/_models/role';
   imports: [CommonModule, ReactiveFormsModule, RouterModule]
 })
 export class AddEditComponent implements OnInit {
-  form!: UntypedFormGroup;
+  form!: FormGroup;
   id!: string;
   isAddMode!: boolean;
   loading = false;
   submitted = false;
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,

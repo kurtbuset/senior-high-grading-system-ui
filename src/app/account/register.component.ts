@@ -3,8 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
-  UntypedFormGroup,
-  UntypedFormBuilder,
+  FormGroup,
+  FormBuilder,
   Validators,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,12 +19,12 @@ import { first } from 'rxjs';
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
 })
 export class RegisterComponent implements OnInit {
-  form: UntypedFormGroup;
+  form: FormGroup;
   loading = false;
   submitted = false;
 
   constructor(
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,

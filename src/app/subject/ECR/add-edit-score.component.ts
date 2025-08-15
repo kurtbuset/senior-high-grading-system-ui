@@ -5,8 +5,8 @@ import { FormArray } from '@angular/forms';
 import { first } from 'rxjs';
 import {
   ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormGroup,
+  FormBuilder,
+  FormGroup,
   Validators,
 } from '@angular/forms';
 import { AlertService } from '@app/_services/alert.service';
@@ -30,11 +30,11 @@ export class AddEditScoreComponent implements OnInit {
   loading = false;
   submitted = false;
 
-  form: UntypedFormGroup;
+  form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private alertService: AlertService,
     private gradingService: GradingService,
     private router: Router,

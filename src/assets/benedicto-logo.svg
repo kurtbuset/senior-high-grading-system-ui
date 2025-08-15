@@ -1,0 +1,77 @@
+
+<svg width="450" height="200" viewBox="0 0 450 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- No background for transparent logo -->
+
+  <!-- Gradients and Definitions -->
+  <defs>
+    <!-- Blue for B - exact match to image -->
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E4A8C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F2A5A;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Orange for C - exact match to image -->
+    <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF7F00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E55100;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Globe gradient - matching the green/yellow stripes -->
+    <linearGradient id="globeBase" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2E7D32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1B5E20;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Yellow stripes for globe -->
+    <linearGradient id="yellowStripe" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFC107;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8F00;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Large B Letter - positioned exactly like in image -->
+  <text x="5" y="155" font-family="Arial, sans-serif" font-size="150" font-weight="900" fill="#1E4A8C">B</text>
+
+  <!-- Globe positioned inside the C opening -->
+  <g transform="translate(175, 100)">
+    <!-- Main globe sphere -->
+    <circle cx="0" cy="0" r="30" fill="url(#globeBase)"/>
+
+    <!-- Yellow horizontal stripes -->
+    <rect x="-30" y="-15" width="60" height="3" fill="url(#yellowStripe)" opacity="0.9"/>
+    <rect x="-30" y="-8" width="60" height="2" fill="url(#yellowStripe)" opacity="0.8"/>
+    <rect x="-30" y="-2" width="60" height="2" fill="url(#yellowStripe)" opacity="0.8"/>
+    <rect x="-30" y="4" width="60" height="2" fill="url(#yellowStripe)" opacity="0.8"/>
+    <rect x="-30" y="10" width="60" height="3" fill="url(#yellowStripe)" opacity="0.9"/>
+
+    <!-- Curved yellow stripes for 3D effect -->
+    <ellipse cx="0" cy="0" rx="30" ry="8" fill="none" stroke="#FFC107" stroke-width="2" opacity="0.7"/>
+    <ellipse cx="0" cy="0" rx="30" ry="15" fill="none" stroke="#FFC107" stroke-width="1.5" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="30" ry="22" fill="none" stroke="#FFC107" stroke-width="1" opacity="0.5"/>
+
+    <!-- Vertical meridians -->
+    <ellipse cx="0" cy="0" rx="8" ry="30" fill="none" stroke="#FFC107" stroke-width="1.5" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="15" ry="30" fill="none" stroke="#FFC107" stroke-width="1" opacity="0.5"/>
+    <ellipse cx="0" cy="0" rx="22" ry="30" fill="none" stroke="#FFC107" stroke-width="0.8" opacity="0.4"/>
+
+    <!-- Central meridian and equator -->
+    <line x1="0" y1="-30" x2="0" y2="30" stroke="#FFC107" stroke-width="1.5" opacity="0.7"/>
+    <line x1="-30" y1="0" x2="30" y2="0" stroke="#FFC107" stroke-width="2" opacity="0.8"/>
+
+    <!-- Highlight on top-left -->
+    <ellipse cx="-10" cy="-12" rx="8" ry="10" fill="#81C784" opacity="0.6"/>
+  </g>
+
+  <!-- Large C Letter - positioned to contain the globe -->
+  <text x="140" y="155" font-family="Arial, sans-serif" font-size="150" font-weight="900" fill="#FF7F00">C</text>
+
+  <!-- BENEDICTO text - exact positioning and styling -->
+  <text x="280" y="85" font-family="Arial, sans-serif" font-size="52" font-weight="900" fill="#1E4A8C" letter-spacing="1px">BENEDICTO</text>
+
+  <!-- COLLEGE text -->
+  <text x="280" y="140" font-family="Arial, sans-serif" font-size="52" font-weight="900" fill="#1E4A8C" letter-spacing="1px">COLLEGE</text>
+
+  <!-- Year 2000 positioned under B -->
+  <text x="175" y="185" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#666">2000</text>
+</svg>

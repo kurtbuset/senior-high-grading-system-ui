@@ -1,0 +1,61 @@
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a237e;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  border-bottom: 1px solid #e9ecef;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.list-group-item {
+  border: 1px solid #e9ecef;
+}
+
+.list-group-item:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.list-group-item:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.btn-outline-primary {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid #1a237e;
+  color: #1a237e;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: #1a237e;
+  color: white;
+  border-radius: 4px;
+}

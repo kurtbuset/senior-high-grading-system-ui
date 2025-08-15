@@ -1,0 +1,70 @@
+<div class="container-fluid p-4">
+  <!-- Dashboard Header -->
+  <div class="mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="page-title mb-1">Student Dashboard</h1>
+        <p class="page-subtitle mb-0">Welcome to your academic dashboard</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Welcome Card -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h4 class="card-title mb-1">Welcome, {{ student.name }}!</h4>
+              <p class="card-text text-muted mb-2">Student ID: {{ student.id }}</p>
+              <p class="card-text mb-0">{{ student.course }} - {{ student.yearLevel }}</p>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-primary">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4" *ngFor="let link of quickLinks">
+      <div class="card stats-card">
+        <div class="card-body text-center">
+          <div class="stats-icon bg-primary text-white mb-3">
+            <i [class]="'fas ' + link.icon"></i>
+          </div>
+          <h5 class="mb-3">{{ link.title }}</h5>
+          <a [routerLink]="link.route" class="btn btn-primary">
+            View Details
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Recent Activity</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item" *ngFor="let activity of recentActivities">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">{{ activity.action }}</h6>
+                <small class="text-muted">{{ activity.time }}</small>
+              </div>
+              <p class="mb-1">{{ activity.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 <div class="py-2 px-4">
     <!-- <div class="container"> -->
-        <h1>Hi {{ account.role }} {{account.firstName}}!</h1>
+        <h1 *ngIf="account">Hi {{ account.role }} {{account.firstName}}!</h1>
+        <h1 *ngIf="!account">Loading...</h1>
         <!-- <p>this is {{ account.role }} dashboard</p> -->
-         <p>{{ account.id }}</p>
+        <p *ngIf="account">{{ account.id }}</p>
     <!-- </div> -->
 </div>  

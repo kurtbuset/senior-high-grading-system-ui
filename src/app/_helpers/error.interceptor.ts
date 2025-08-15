@@ -1,33 +1,33 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandlerFn, HttpEvent } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
 
 import { AccountService } from '@app/_services/account.service';
 
-@Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private accountService: AccountService) { }
-
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(catchError(err => {
-            if ([401, 403].includes(err.status) && this.accountService.accountValue) {
-                // auto logout if 401 or 403 response returned from api
-                this.accountService.logout();
-            }
-
-            const error = (err && err.error && err.error.message) || err.statusText;
-
-            // Only log errors that aren't expected authentication failures
-            if (!(err.status === 401 && request.url.includes('refresh-token'))) {
-                console.error('HTTP Error:', {
-                    status: err.status,
-                    url: request.url,
-                    message: error
-                });
-            }
-
-            return throwError(() => error);
-        }))
+export function ErrorInterceptor(
+  request: HttpRequest<unknown>, 
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> {
+  const accountService = inject(AccountService);
+  
+  return next(request).pipe(catchError(err => {
+    if ([401, 403].includes(err.status) && accountService.accountValue) {
+      // auto logout if 401 or 403 response returned from api
+      accountService.logout();
     }
+
+    const error = (err && err.error && err.error.message) || err.statusText;
+
+    // Only log errors that aren't expected authentication failures
+    if (!(err.status === 401 && request.url.includes('refresh-token'))) {
+      console.error('HTTP Error:', {
+        status: err.status,
+        url: request.url,
+        message: error
+      });
+    }
+
+    return throwError(() => error);
+  }));
 }

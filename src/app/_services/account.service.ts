@@ -18,6 +18,16 @@ export class AccountService {
   constructor(private router: Router, private http: HttpClient, private subjectService: SubjectService) {
     this.accountSubject = new BehaviorSubject<Account>(null);
     this.account = this.accountSubject.asObservable();
+    
+    // Log account changes for debugging
+    this.account.subscribe(account => {
+      console.log('AccountService: Account state changed:', account);
+      if (account) {
+        console.log('AccountService: User logged in with role:', account.role);
+      } else {
+        console.log('AccountService: No user logged in');
+      }
+    });
   }
 
   public get accountValue(): Account {
@@ -26,7 +36,14 @@ export class AccountService {
 
   // Development helper method to set a mock account
   setMockAccount(account: Account) {
+    console.log('AccountService: Setting mock account:', account);
     this.accountSubject.next(account);
+  }
+
+  // Method to manually clear account (useful for testing)
+  clearAccount() {
+    console.log('AccountService: Clearing account');
+    this.accountSubject.next(null);
   }
 
   login(username: string, password: string) {
@@ -46,24 +63,45 @@ export class AccountService {
   }
 
   logout() {
-    this.http
-      .post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true })
-      .subscribe();
-    localStorage.removeItem('account');
+    console.log('AccountService: Starting logout process...');
+
+    try {
+      // Revoke token on server (don't wait for response)
+      this.http
+        .post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true })
+        .subscribe({
+          next: () => console.log('Token revoked successfully'),
+          error: (error) => console.log('Token revocation failed (server may be down):', error)
+        });
+    } catch (error) {
+      console.log('Token revocation request failed:', error);
+    }
+
+    // Clear all local storage
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // Stop refresh timer
     this.stopRefreshTokenTimer();
+
+    // Set account to null (this will trigger UI updates)
     this.accountSubject.next(null);
+
+    // Navigate to login page
     this.router.navigate(['/account/login']);
+
+    console.log('AccountService: Logout complete, account set to null, redirected to login');
   }
 
   refreshToken() {
+    console.log('AccountService: Attempting to refresh token...');
+    
     return this.http
       .post<any>(`${baseUrl}/refresh-token`, {}, { withCredentials: true })
       .pipe(
         map((account) => {
-          // console.log('yeah')
-          // console.log(account.id)
+          console.log('AccountService: Token refresh successful:', account);
           this.accountSubject.next(account);
-          // this.subjectService.getOneSubject(account.id).subscribe(())
           this.startRefreshTokenTimer();
           return account;
         })
@@ -93,16 +131,20 @@ export class AccountService {
   private refreshTokenTimeout;
 
   private startRefreshTokenTimer() {
-    // parse json object from base64 encoded jwt token
-    const jwtToken = JSON.parse(atob(this.accountValue.jwtToken.split('.')[1]));
+    try {
+      // parse json object from base64 encoded jwt token
+      const jwtToken = JSON.parse(atob(this.accountValue.jwtToken.split('.')[1]));
 
-    // set a timeout to refresh the token a minute before it expires
-    const expires = new Date(jwtToken.exp * 1000);
-    const timeout = expires.getTime() - Date.now() - 60 * 1000;
-    this.refreshTokenTimeout = setTimeout(
-      () => this.refreshToken().subscribe(),
-      timeout
-    );
+      // set a timeout to refresh the token a minute before it expires
+      const expires = new Date(jwtToken.exp * 1000);
+      const timeout = expires.getTime() - Date.now() - 60 * 1000;
+      this.refreshTokenTimeout = setTimeout(
+        () => this.refreshToken().subscribe(),
+        timeout
+      );
+    } catch (error) {
+      console.log('AccountService: Error parsing JWT token:', error);
+    }
   }
 
   private stopRefreshTokenTimer() {

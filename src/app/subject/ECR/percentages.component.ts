@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
+  FormBuilder,
+  FormGroup,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -21,14 +21,14 @@ import { first } from 'rxjs';
 export class PercentagesComponent {
   teacher_subject_id: string;
   subject$ = this.subjectService.subject;
-  form: UntypedFormGroup;
+  form: FormGroup;
   isEditing = false;
   loading = false;
   submitted = false;
 
   constructor(
     private subjectService: SubjectService,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private alertService: AlertService,
     private route: ActivatedRoute,
     private gradingService: GradingService,

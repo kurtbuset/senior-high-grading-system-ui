@@ -1,0 +1,81 @@
+<div class="container-fluid p-4">
+  <!-- Dashboard Header -->
+  <div class="mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="page-title mb-1">Admin Dashboard</h1>
+        <p class="page-subtitle mb-0">Welcome to the Benedicto College Grading System</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card stats-card">
+        <div class="card-body text-center">
+          <div class="stats-icon bg-primary text-white mb-3">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="stats-number">{{ stats.totalAccounts }}</h3>
+          <p class="stats-label">Total Accounts</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stats-card">
+        <div class="card-body text-center">
+          <div class="stats-icon bg-success text-white mb-3">
+            <i class="fas fa-book"></i>
+          </div>
+          <h3 class="stats-number">{{ stats.totalSubjects }}</h3>
+          <p class="stats-label">Total Subjects</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stats-card">
+        <div class="card-body text-center">
+          <div class="stats-icon bg-info text-white mb-3">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h3 class="stats-number">{{ stats.totalAssignments }}</h3>
+          <p class="stats-label">Teacher Assignments</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card stats-card">
+        <div class="card-body text-center">
+          <div class="stats-icon bg-warning text-white mb-3">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3 class="stats-number">{{ stats.activeUsers }}</h3>
+          <p class="stats-label">Active Users</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activities -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Recent Activities</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item" *ngFor="let activity of recentActivities">
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">{{ activity.action }}</h6>
+                <small class="text-muted">{{ activity.time }}</small>
+              </div>
+              <p class="mb-1">{{ activity.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

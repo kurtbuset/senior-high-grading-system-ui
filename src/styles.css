@@ -1,0 +1,204 @@
+/* ==============================
+   Global Styles
+============================== */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Links reset */
+a {
+  text-decoration: none;
+}
+
+/* ==============================
+   Sidebar (Shared for Admin & Student)
+============================== */
+.sidebar {
+  background-color: #fff;
+  border-right: 1px solid #dee2e6;
+  width: 240px;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidebar .logo-container {
+  padding: 1rem 0;
+  border-bottom: 1px solid #dee2e6;
+  text-align: center;
+}
+
+.sidebar .logo {
+  max-width: 120px;
+  height: auto;
+}
+
+.nav-menu {
+  margin-top: 1rem;
+  flex: 1;
+}
+
+.nav-menu .nav-link {
+  color: #495057;
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.nav-menu .nav-link:hover {
+  background-color: #f1f3f5;
+  border-left: 4px solid #0d6efd;
+  color: #0d6efd;
+}
+
+.nav-menu .active {
+  background-color: #e9ecef;
+  border-left: 4px solid #0d6efd;
+  color: #0d6efd;
+}
+
+.logout {
+  margin-top: auto;
+  color: #dc3545 !important;
+}
+
+/* ==============================
+   Main Content
+============================== */
+.main-content {
+  margin-left: 240px;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.no-sidebar .main-content {
+  margin-left: 0;
+}
+
+/* ==============================
+   Student Sidebar Theme
+============================== */
+.student-sidebar {
+  background-color: #fff;
+  border-right: 1px solid #dee2e6;
+  width: 240px;
+  height: 100vh;
+  padding-top: 1rem;
+}
+
+.student-sidebar .nav-link {
+  padding: 0.75rem 1.25rem;
+  color: #495057;
+  font-weight: 500;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.student-sidebar .nav-link:hover {
+  background-color: #f1f3f5;
+  border-left: 4px solid #0d6efd;
+  color: #0d6efd;
+}
+
+.student-sidebar .active {
+  background-color: #e9ecef;
+  border-left: 4px solid #0d6efd;
+  color: #0d6efd;
+}
+
+/* ==============================
+   Cards (Profile & E-Grade)
+============================== */
+.profile-card,
+.egrade-card {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-card h4,
+.egrade-card h4 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+/* ==============================
+   Tables
+============================== */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+/* ==============================
+   Buttons
+============================== */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+/* ==============================
+   Logout Modal
+============================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 0.25rem;
+  padding: 1.5rem;
+  width: 400px;
+  max-width: 95%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

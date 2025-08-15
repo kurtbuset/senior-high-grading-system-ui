@@ -311,8 +311,7 @@ export class ListComponent implements OnInit {
       subjectName: ['', Validators.required],
       grade_level: ['', Validators.required],
       strand: ['', Validators.required],
-      section: ['', Validators.required],
-      school_year: ['', Validators.required],
+      school_year: ['', [Validators.required, Validators.pattern(/^[0-9]{4}-[0-9]{4}$/)]],
       semester: ['', Validators.required]
     });
   }
@@ -454,6 +453,32 @@ export class ListComponent implements OnInit {
     this.filterSemester = '';
     this.searchTerm = '';
     this.applyFilters();
+  }
+
+  // Format school year input to YYYY-YYYY format
+  formatSchoolYear(event: any) {
+    let value = event.target.value;
+
+    // Remove all non-numeric characters
+    value = value.replace(/\D/g, '');
+
+    // Limit to 8 digits
+    if (value.length > 8) {
+      value = value.substring(0, 8);
+    }
+
+    // Add hyphen after 4 digits
+    if (value.length > 4) {
+      value = value.substring(0, 4) + '-' + value.substring(4);
+    }
+
+    // Update the form control value
+    this.subjectForm.patchValue({
+      school_year: value
+    });
+
+    // Update the input field
+    event.target.value = value;
   }
 
   openAddModal() {

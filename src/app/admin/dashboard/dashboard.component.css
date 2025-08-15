@@ -1,0 +1,73 @@
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a237e;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: #6c757d;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+.stats-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stats-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto;
+}
+
+.stats-number {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 10px 0 5px 0;
+  color: #1a237e;
+}
+
+.stats-label {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-header {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.list-group-item {
+  border: none;
+  padding: 1rem 0;
+}
+
+.list-group-item:first-child {
+  padding-top: 0;
+}
+
+.list-group-item:last-child {
+  padding-bottom: 0;
+}
+
+.list-group-item:not(:last-child) {
+  border-bottom: 1px solid #e9ecef;
+}

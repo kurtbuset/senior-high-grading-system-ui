@@ -1,147 +1,99 @@
-<div class="app-container d-flex" [ngClass]="{ 'bg-light': account }">
-  <!-- main nav -->
-  <nav
-    class="text-white sidebar p-3 vh-100"
-    style="
-    width: 200px;
-    background-color: rgb(0, 0, 70);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 1000;
-    overflow-y: auto;"
-    *ngIf="account"
-  >
-    <div class="mt-2 mb-4 text-center">
-      <h4
-        class="fw-bold"
-        style="letter-spacing: 1px; cursor: pointer"
-        routerLink="/"  
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-talWhvqHshpEQw5Kf10LV9vno1j6fbwWUQ&s" width="100" alt="">
-      </h4>
+<div class="d-flex" [ngClass]="{ 'no-sidebar': !account }">
+  <!-- Sidebar -->
+  <aside class="sidebar vh-100 position-fixed bg-light border-end" *ngIf="account" [ngClass]="{ 'collapsed': isCollapsed }">
+    <!-- BC Logo -->
+    <div class="logo-container text-center p-3 border-bottom">
+      <img src="assets/benedicto-logo.svg" alt="Benedicto College Logo" class="logo mb-2">
+      <h5 class="fw-bold text-primary">Benedicto College</h5>
     </div>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link text-white">Dashboard</a
-        >
-      </li>
-      
-      <li *ngIf="account.role === Role.Admin" class="nav-item">
-        <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
-          >Accounts</a
-        >
-      </li>
-      <li *ngIf="account.role === Role.Admin" class="nav-item">
-        <a routerLink="/admin/subjects" routerLinkActive="active" class="nav-link text-white"
-          >Subjects</a
-        >
-      </li>
-      <li *ngIf="account.role === Role.Admin" class="nav-item">
-        <a routerLink="/admin/assignments" routerLinkActive="active" class="nav-link text-white"
-          >Teacher Assignments</a
-        >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Teacher">
-        <a routerLink="/subject" routerLinkActive="active" class="nav-link text-white"
-          >Subjects</a
-        >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Student">
-        <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-          >Report Card</a
-        >
-      </li>
-      <li class="nav-item">
-        <a
-          routerLink="/profile"
-          routerLinkActive="active"
-          class="nav-link text-white"
-          >My Profile</a
-        >
-      </li>
-      <li class="nav-item">
-      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-        >Modify Account</a
-      >
-      </li>
-      <li class="nav-item">
-        <a
-          (click)="openLogoutModal()"
-          class="nav-link text-white"
-          style="cursor: pointer"
-          >Logout</a
-        >
-      </li>
-    </ul>
-  </nav>
 
-  <div
-    class="modal fade"
-    tabindex="-1"
-    [ngClass]="{ show: showLogoutModal }"
-    [ngStyle]="{ display: showLogoutModal ? 'block' : 'none' }"
-    role="dialog"
-    aria-modal="true"
-  >
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">Confirm Logout</h3>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to logout?</p>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="closeLogoutModal()"
-          >
-            No
-          </button>
-          <button type="button" class="btn btn-danger" (click)="logout()">
-            Yes
-          </button>
-        </div>
+    <!-- Navigation Menu -->
+    <nav class="nav flex-column nav-menu p-3">
+      
+      <!-- Admin Menu -->
+      <ng-container *ngIf="account.role === Role.Admin">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link nav-item">
+          Dashboard
+        </a>
+        <a routerLink="/admin/subjects" routerLinkActive="active" class="nav-link nav-item">
+          Subjects
+        </a>
+        <a routerLink="/admin/assignments" routerLinkActive="active" class="nav-link nav-item">
+          Teacher Assignment
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-link nav-item">
+          My Profile
+        </a>
+      </ng-container>
+
+      <!-- Teacher Menu -->
+      <ng-container *ngIf="account.role === Role.Teacher">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link nav-item">
+          Dashboard
+        </a>
+        <a routerLink="/subject" routerLinkActive="active" class="nav-link nav-item">
+          Subjects
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-link nav-item">
+          My Profile
+        </a>
+      </ng-container>
+
+      <!-- Student Menu -->
+      <ng-container *ngIf="account.role === Role.Student">
+        <a routerLink="/student/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link nav-item">
+          Dashboard
+        </a>
+        <a routerLink="/student/e-grade" routerLinkActive="active" class="nav-link nav-item">
+          E-Grade
+        </a>
+        <a routerLink="/student/my-profile" routerLinkActive="active" class="nav-link nav-item">
+          My Profile
+        </a>
+        <a routerLink="/student/modify-account" routerLinkActive="active" class="nav-link nav-item">
+          Modify Account
+        </a>
+      </ng-container>
+
+      <!-- Logout -->
+      <a (click)="openLogoutModal()" class="nav-link nav-item logout mt-3 text-danger fw-bold" style="cursor: pointer">
+        Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content flex-grow-1" [ngClass]="{ 'login-page': !account }">
+    <!-- Top Navbar (only if logged in) -->
+    <nav class="navbar navbar-light bg-light border-bottom px-3" *ngIf="account">
+      <button class="btn btn-outline-primary d-lg-none" (click)="isCollapsed = !isCollapsed">
+        ☰ Menu
+      </button>
+    </nav>
+
+    <alert></alert>
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Logout Modal -->
+  <div class="modal-overlay" *ngIf="showLogoutModal" (click)="closeLogoutModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Confirm Logout</h3>
+        <button type="button" class="btn-close" (click)="closeLogoutModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to logout from your account?</p>
+        <small class="text-muted">You will need to login again to access your account.</small>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeLogoutModal()" [disabled]="loggingOut">Cancel</button>
+        <button class="btn btn-danger" (click)="logout()" [disabled]="loggingOut">
+          <span *ngIf="loggingOut" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <span *ngIf="!loggingOut" class="logout-icon">🚪</span>
+          {{ loggingOut ? 'Logging out...' : 'Logout' }}
+        </button>
       </div>
     </div>
-  </div>
-  <div
-    class="modal-backdrop fade"
-    [ngClass]="{ show: showLogoutModal }"
-    *ngIf="showLogoutModal"
-  ></div>
-
-  <div
-    class="flex-grow-1 background"
-    style="padding: 1rem;"
-    [ngStyle]="!account   
-      ? 
-      {
-          'background-image':
-            'url(https://media.licdn.com/dms/image/v2/C561BAQEGwJUSWC5Dfw/company-background_10000/company-background_10000/0/1633699511389/benedicto_college_cover?e=2147483647&v=beta&t=Iiz-yGR2m0qFmUID-2wZehq_DmBizxAbccTxIoinYoc)',
-          'background-size': 'cover',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat'
-        } : {
-          'margin-left': '200px'  
-        }
-    "
-  >
-    
-    <router-outlet name="subnav"></router-outlet> 
-
-    <!-- global alert -->
-    <alert></alert>
-    
-    <!-- <breadcrumb-nav *ngIf="account" /> -->
-    
-    
-    <!-- main router outlet -->
-    <router-outlet></router-outlet>
   </div>
 </div>

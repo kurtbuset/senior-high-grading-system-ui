@@ -1,12 +1,111 @@
-<h1>My Profile</h1>
-<div class="d-flex justify-content-between">
-  <div>
-    <strong>Firstname: </strong> {{ account.firstName }}
-  </div>
-  
-  <div>
-    <strong>Lastname: </strong> {{ account.lastName }}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+
+      <!-- Profile Card -->
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body text-center p-5">
+          <img src="https://via.placeholder.com/120" alt="Profile Picture" class="rounded-circle mb-3 profile-pic">
+          <h3 class="card-title mb-1">{{ account.firstName }} {{ account.lastName }}</h3>
+          <p class="text-muted">{{ account.email }}</p>
+          <p class="mb-4"><span class="badge bg-primary">{{ account.role }}</span></p>
+
+          <button class="btn btn-outline-primary me-2" (click)="openModifyModal()">Modify Account</button>
+          <button class="btn btn-outline-secondary me-2" (click)="resetPassword()">Reset Password</button>
+          <button class="btn btn-outline-danger" (click)="deleteAccount()">Delete Account</button>
+        </div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="card shadow-sm border-0 rounded-4 mt-4">
+        <div class="card-body p-4">
+          <h5 class="mb-3">Account Settings</h5>
+          <form (submit)="onSettingsUpdate($event)">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="emailNotifications" name="emailNotifications">
+              <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="twoFactorAuth" name="twoFactorAuth">
+              <label class="form-check-label" for="twoFactorAuth">Two-Factor Authentication</label>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="profileVisibility" name="profileVisibility">
+              <label class="form-check-label" for="profileVisibility">Public Profile</label>
+            </div>
+            <button class="btn btn-success" type="submit" [disabled]="loading">
+              {{ loading ? 'Saving...' : 'Save Settings' }}
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<a class="btn btn-sm btn-primary">Update Profile</a>  
+<!-- Modify Account Modal -->
+<div class="modal fade" tabindex="-1" [class.show]="isModifyModalOpen" [style.display]="isModifyModalOpen ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Modify Account</h5>
+        <button type="button" class="btn-close" (click)="closeModifyModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="saveChanges($event)">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" [value]="account.title">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">First Name</label>
+            <input type="text" name="firstName" class="form-control" [value]="account.firstName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Last Name</label>
+            <input type="text" name="lastName" class="form-control" [value]="account.lastName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" [value]="account.email" required>
+          </div>
+          <div class="text-end">
+            <button type="button" class="btn btn-secondary me-2" (click)="closeModifyModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              {{ loading ? 'Saving...' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 4px solid #dee2e6;
+  }
+
+  .modal.fade.show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    border-radius: 1rem;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+  }
+</style>
