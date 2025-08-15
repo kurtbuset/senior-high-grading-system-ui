@@ -9,4 +9,7 @@ export class Account {
     role: Role;
     isActive: boolean
     jwtToken?: string;
+    phone?: string;
+    address?: string;
+    password?: string;
 }

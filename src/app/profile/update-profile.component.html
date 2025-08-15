@@ -1,0 +1,79 @@
+<div class="update-profile-header text-center mb-4">
+  <img src="../../assets/profile-edit.svg" alt="Edit Profile" style="width: 80px; margin-bottom: 10px;">
+  <h2 class="fw-bold">Update Profile</h2>
+  <p class="text-muted">Edit your personal information below. Fields marked with * are required.</p>
+</div>
+<form class="update-profile-form p-4 rounded shadow bg-white position-relative" (ngSubmit)="onSubmit()">
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+      <input type="text" id="firstName" class="form-control" [(ngModel)]="account.firstName" name="firstName" required placeholder="Enter your first name">
+    </div>
+    <div class="col-md-6">
+      <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+      <input type="text" id="lastName" class="form-control" [(ngModel)]="account.lastName" name="lastName" required placeholder="Enter your last name">
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+    <input type="email" id="email" class="form-control" [(ngModel)]="account.email" name="email" required placeholder="Enter your email address">
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Phone</label>
+    <input type="text" id="phone" class="form-control" [(ngModel)]="account.phone" name="phone" placeholder="Enter your phone number">
+  </div>
+  <div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <input type="text" id="address" class="form-control" [(ngModel)]="account.address" name="address" placeholder="Enter your address">
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" id="password" class="form-control" [(ngModel)]="account.password" name="password" placeholder="Enter a new password">
+  </div>
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-primary px-4 shadow-sm">Save Changes</button>
+  </div>
+</form>
+<style>
+  .update-profile-header img {
+    border-radius: 50%;
+    background: #f3f3f3;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .update-profile-header h2 {
+    color: #232a4d;
+    margin-bottom: 0.5rem;
+  }
+  .update-profile-header p {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+  .update-profile-form {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid #e3e3e3;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(35,42,77,0.08);
+  }
+  .update-profile-form label {
+    font-weight: 500;
+    color: #232a4d;
+  }
+  .update-profile-form input {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+  .update-profile-form input:focus {
+    border-color: #232a4d;
+    box-shadow: 0 0 0 2px #232a4d22;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, #232a4d 60%, #217a5b 100%);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+</style>

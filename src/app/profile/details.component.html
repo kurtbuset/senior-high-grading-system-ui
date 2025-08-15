@@ -3,10 +3,11 @@
   <div>
     <strong>Firstname: </strong> {{ account.firstName }}
   </div>
-  
   <div>
     <strong>Lastname: </strong> {{ account.lastName }}
   </div>
 </div>
-
-<a class="btn btn-sm btn-primary">Update Profile</a>  
+<div class="mb-3">
+  <strong>Email: </strong> {{ account.email }}
+</div>
+<a routerLink="update" class="btn btn-sm btn-primary">Update Profile</a>

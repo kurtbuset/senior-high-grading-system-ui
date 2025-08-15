@@ -15,20 +15,8 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
     <div class="container mt-4">
       <h2>{{ isAddMode ? 'Add New Account' : 'Edit Existing Account' }}</h2>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
-        <div class="form-group">
-          <label for="title" class="form-label">Title</label>
-          <select id="title" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.title.errors }" required>
-            <option value="">Select Title</option>
-            <option value="Mr">Mr</option>
-            <option value="Ms">Ms</option>
-            <option value="Mrs">Mrs</option>
-            <option value="Dr">Dr</option>
-            <option value="Prof">Prof</option>
-          </select>
-          <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
-            <div *ngIf="f.title.errors.required">Title is required</div>
-          </div>
-        </div>
+    
+
         <div class="form-group">
           <label for="firstName" class="form-label">First Name</label>
           <input type="text" id="firstName" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" required />
@@ -36,6 +24,7 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
             <div *ngIf="f.firstName.errors.required">First Name is required</div>
           </div>
         </div>
+
         <div class="form-group">
           <label for="lastName" class="form-label">Last Name</label>
           <input type="text" id="lastName" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" required />
@@ -43,6 +32,7 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
             <div *ngIf="f.lastName.errors.required">Last Name is required</div>
           </div>
         </div>
+
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
           <input type="email" id="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" required />
@@ -51,22 +41,25 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
             <div *ngIf="f.email.errors.email">Email must be a valid address</div>
           </div>
         </div>
+
         <div class="form-group">
           <label for="role" class="form-label">Role</label>
           <select id="role" formControlName="role" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.role.errors }" required>
             <option value="">Select Role</option>
             <option [value]="Role.Admin">Admin</option>
             <option [value]="Role.Teacher">Teacher</option>
-            <option [value]="Role.Student">Student</option>
+            <!-- Student removed -->
           </select>
           <div *ngIf="submitted && f.role.errors" class="invalid-feedback">
             <div *ngIf="f.role.errors.required">Role is required</div>
           </div>
         </div>
+
         <div class="form-group form-check">
           <input type="checkbox" id="isActive" formControlName="isActive" class="form-check-input" />
           <label class="form-check-label" for="isActive">Active</label>
         </div>
+
         <div *ngIf="isAddMode" class="form-group">
           <label for="password" class="form-label">Password</label>
           <input type="password" id="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" required />
@@ -75,6 +68,7 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
             <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
           </div>
         </div>
+
         <div *ngIf="isAddMode" class="form-group">
           <label for="confirmPassword" class="form-label">Confirm Password</label>
           <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }" required />
@@ -83,6 +77,7 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
             <div *ngIf="form.errors?.mustMatch">Passwords must match</div>
           </div>
         </div>
+
         <button [disabled]="loading" class="btn btn-primary mt-3" type="submit">
           {{ isAddMode ? 'Create Account' : 'Update Account' }}
         </button>
@@ -114,7 +109,6 @@ export class AddEditComponent implements OnInit {
     this.isAddMode = !this.id;
 
     this.form = this.formBuilder.group({
-      title: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -131,7 +125,6 @@ export class AddEditComponent implements OnInit {
         .pipe(first())
         .subscribe(account => {
           this.form.patchValue({
-            title: account.title,
             firstName: account.firstName,
             lastName: account.lastName,
             email: account.email,
@@ -148,7 +141,6 @@ export class AddEditComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
     this.alertService.clear();
 
     if (this.form.invalid) {
@@ -169,7 +161,10 @@ export class AddEditComponent implements OnInit {
       .subscribe({
         next: () => {
           this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['../'], { relativeTo: this.route });
+          // ensure loading flag reset before navigation
+          this.loading = false;
+          // navigate to accounts list (use absolute path to ensure correct route)
+          this.router.navigate(['/admin/accounts']);
         },
         error: (error) => {
           this.alertService.error(error);
@@ -191,7 +186,9 @@ export class AddEditComponent implements OnInit {
       .subscribe({
         next: () => {
           this.alertService.success('Account updated successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['../../'], { relativeTo: this.route });
+          this.loading = false;
+          // navigate back to accounts list
+          this.router.navigate(['/admin/accounts']);
         },
         error: (error) => {
           this.alertService.error(error);

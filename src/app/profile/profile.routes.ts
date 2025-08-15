@@ -6,6 +6,7 @@ export const profileRoutes: Routes = [
       //  { path: '', pathMatch: 'full', redirectTo: 'test' }, // or any default child
 
       { path: '', loadComponent: () => import('./details.component').then((m) => m.DetailsComponent), title: 'Profile details' },
+      { path: 'update', loadComponent: () => import('./update-profile.component').then(m => m.UpdateProfileComponent), title: 'Update Profile' },
     ]
   }
 ];

@@ -1,7 +1,57 @@
-<div class="py-2 px-4">
-    <!-- <div class="container"> -->
-        <h1>Hi {{ account.role }} {{account.firstName}}!</h1>
-        <!-- <p>this is {{ account.role }} dashboard</p> -->
-         <p>{{ account.id }}</p>
-    <!-- </div> -->
-</div>  
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="fw-bold mb-2">Welcome Super Admin!</h1>
+    <p class="lead">Manage your platform with ease and efficiency</p>
+  </div>
+<div class="row justify-content-center align-items-stretch dashboard-cards-row">
+  <div class="col-md-4 mb-4 d-flex">
+    <div class="card shadow-sm border-0 flex-fill d-flex flex-column justify-content-between" style="background: #232a4d; color: #fff; border-radius: 18px;">
+      <div class="card-body text-center d-flex flex-column justify-content-between">
+        <div>
+          <h4 class="card-title mb-3">Accounts</h4>
+        </div>
+        <div class="dashboard-btn-row">
+          <a [routerLink]="['/admin/accounts']" class="btn btn-primary fw-bold" style="width: 70%;">Manage Accounts</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4 d-flex">
+    <div class="card shadow-sm border-0 flex-fill d-flex flex-column justify-content-between" style="background: #217a5b; color: #fff; border-radius: 18px;">
+      <div class="card-body text-center d-flex flex-column justify-content-between">
+        <div>
+          <h4 class="card-title mb-3">System Status</h4>
+        </div>
+        <div class="dashboard-btn-row">
+          <a routerLink="/admin/subjects" class="btn btn-success fw-bold" style="width: 70%;">View Status</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4 d-flex">
+    <div class="card shadow-sm border-0 flex-fill d-flex flex-column justify-content-between" style="background: #3d2a5d; color: #fff; border-radius: 18px;">
+      <div class="card-body text-center d-flex flex-column justify-content-between">
+        <div>
+          <h4 class="card-title mb-3">Reports</h4>
+        </div>
+        <div class="dashboard-btn-row">
+          <a routerLink="/admin/assignments" class="btn btn-info fw-bold" style="width: 70%;">View Reports</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .dashboard-cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .dashboard-btn-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 70px;
+  }
+</style>
+</div>

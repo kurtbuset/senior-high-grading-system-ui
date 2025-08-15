@@ -1,3 +1,4 @@
+// ...existing code...
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -18,6 +19,10 @@ export class AccountService {
   constructor(private router: Router, private http: HttpClient, private subjectService: SubjectService) {
     this.accountSubject = new BehaviorSubject<Account>(null);
     this.account = this.accountSubject.asObservable();
+  }
+
+  public updateLocalAccount(account: Account) {
+    this.accountSubject.next(account);
   }
 
   public get accountValue(): Account {
@@ -78,8 +83,9 @@ export class AccountService {
     return this.http.get<Account>(`${baseUrl}/${id}`);
   }
 
+  // Use the register endpoint on the fake backend so account creation works in dev mode
   createAccount(account: Account) {
-    return this.http.post(`${baseUrl}`, account);
+    return this.http.post(`${baseUrl}/register`, account);
   }
 
   updateAccount(id: string, account: Partial<Account>) {

@@ -161,7 +161,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           const verifyUrl = `${location.origin}/account/verify-email?token=${account.verificationToken}`;
           alertService.info(
             `
-                        <h4>Verification Email</h4> 
+                        <h4>Verification Email</h4>
                         <p>Please click the below link to verify your email address:</p>
                         <p><a href="${verifyUrl}">${verifyUrl}</a></p>
                         <div><strong>NOTE:</strong> The fake backend displayed this "email" so you can test without an api. A real backend would send a real email.</div>

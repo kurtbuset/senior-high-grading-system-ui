@@ -15,22 +15,20 @@
   <table class="table table-hover table-striped">
     <thead class="thead-dark">
       <tr>
-        <th style="width: 5%;">#</th>
-        <th style="width: 10%;">Title</th>
-        <th style="width: 20%;">Name</th>
-        <th style="width: 25%;">Email</th>
-        <th style="width: 15%;">Role</th>
-        <th style="width: 10%;">Status</th>
-        <th style="width: 15%;">Actions</th>
+        <th style="width: 5%;" class="text-center">#</th>
+        <th style="width: 20%;" class="text-left">Name</th>
+        <th style="width: 25%;" class="text-left">Email</th>
+        <th style="width: 15%;" class="text-center">Role</th>
+        <th style="width: 10%;" class="text-center">Status</th>
+        <th style="width: 15%;" class="text-center">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let account of accounts; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ account.title }}</td>
-        <td>{{ account.firstName }} {{ account.lastName }}</td>
-        <td>{{ account.email }}</td>
-        <td>
+        <td class="text-center">{{ i + 1 }}</td>
+        <td class="text-left">{{ account.firstName }} {{ account.lastName }}</td>
+        <td class="text-left">{{ account.email }}</td>
+        <td class="text-center">
           <span class="badge"
                 [ngClass]="{
                   'badge-primary': account.role === Role.Admin,
@@ -39,7 +37,7 @@
             {{ account.role }}
           </span>
         </td>
-        <td>
+        <td class="text-center">
           <span class="badge"
                 [ngClass]="{
                   'badge-success': account.isActive,
@@ -48,17 +46,17 @@
             {{ account.isActive ? 'Active' : 'Inactive' }}
           </span>
         </td>
-        <td>
-          <div class="btn-group" role="group">
+        <td class="text-center">
+          <div class="d-flex flex-column align-items-center gap-2">
             <a [routerLink]="['edit', account.id]"
-               class="btn btn-sm btn-outline-primary"
+               class="btn btn-sm btn-outline-primary w-75 mb-1"
                title="Edit Account">
-              <i class="fa fa-edit"></i>
+              <i class="fa fa-edit"></i> Edit
             </a>
             <button (click)="deleteAccount(account.id)"
-                    class="btn btn-sm btn-outline-danger"
+                    class="btn btn-sm btn-outline-danger w-75"
                     title="Delete Account">
-              <i class="fa fa-trash"></i>
+              <i class="fa fa-trash"></i> Delete
             </button>
           </div>
         </td>
