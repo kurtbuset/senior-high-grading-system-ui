@@ -1,13 +1,3 @@
-<!-- <p class="text-center text-sm text-gray-600 m-0">
-  🚧 We appreciate your time in using this system during its beta phase.
-</p>
-
-<p class="text-center text-sm text-gray-600 m-0">
-  Your feedback is valuable in helping us refine and enhance the experience.
-</p> -->
-
-
-
 <div class="app-container d-flex" [ngClass]="{ 'bg-light': account }">
   <!-- main nav -->
   <nav
@@ -57,6 +47,11 @@
       <li class="nav-item" *ngIf="account.role === Role.Admin">
       <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
         >Subject Assignments</a
+      >
+      </li>
+      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
+        >Strands</a
       >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Student">

@@ -5,6 +5,4 @@ export class Student {
   school_id: string
   sex: string
   address: string
-  guardian_name: string
-  guardian_contact: string
 }

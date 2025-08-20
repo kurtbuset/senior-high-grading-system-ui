@@ -31,6 +31,7 @@ export class SubjectListComponent implements OnInit {
       .subscribe({
         next: (subjects) => {
           this.subjects = subjects;
+          console.log(subjects)
           this.subjectService.subjectSubject.next(null);
           this.loading = false;
         },

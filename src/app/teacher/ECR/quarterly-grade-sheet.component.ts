@@ -18,6 +18,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   students: any;
   teacher_subject_id: string;
   account = this.accountService.accountValue;
+  showLogoutModal = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
     this.loading = true;
     this.route.paramMap.subscribe((params) => {
       this.quarter = params.get('quarter')!;
-
+      console.log(this.quarter)
       this.gradingService
         .getQuarterlyGradeSheet(this.teacher_subject_id, {
           quarter: this.quarter,
@@ -42,6 +43,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (students) => {
+            // console.log(students)
             this.students = students;
             this.loading = false
           },
@@ -55,5 +57,29 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   printGradeSheet() {
     console.log('print time');
     window.print();
+  }
+
+
+  openLogoutModal() {
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal() {
+    this.showLogoutModal = false;
+  }
+
+  lockGrades() {
+    this.showLogoutModal = false;
+    this.alertService.success('grades are now LOCK!')
+    // console.log(this.quarter)
+    // console.log(this.students)
+
+     const grades = this.students.map((s: any) => ({
+        enrollment_id: s.enrollment_id,
+        transmutedGrade: s.transmutedGrade,
+        quarter: this.quarter
+      }));
+    
+      console.log(grades)
   }
 }

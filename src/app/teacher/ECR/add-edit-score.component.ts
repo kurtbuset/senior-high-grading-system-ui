@@ -59,8 +59,6 @@ export class AddEditScoreComponent implements OnInit {
     this.form = this.formBuilder.group({
       scores: this.formBuilder.array([])
     });
-
-    console.log(this.form.controls)
     
 
     if (this.isAddMode) {

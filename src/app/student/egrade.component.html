@@ -3,35 +3,54 @@
 
   <div class="form-group col-md-4">
     <label for="schoolTerm">School Term</label>
-    <select id="schoolTerm" class="form-control" onchange="">
+    <select id="schoolTerm" class="form-control" [(ngModel)]="selectedSemester">
       <option value="">-- Select School Term --</option>
-      <option value="1st sem sy 2025-2026">
-        1st Semester S.Y. 2025 - 2026
-      </option>
-      <option value="2nd sem sy 2025-2026">
-        2nd Semester S.Y. 2025 - 2026
-      </option>
+      <option value="FIRST SEMESTER">1st Semester S.Y. 2025 - 2026</option>
+      <option value="SECOND SEMESTER">2nd Semester S.Y. 2025 - 2026</option>
     </select>
   </div>
 
   <table class="table table-hover table-sm">
     <thead>
       <tr>
-        <th style="width: 30%">Subject Name</th>
-        <th style="width: 10%">Subject Type</th>
-        <th style="width: 15%">Teacher</th>
-        <th style="width: 10%">First Quarter</th>
-        <th style="width: 10%">Second Quarter</th>
+        <th style="width: 60%">Subject Name</th>
+        <th style="width: 20%">Teacher</th>
+        <th style="width: 20%">seme</th>
+        <th style="width: 10%">First Qtr</th>
+        <th style="width: 10%">Second Qtr</th>
         <th style="width: 10%">Final</th>
       </tr>
     </thead>
     <tbody>
-      <td>Oral Communication</td>
-      <td>Core</td>
-      <td>Leny yamillo</td>
-      <td>90</td>
-      <td>89</td>
-      <td>90</td>
+      <!-- If no semester selected -->
+      <tr *ngIf="!selectedSemester">
+        <td colspan="6" class="text-center py-6">
+          <h1 class="text-xl font-bold">Select semester</h1>
+        </td>
+      </tr>
+
+      <!-- If SECOND SEMESTER selected but no 2nd sem subjects -->
+      <tr
+        *ngIf="selectedSemester === 'SECOND SEMESTER' && !hasSecondSemSubjects"
+      >
+        <td colspan="6" class="text-center py-6">
+          <h1>
+            You're not yet enrolled in 2nd sem
+          </h1>
+        </td>
+      </tr>
+
+      <!-- Otherwise, render filtered subjects -->
+      <tr *ngFor="let a of filteredSubjects; let i = index">
+        <td>{{ a.subjectName }}</td>
+        <td>
+          {{ a.teacher ? a.teacher.lastName + " " + a.teacher.firstName : "" }}
+        </td>
+        <td>{{ a.semester }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
 </div>
