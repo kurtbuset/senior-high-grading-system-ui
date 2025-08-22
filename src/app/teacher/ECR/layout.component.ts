@@ -3,8 +3,9 @@ import { ActivatedRoute, RouterModule  } from '@angular/router';
 import { SubnavComponent } from './subnav.component';
 import { SubjectService } from '@app/_services/subject.service';
 import { PercentagesComponent } from "./percentages.component";
+import { SubjectInformationComponent } from '../subject-information.component';
 
-@Component({ standalone: true, templateUrl: 'layout.component.html', imports: [RouterModule, SubnavComponent, PercentagesComponent] })
+@Component({ standalone: true, templateUrl: 'layout.component.html', imports: [RouterModule, SubnavComponent, PercentagesComponent, SubjectInformationComponent] })
 export class LayoutComponent implements OnInit{
   teacher_subject_id: string
   

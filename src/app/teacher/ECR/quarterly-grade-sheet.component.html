@@ -2,14 +2,14 @@
   <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">
     Print Grades
   </button>
-  <button class="btn btn-sml btn-warning ml-3" (click)="openLogoutModal()">Lock Grades</button>
+  <button class="btn btn-sml btn-warning ml-3" (click)="openLockModal()">Lock Grades</button>
 </div>
 
 <div
   class="modal fade"
   tabindex="-1"
-  [ngClass]="{ show: showLogoutModal }"
-  [ngStyle]="{ display: showLogoutModal ? 'block' : 'none' }"
+  [ngClass]="{ show: showLockModal }"
+  [ngStyle]="{ display: showLockModal ? 'block' : 'none' }"
   role="dialog"
   aria-modal="true"
 >
@@ -25,7 +25,7 @@
         <button
           type="button"
           class="btn btn-secondary"
-          (click)="closeLogoutModal()"
+          (click)="closeLockModal()"
         >
           No
         </button>
@@ -38,8 +38,8 @@
 </div>
 <div
   class="modal-backdrop fade"
-  [ngClass]="{ show: showLogoutModal }"
-  *ngIf="showLogoutModal"
+  [ngClass]="{ show: showLockModal }"
+  *ngIf="showLockModal"
 ></div>
 
 <div id="print-header" class="mb-4 d-flex justify-content-center">

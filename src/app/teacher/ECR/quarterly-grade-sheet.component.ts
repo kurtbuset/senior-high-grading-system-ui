@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
 import { GradingService } from '@app/_services/grading.service';
-import { StudentService } from '@app/_services/student.service';
 import { first } from 'rxjs';
 
 @Component({
@@ -18,7 +17,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   students: any;
   teacher_subject_id: string;
   account = this.accountService.accountValue;
-  showLogoutModal = false;
+  showLockModal = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,7 +42,6 @@ export class QuarterlyGradeSheetComponent implements OnInit {
         .pipe(first())
         .subscribe({
           next: (students) => {
-            // console.log(students)
             this.students = students;
             this.loading = false
           },
@@ -60,16 +58,16 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   }
 
 
-  openLogoutModal() {
-    this.showLogoutModal = true;
+  openLockModal() {
+    this.showLockModal = true;
   }
 
-  closeLogoutModal() {
-    this.showLogoutModal = false;
+  closeLockModal() {
+    this.showLockModal = false;
   }
 
   lockGrades() {
-    this.showLogoutModal = false;
+    this.showLockModal = false;
     this.alertService.success('grades are now LOCK!')
     // console.log(this.quarter)
     // console.log(this.students)

@@ -56,7 +56,6 @@ export class AccountService {
       .pipe(
         map((account) => {
           this.accountSubject.next(account);
-          // this.subjectService.getOneSubject(account.id).subscribe(())
           this.startRefreshTokenTimer();
           return account;
         })
