@@ -15,7 +15,7 @@ import { MustMatch } from '@app/_helpers/must-match.validator';
     <div class="container mt-4">
       <h2>{{ isAddMode ? 'Add New Account' : 'Edit Existing Account' }}</h2>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
-    
+
 
         <div class="form-group">
           <label for="firstName" class="form-label">First Name</label>

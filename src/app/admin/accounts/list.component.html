@@ -47,16 +47,16 @@
           </span>
         </td>
         <td class="text-center">
-          <div class="d-flex flex-column align-items-center gap-2">
+          <div class="d-flex justify-content-center align-items-center gap-3">
             <a [routerLink]="['edit', account.id]"
-               class="btn btn-sm btn-outline-primary w-75 mb-1"
+               class="btn btn-edit"
                title="Edit Account">
-              <i class="fa fa-edit"></i> Edit
+              Edit
             </a>
             <button (click)="deleteAccount(account.id)"
-                    class="btn btn-sm btn-outline-danger w-75"
+                    class="btn btn-delete"
                     title="Delete Account">
-              <i class="fa fa-trash"></i> Delete
+              Delete
             </button>
           </div>
         </td>
@@ -68,3 +68,55 @@
     <p class="text-muted">No accounts found.</p>
   </div>
 </div>
+
+<!-- button styles -->
+<style>
+  /* compact action buttons that fit inside the table column */
+  .btn-edit {
+    padding: 0.35rem 0.9rem;
+    min-width: 86px;
+    height: 38px;
+    background: linear-gradient(90deg, #1e90ff 0%, #0369a1 100%);
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 6px 16px rgba(3,105,161,0.12);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-edit:hover { transform: translateY(-1px); }
+
+  .btn-delete {
+    background: #fff;
+    color: #e11d48;
+    padding: 0.35rem 0.9rem;
+    min-width: 86px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1.5px solid #e11d48;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-delete:hover { background: #fff3f5; }
+
+  /* reduce gap between buttons so they fit in smaller columns */
+  td .d-flex { gap: 0.5rem; }
+
+  @media (max-width: 768px) {
+    .btn-edit, .btn-delete {
+      padding: 0.3rem 0.6rem;
+      min-width: 70px;
+      font-size: 0.9rem;
+      height: 34px;
+      border-radius: 6px;
+    }
+  }
+</style>
