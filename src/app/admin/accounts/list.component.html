@@ -53,9 +53,10 @@
                title="Edit Account">
               Edit
             </a>
-            <button (click)="deleteAccount(account.id)"
+            <button (click)="deleteAccount(account.id, account.role)"
                     class="btn btn-delete"
-                    title="Delete Account">
+                    title="Delete Account"
+                    [disabled]="loading">
               Delete
             </button>
           </div>

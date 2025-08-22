@@ -15,10 +15,11 @@ import { AccountService } from '@app/_services/account.service';
   imports: [CommonModule, RouterModule],
 })
 export class FinalSemesterGradeSheetComponent implements OnInit {
-  subject$ = this.subjectService.subject;
+  subject$: any;
   students: any;
   id: string;
-  account = this.accountService.accountValue;
+  account: any;
+  
   constructor(
     private route: ActivatedRoute,
     private subjectService: SubjectService,
@@ -28,6 +29,8 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
 
 
   ngOnInit() {
+    this.subject$ = this.subjectService.subject;
+    this.account = this.accountService.accountValue;
     this.id = this.route.snapshot.paramMap.get('id')
 
     this.gradingService

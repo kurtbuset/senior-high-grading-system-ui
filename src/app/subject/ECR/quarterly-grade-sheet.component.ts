@@ -17,7 +17,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
 
   students: any;
   teacher_subject_id: string;
-  account = this.accountService.accountValue;
+  account: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +31,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.account = this.accountService.accountValue;
     this.route.paramMap.subscribe((params) => {
       this.quarter = params.get('quarter')!;
 

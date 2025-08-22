@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { AccountService } from "@app/_services/account.service";
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,10 +8,14 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [FormsModule]
 })
-export class UpdateProfileComponent {
-  account = this.accountService.accountValue;
+export class UpdateProfileComponent implements OnInit {
+  account: any = {};
 
   constructor(private accountService: AccountService, private router: Router) {}
+  
+  ngOnInit() {
+    this.account = this.accountService.accountValue;
+  }
 
   onSubmit() {
     this.accountService.updateAccount(this.account.id, {

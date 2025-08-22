@@ -39,6 +39,21 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           return register();
         case url.endsWith('/accounts/revoke-token') && method === 'POST':
           return revokeToken();
+        case url.endsWith('/accounts') && method === 'GET':
+          return getAllAccounts();
+        case url.match(/\/accounts\/\d+$/) && method === 'GET':
+          return getAccountById();
+        case url.match(/\/accounts\/\d+$/) && method === 'PUT':
+          return updateAccount();
+        case url.match(/\/accounts\/\d+$/) && method === 'DELETE':
+          return deleteAccount();
+        // fallback handlers so variations in URL (with host or query) still match
+        case url.includes('/accounts') && method === 'GET':
+          return getAllAccounts();
+        case url.includes('/accounts') && method === 'PUT':
+          return updateAccount();
+        case url.includes('/accounts') && method === 'DELETE':
+          return deleteAccount();
       }
     }
 
@@ -209,6 +224,44 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       });
     }
 
+    // Admin CRUD handlers
+    function getAllAccounts() {
+      return ok(accounts.map((x) => basicDetails(x)));
+    }
+
+    function getAccountById() {
+      const id = idFromUrl();
+      const account = accounts.find((x) => x.id === id);
+      return ok(basicDetails(account));
+    }
+
+    function updateAccount() {
+      const id = idFromUrl();
+      const params = body;
+      const account = accounts.find((x) => x.id === id);
+      if (!account) return error('Account not found');
+      Object.assign(account, params);
+      localStorage.setItem(accountsKey, JSON.stringify(accounts));
+      console.log('FakeBackend: updated account', id);
+      return ok();
+    }
+
+    function deleteAccount() {
+      const id = idFromUrl();
+      if (isNaN(id)) return error('Invalid account id');
+      const before = accounts.length;
+      accounts = accounts.filter((x) => x.id !== id);
+      localStorage.setItem(accountsKey, JSON.stringify(accounts));
+      const after = accounts.length;
+      console.log(`FakeBackend: deleteAccount id=${id} before=${before} after=${after}`);
+      return ok();
+    }
+
+    function idFromUrl() {
+      const urlParts = url.split('/');
+      return parseInt(urlParts[urlParts.length - 1]);
+    }
+
     // helper functions
     function error(message: string) {
       return throwError(() => ({ error: { message } })).pipe(
@@ -223,6 +276,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     }
 
     function unauthorized() {
+      console.warn('FakeBackend: unauthorized called for', method, url);
       return throwError(() => ({
         status: 401,
         error: { message: 'Unauthorized' },

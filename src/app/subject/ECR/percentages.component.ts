@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -18,9 +18,9 @@ import { first } from 'rxjs';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class PercentagesComponent {
+export class PercentagesComponent implements OnInit {
   teacher_subject_id: string;
-  subject$ = this.subjectService.subject;
+  subject$: any;
   form: UntypedFormGroup;
   isEditing = false;
   loading = false;
@@ -34,6 +34,10 @@ export class PercentagesComponent {
     private gradingService: GradingService,
     private router: Router
   ) {}
+  
+  ngOnInit() {
+    this.subject$ = this.subjectService.subject;
+  }
 
   startEditing(subject: any) {
     this.form = this.formBuilder.group({

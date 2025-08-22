@@ -7,8 +7,12 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule]
 })
-export class HomeComponent {
-  account = this.accountService.accountValue;
+export class HomeComponent implements OnInit {
+  account: any;
 
   constructor(private accountService: AccountService) {}
+  
+  ngOnInit() {
+    this.account = this.accountService.accountValue;
+  }
 }

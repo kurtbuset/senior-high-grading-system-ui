@@ -14,9 +14,9 @@ import { AccountService } from '@app/_services/account.service';
   standalone: true,
   imports: [CommonModule, FormsModule, CommonModule],
 })
-export class SubjectInformationComponen{
+export class SubjectInformationComponen implements OnInit {
   // auto assignment when someone is using .next()
-  subject$ = this.subjectService.subject;
+  subject$: any;
 
 
   teacher_subject_id: string;
@@ -26,5 +26,9 @@ export class SubjectInformationComponen{
   constructor(
     private subjectService: SubjectService,
   ) {}
+  
+  ngOnInit() {
+    this.subject$ = this.subjectService.subject;
+  }
 
 }
