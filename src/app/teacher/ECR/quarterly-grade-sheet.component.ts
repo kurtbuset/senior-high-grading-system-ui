@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
 import { GradingService } from '@app/_services/grading.service';
+import { SubjectService } from '@app/_services/subject.service';
 import { first } from 'rxjs';
 
 @Component({
@@ -23,7 +24,8 @@ export class QuarterlyGradeSheetComponent implements OnInit {
     private route: ActivatedRoute,
     private gradingService: GradingService,
     private alertService: AlertService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private subjectService: SubjectService
   ) {
     this.route.parent?.paramMap.subscribe((params) => {
       this.teacher_subject_id = params.get('id')!;
@@ -69,8 +71,8 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   lockGrades() {
     this.showLockModal = false;
     this.alertService.success('grades are now LOCK!')
-    // console.log(this.quarter)
-    // console.log(this.students)
+
+    console.log(this.teacher_subject_id)
 
      const grades = this.students.map((s: any) => ({
         enrollment_id: s.enrollment_id,

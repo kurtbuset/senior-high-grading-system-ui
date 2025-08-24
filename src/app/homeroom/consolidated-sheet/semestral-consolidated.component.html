@@ -1,4 +1,4 @@
-<div class="table-responsive-lg">
+<!-- <div class="table-responsive-lg"> -->
   <table class="table table-hover table-sm text-center" *ngIf="sheet">
   <thead>
     <tr>
@@ -20,15 +20,18 @@
       <td>{{ student.account.lastname }}, {{ student.account.firstname }}</td>
       <ng-container *ngFor="let subj of sheet.subjects">
         <!-- placeholder grades, you can replace with real quiz/score data -->
+         <!-- first quarter grade per student per subject -->
         <td>-</td>
+        <!-- second quarter grade per student per subject -->
         <td>-</td>
+        <!-- ave of 2 quarter grade per student per subject -->
         <td>-</td>
       </ng-container>
     </tr>
   </tbody>
 </table>
 
-</div>
+<!-- </div> -->
 
 <div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
   <div class="spinner-border text-primary" role="status"></div>

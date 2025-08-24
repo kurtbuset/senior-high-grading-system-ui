@@ -71,10 +71,11 @@ export class AssessmentTypeComponent implements OnInit {
   }
 
   loadQuizzes() {
-    this.gradingService
+    this.gradingService 
       .getQuizzes(this.teacher_subject_id, this.values)
       .subscribe({
         next: (quizzes) => {
+          console.log(quizzes)
           this.quizzes = quizzes;
           for (let quiz of quizzes) {
             this.quizForms[quiz.id] = this.formBuilder.group({
