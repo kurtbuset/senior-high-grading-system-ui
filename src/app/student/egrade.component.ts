@@ -23,7 +23,7 @@ export class EgradeComponent implements OnInit {
   ngOnInit(): void {
     this.studentService
       .getSubjectsAndGrades(Number(this.account_id))
-      .pipe(first())
+      .pipe(first())  
       .subscribe({
         next: (subjects) => {
           // console.log(subjects)

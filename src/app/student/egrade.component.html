@@ -13,6 +13,7 @@
   <table class="table table-hover table-sm">
     <thead>
       <tr>
+        <th style="width: 10%">Code</th>
         <th style="width: 60%">Subject Name</th>
         <th style="width: 20%">Teacher</th>
         <th style="width: 10%">First Qtr</th>
@@ -41,6 +42,7 @@
 
       <!-- Otherwise, render filtered subjects -->
       <tr *ngFor="let a of filteredSubjects; let i = index">
+        <td>{{ a.subjectCode }}</td>
         <td>{{ a.subjectName }}</td>
         <td>
           {{ a.teacher ? a.teacher.lastName + " " + a.teacher.firstName : "" }}
