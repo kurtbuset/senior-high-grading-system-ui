@@ -18,7 +18,8 @@
       <td>{{ h.section }}</td>
       <td>{{ h.strand}}</td>
       <td>
-        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" routerLinkActive="active"  class="btn btn-sm btn-primary">View Consolidated Sheet</a>
+        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" routerLinkActive="active"  class="btn btn-sm btn-primary">Consolidated Sheet</a>
+        <a [routerLink]="['./locking-history', h.id]" routerLinkActive="active"  class="btn btn-sm btn-success ml-3">Locking History</a>
       </td>
     </tr>
   </tbody>

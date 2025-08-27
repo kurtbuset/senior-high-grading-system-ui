@@ -44,12 +44,12 @@
         >Subjects List</a
       >
       </li>
-      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      <!-- <li class="nav-item" *ngIf="account.role === Role.Admin">
       <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
         >Subject Assignments</a
       >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      </li> -->
+      <li class="nav-item" *ngIf="account.role === Role.Principal || account.role === Role.Registrar">
       <a routerLink="/homeroom" routerLinkActive="active" class="nav-link text-white"
         >Homerooms</a
       >
