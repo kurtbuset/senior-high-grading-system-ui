@@ -11,8 +11,9 @@ import { homeroomRoutes } from './homeroom/homeroom.routes';
 import { Role } from './_models/role';
 
 export const routes: Routes = [
-  // eagerly loaded component 
-  { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
+  // redirect root to login if not authenticated, otherwise to home
+  { path: '', redirectTo: '/account/login', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
   // lazily loaded
   { path: 'account', children: accountRoutes },
   { path: 'profile', children: profileRoutes, canActivate: [authGuard] },

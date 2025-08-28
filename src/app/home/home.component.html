@@ -1,7 +1,66 @@
-<div class="py-2 px-4">
-    <!-- <div class="container"> -->
-        <h1>Hi {{ account.role }} {{account.firstName}}!</h1>
-        <!-- <p>this is {{ account.role }} dashboard</p> -->
-         <p>{{ account.id }}</p>
-    <!-- </div> -->
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h1 class="mb-0 h4">Dashboard</h1>
+      <p class="mb-0 opacity-75">Welcome to the Grading System</p>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Welcome, {{ account.firstName }}!</h5>
+          <p class="text-muted">Role: {{ account.role }}</p>
+          <p class="text-muted">User ID: {{ account.id }}</p>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-end">
+            <div class="text-end">
+              <small class="text-muted">Senior High School</small><br>
+              <small class="text-muted">Grading System</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions or Stats (Optional) -->
+  <div class="row" *ngIf="account.role === 'Admin' || account.role === 'SuperAdmin'">
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title">Accounts</h6>
+          <p class="card-text">Manage user accounts</p>
+          <a routerLink="/admin/accounts" class="btn btn-primary btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title">Subjects</h6>
+          <p class="card-text">Manage subjects</p>
+          <a routerLink="/admin/subjects" class="btn btn-primary btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title">Assignments</h6>
+          <p class="card-text">Teacher assignments</p>
+          <a routerLink="/admin/assignments" class="btn btn-primary btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h6 class="card-title">Homeroom</h6>
+          <p class="card-text">Manage homerooms</p>
+          <a routerLink="/homeroom" class="btn btn-primary btn-sm">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>  

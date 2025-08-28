@@ -1,15 +1,27 @@
-<h1>Homerooms</h1>
+<!-- Homerooms -->
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h1 class="mb-0 h4">Homerooms</h1>
+      <p class="mb-0 opacity-75">Manage homeroom classes and view consolidated sheets</p>
+    </div>
+  </div>
 
-<table class="table table-hover table-sm">
-  <thead>
-    <tr>
-      <th style="width: 5%;">ID</th>
-      <th style="width: 10%;">Grade Level</th>
-      <th style="width: 15%;">Section</th>
-      <th style="width: 20%;">Strand</th>
-      <th style="width: 20%;">Actions</th>
-    </tr>
-  </thead>
+  <!-- Homerooms Table -->
+  <div class="card">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-primary">
+            <tr>
+              <th style="width: 5%;">ID</th>
+              <th style="width: 10%;">Grade Level</th>
+              <th style="width: 15%;">Section</th>
+              <th style="width: 20%;">Strand</th>
+              <th style="width: 20%;">Actions</th>
+            </tr>
+          </thead>
 
   <tbody>
     <tr *ngFor="let h of homerooms; let i = index">
@@ -25,10 +37,14 @@
   </tbody>
 </table>
 
-<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
-  <div class="spinner-border text-primary" role="status"></div>
-</div>
+      <div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
 
-<ng-template #noData>
-  <p>No homeroooms.</p>
-</ng-template>
+      <div *ngIf="homerooms.length === 0 && !loading" class="text-center py-5">
+        <h4 class="fw-bold text-dark mb-3">No homerooms found</h4>
+        <p class="text-muted mb-4">No homeroom classes are currently available.</p>
+      </div>
+    </div>
+  </div>
+</div>

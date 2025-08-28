@@ -32,7 +32,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -49,21 +49,29 @@ export class LoginComponent {
 
     // stop here if form is invalid
     if (this.form.invalid) {
+      console.log('Form is invalid:', this.form.errors);
       return;
     }
 
     this.loading = true;
+    const email = this.f.email.value;
+    const password = this.f.password.value;
+    
+    console.log('Attempting login with email:', email);
+    
     this.accountService
-      .login(this.f.username.value, this.f.password.value)
+      .login(email, password)
       .pipe(first())
       .subscribe({
         next: () => {
+          console.log('Login successful');
           // get return url from query parameters or default to home page
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+          console.log('Redirecting to:', returnUrl);
           this.router.navigateByUrl(returnUrl);
         },
         error: (error) => {
-          console.log(error);
+          console.log('Login error:', error);
           this.alertService.error(error);
           this.loading = false;
         },

@@ -1,34 +1,26 @@
-<div class="app-container d-flex" [ngClass]="{ 'bg-light': account }">
+<div class="app-container d-flex">
   <!-- main nav -->
   <nav
-    class="text-white sidebar p-3 vh-100"
-    style="
-    width: 200px;
-    background-color: rgb(0, 0, 70);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 1000;
-    overflow-y: auto;"
-    *ngIf="account"
+    class="sidebar vh-100 p-0"
+    style="width: 170px; position: fixed; top: 0; left: 0; z-index: 1000; background-color: #1e2b6b;"
+    *ngIf="account && account.jwtToken"
   >
-    <div class="mt-2 mb-4 text-center">
-      <h4
-        class="fw-bold"
-        style="letter-spacing: 1px; cursor: pointer"
-        routerLink="/"  
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <img src="../assets/images/bc logo.png" width="100" height="100" alt="bc logo">
-      </h4>
+    <!-- Logo Section -->
+    <div class="text-center py-4" style="background-color: #1e2b6b;">
+      <img src="../assets/images/bc logo.png" width="80" height="80" alt="bc logo" class="mb-2">
     </div>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link text-white">Dashboard</a
-        >
-      </li>
+    
+    <!-- Navigation Items -->
+    <ul class="nav flex-column px-0" style="height: calc(100vh - 120px); display: flex; flex-direction: column; justify-content: space-between;">
+      <!-- Main Navigation -->
+      <div>
+        <li class="nav-item">
+          <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Dashboard
+          </a>
+        </li>
       
       <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
         <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
@@ -121,18 +113,16 @@
   ></div>
 
   <div
-    class="flex-grow-1 background"
-    style="padding: 1rem;"
-    [ngStyle]="!account   
+    class="flex-grow-1"
+    [ngStyle]="!(account && account.jwtToken)   
       ? 
       {
-          'background-image':
-            'url(https://media.licdn.com/dms/image/v2/C561BAQEGwJUSWC5Dfw/company-background_10000/company-background_10000/0/1633699511389/benedicto_college_cover?e=2147483647&v=beta&t=Iiz-yGR2m0qFmUID-2wZehq_DmBizxAbccTxIoinYoc)',
-          'background-size': 'cover',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat'
+          'background-color': '#f8f9fa',
+          'padding': '0'
         } : {
-          'margin-left': '200px'  
+          'margin-left': '170px',
+          'padding': '0',
+          'background-color': '#f8f9fa'
         }
     "
   >
@@ -141,9 +131,6 @@
 
     <!-- global alert -->
     <alert></alert>
-    
-    <!-- <breadcrumb-nav *ngIf="account" /> -->
-    
     
     <!-- main router outlet -->
     <router-outlet></router-outlet>
