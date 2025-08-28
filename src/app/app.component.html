@@ -14,76 +14,78 @@
     <ul class="nav flex-column px-0" style="height: calc(100vh - 120px); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
       <!-- Main Navigation -->
       <div>
-        <li class="nav-item">
+      <li class="nav-item">
           <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             Dashboard
-          </a>
-        </li>
-        
+        </a>
+      </li>
+
         <!-- SuperAdmin Menu Items -->
         <li class="nav-item" *ngIf="account.role === Role.SuperAdmin">
           <a routerLink="/superadmin" routerLinkActive="active" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             SuperAdmin Panel
-          </a>
-        </li>
-        
+        </a>
+      </li>   
+
         <!-- Principal/Registrar Menu Items -->
         <li class="nav-item" *ngIf="account.role === Role.Principal || account.role === Role.Registrar">
           <a routerLink="/homeroom" routerLinkActive="active" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             Homeroom
-          </a>
-        </li>
-        
+        </a>
+      </li>
+
         <!-- Teacher Menu Items -->
         <li class="nav-item" *ngIf="account.role === Role.Teacher">
           <a routerLink="/teacher" routerLinkActive="active" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             Subjects
-          </a>
-        </li>
-        
+        </a>
+      </li>
+
         <!-- Student Menu Items -->
-        <li class="nav-item" *ngIf="account.role === Role.Student">
-          <a routerLink="/student" routerLinkActive="active" 
-             class="nav-link text-white py-3 px-4" 
-             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
-            E-Grade
-          </a>
-        </li>
-        
+      <li class="nav-item" *ngIf="account.role === Role.Student">
+        <a
+          routerLink="/egrade"
+          routerLinkActive="active"
+          class="nav-link text-white"
+        >
+          <i class="bi bi-bar-chart-line me-2"></i> E-Grade
+        </a>
+      </li>
+
         <!-- Student-only Profile Menu Items -->
         <li class="nav-item" *ngIf="account.role === Role.Student">
           <a routerLink="/student/profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             My Profile
-          </a>
-        </li>
+        </a>
+      </li>
         <li class="nav-item" *ngIf="account.role === Role.Student">
           <a routerLink="/student/modify-account" routerLinkActive="active" 
              class="nav-link text-white py-3 px-4" 
              style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             Modify Account
-          </a>
-        </li>
+        </a>
+      </li>
       </div>
-      
+
       <!-- Logout at bottom -->
       <div>
-        <li class="nav-item">
+      <li class="nav-item">
           <a (click)="openLogoutModal()" 
              class="nav-link text-white py-3 px-4" 
              style="cursor: pointer; border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
             Logout
-          </a>
-        </li>
+        </a>
+      </li>
       </div>
     </ul>
   </nav>
@@ -138,16 +140,19 @@
           'margin-left': '170px',
           'padding': '0',
           'background-color': '#f8f9fa'
-        }
+          }
     "
   >
     
-    <router-outlet name="subnav"></router-outlet> 
+    <router-outlet name="subnav"></router-outlet>
 
     <!-- global alert -->
     <alert></alert>
-    
+
+    <!-- <breadcrumb-nav *ngIf="account" /> -->
+
     <!-- main router outlet -->
     <router-outlet></router-outlet>
+  </div>
   </div>
 </div>
