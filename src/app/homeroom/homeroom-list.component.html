@@ -1,0 +1,34 @@
+<h1>Homerooms</h1>
+
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th style="width: 5%;">ID</th>
+      <th style="width: 10%;">Grade Level</th>
+      <th style="width: 15%;">Section</th>
+      <th style="width: 20%;">Strand</th>
+      <th style="width: 20%;">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let h of homerooms; let i = index">
+      <td>{{ h.id }}</td>
+      <td>{{ h.grade_level }}</td>
+      <td>{{ h.section }}</td>
+      <td>{{ h.strand}}</td>
+      <td>
+        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" routerLinkActive="active"  class="btn btn-sm btn-primary">Consolidated Sheet</a>
+        <a [routerLink]="['./locking-history', h.id]" routerLinkActive="active"  class="btn btn-sm btn-success ml-3">Locking History</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<ng-template #noData>
+  <p>No homeroooms.</p>
+</ng-template>

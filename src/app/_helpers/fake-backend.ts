@@ -84,7 +84,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       account.id = newId(accounts);
       if (account.id === 1) {
         // first registered account is an admin
-        account.role = Role.Admin;
+        // account.role = Role.Admin;
         account.isVerified = true;
       } else {
         account.role = Role.Teacher;

@@ -21,7 +21,7 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-talWhvqHshpEQw5Kf10LV9vno1j6fbwWUQ&s" width="100" alt="">
+        <img src="../assets/images/bc logo.png" width="100" height="100" alt="bc logo">
       </h4>
     </div>
     <ul class="nav flex-column">
@@ -36,7 +36,7 @@
         >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Teacher">
-        <a routerLink="/subject" routerLinkActive="active" class="nav-link text-white"
+        <a routerLink="/teacher" routerLinkActive="active" class="nav-link text-white"
           >Subjects</a
         >
       <li class="nav-item" *ngIf="account.role === Role.Admin">
@@ -44,14 +44,19 @@
         >Subjects List</a
       >
       </li>
-      <li class="nav-item" *ngIf="account.role === Role.Admin">
+      <!-- <li class="nav-item" *ngIf="account.role === Role.Admin">
       <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
         >Subject Assignments</a
       >
+      </li> -->
+      <li class="nav-item" *ngIf="account.role === Role.Principal || account.role === Role.Registrar">
+      <a routerLink="/homeroom" routerLinkActive="active" class="nav-link text-white"
+        >Homerooms</a
+      >
       </li>
       <li class="nav-item" *ngIf="account.role === Role.Student">
-        <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-          >Report Card</a
+        <a routerLink="/egrade" routerLinkActive="active" class="nav-link text-white"
+          >E-Grade</a
         >
       </li>
       <li class="nav-item">

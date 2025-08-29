@@ -1,0 +1,42 @@
+<h1>Subjects</h1>
+
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th style="width:5%;">#</th>
+      <th style="width:20%">Subject Title</th>
+      <th style="width:10%">School Year</th>
+      <th style="width:5%">Level</th>
+      <th style="width:10%">Section</th>
+      <th style="width:10%">Semester</th>
+      <th style="width:15%">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr *ngFor="let a of subjects; let i = index">
+      <td>{{ a.id }}</td>
+      <td>{{ a.subjectName }}</td>
+      <td>{{ a.school_year }}</td>
+      <td>{{ a.grade_level }}</td>
+      <td>{{ a.section }}</td>
+      <td>{{ a.semester }}</td>
+      <td>
+        <div class="d-flex p-1 gap-1">
+          <a [routerLink]="['./', a.id]" routerLinkActive="active" class="btn btn-sm btn-primary">ECR</a>
+          <a [routerLink]="['./students', a.id]" routerLinkActive="active" class="ml-1 btn btn-sm btn-success">Data Sheet</a>
+        </div>
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<ng-template #noData>
+  <p>No subjects assigned yet.</p>
+</ng-template>
