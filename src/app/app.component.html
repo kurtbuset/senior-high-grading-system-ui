@@ -22,6 +22,7 @@
           </a>
         </li>
       
+<<<<<<< Updated upstream
       <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
         <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
           >Accounts</a
@@ -72,6 +73,83 @@
           >Logout</a
         >
       </li>
+=======
+        <!-- Admin Menu Items -->
+        <li *ngIf="account.role === Role.Admin || account.role === Role.SuperAdmin" class="nav-item">
+          <a routerLink="/admin/accounts" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Accounts
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="account.role === Role.Admin || account.role === Role.SuperAdmin">
+          <a routerLink="/admin/subjects" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Subject Lists
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="account.role === Role.Admin || account.role === Role.SuperAdmin">
+          <a routerLink="/admin/assignments" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Teacher Assignments
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="account.role === Role.Admin || account.role === Role.SuperAdmin">
+          <a routerLink="/homeroom" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Homeroom
+          </a>
+        </li>
+        
+        <!-- Teacher Menu Items -->
+        <li class="nav-item" *ngIf="account.role === Role.Teacher">
+          <a routerLink="/teacher" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Subjects
+          </a>
+        </li>
+        
+        <!-- Student Menu Items -->
+        <li class="nav-item" *ngIf="account.role === Role.Student">
+          <a routerLink="/egrade" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            E-Grade
+          </a>
+        </li>
+        
+        <!-- Common Menu Items -->
+        <li class="nav-item">
+          <a routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            My Profile
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/profile/edit" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Modify Account
+          </a>
+        </li>
+      </div>
+      
+      <!-- Logout at bottom -->
+      <div>
+        <li class="nav-item">
+          <a (click)="openLogoutModal()" 
+             class="nav-link text-white py-3 px-4" 
+             style="cursor: pointer; border: none; background: transparent; font-size: 14px; font-weight: 500;">
+            Logout
+          </a>
+        </li>
+      </div>
+>>>>>>> Stashed changes
     </ul>
   </nav>
 
