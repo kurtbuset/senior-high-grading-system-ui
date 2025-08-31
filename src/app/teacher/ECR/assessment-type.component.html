@@ -2,8 +2,6 @@
   <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
 </div>
 
-
-
 <div class="d-flex justify-content-between p-3">
   <div style="width: 75%">
     <table class="table table-bordered table-sm">
@@ -22,7 +20,10 @@
         <tr *ngFor="let quiz of quizzes">
           <!-- <td>{{ quiz.id }}</td> -->
           <td>
-            <div *ngIf="editingQuizId !== quiz.id; else editHps" class="font-weight-bold text-center">
+            <div
+              *ngIf="editingQuizId !== quiz.id; else editHps"
+              class="font-weight-bold text-center"
+            >
               {{ quiz.hps }}
             </div>
             <ng-template #editHps>
@@ -56,6 +57,7 @@
               *ngIf="editingQuizId !== quiz.id"
               class="btn btn-sm btn-info"
               (click)="onEdit(quiz)"
+              [disabled]="locked"
             >
               Edit
             </button>
@@ -63,6 +65,7 @@
               *ngIf="editingQuizId === quiz.id"
               class="btn btn-sm btn-success"
               (click)="updateQuiz(quiz)"
+              [disabled]="locked"
             >
               Save
             </button>
@@ -73,19 +76,32 @@
               [routerLink]="['./add', quiz.id]"
               [queryParams]="{ hps: quiz.hps }"
               class="btn btn-sm btn-success mr-3"
-              disabled 
+              [class.disabled]="locked"
+              [attr.tabindex]="locked ? -1 : 0"
               >Add Scores</a
             >
-            <a [routerLink]="['./edit', quiz.id]" class="btn btn-sm btn-primary" [queryParams]="{ hps: quiz.hps }"
+            <a
+              [routerLink]="['./edit', quiz.id]"
+              [queryParams]="{ hps: quiz.hps }"
+              class="btn btn-sm btn-primary"
+              [class.disabled]="locked"
+              [attr.tabindex]="locked ? -1 : 0"
               >Update Scores</a
             >
           </td>
-          
+
           <td>
-            <button [disabled]="quiz.isDeleting" (click)="deleteQuiz(quiz.id)" class="btn btn-sm btn-danger btn-delete-account">
-                    <span *ngIf="quiz.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!quiz.isDeleting">Delete</span>
-                </button>
+            <button
+              [disabled]="quiz.isDeleting || locked"
+              (click)="deleteQuiz(quiz.id)"
+              class="btn btn-sm btn-danger btn-delete-account"
+            >
+              <span
+                *ngIf="quiz.isDeleting"
+                class="spinner-border spinner-border-sm"
+              ></span>
+              <span *ngIf="!quiz.isDeleting">Delete</span>
+            </button>
           </td>
         </tr>
       </tbody>
@@ -94,53 +110,55 @@
 
   <div style="width: 20%" class="pb-3 px-3">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <h4 class="mb-3">Add quiz</h4>
-      <div class="mb-2 d-flex">
-        <label class="form-label d-inline w-50">Perfect Score:</label>
-        <input
-          type="number"
-          class="form-control form-control-sm w-50"
-          [ngClass]="{ 'is-invalid': submitted && f.hps.errors }"
-          formControlName="hps"
-        />
-      </div>
-      <div *ngIf="submitted && f.hps.errors" class="invalid-feedback d-block">
-        <div *ngIf="f.hps.errors.required">Perfect Score is required</div>
-      </div>
-      <div class="mb-2">
-        <label class="form-label d-inline">Description:</label>
-        <textarea
-          class="form-control form-control-sm"
-          [ngClass]="{
-            'is-invalid': submitted && f.description.errors?.maxlength
-          }"
-          formControlName="description"
-          rows="2"
-          placeholder="description is optional "
-        ></textarea>
-        <div
-          *ngIf="submitted && f.description.errors?.maxlength"
-          class="invalid-feedback d-block"
-        >
-          <div>Description must not exceed 255 characters</div>
+      <fieldset [disabled]="locked">
+        <h4 class="mb-3">Add quiz</h4>
+        <div class="mb-2 d-flex">
+          <label class="form-label d-inline w-50">Perfect Score:</label>
+          <input
+            type="number"
+            class="form-control form-control-sm w-50"
+            [ngClass]="{ 'is-invalid': submitted && f.hps.errors }"
+            formControlName="hps"
+          />
         </div>
-      </div>
+        <div *ngIf="submitted && f.hps.errors" class="invalid-feedback d-block">
+          <div *ngIf="f.hps.errors.required">Perfect Score is required</div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label d-inline">Description:</label>
+          <textarea
+            class="form-control form-control-sm"
+            [ngClass]="{
+              'is-invalid': submitted && f.description.errors?.maxlength
+            }"
+            formControlName="description"
+            rows="2"
+            placeholder="description is optional "
+          ></textarea>
+          <div
+            *ngIf="submitted && f.description.errors?.maxlength"
+            class="invalid-feedback d-block"
+          >
+            <div>Description must not exceed 255 characters</div>
+          </div>
+        </div>
 
-      <button [disabled]="loading" class="btn btn-primary">
-        <span
-          *ngIf="loading"
-          class="spinner-border spinner-border-sm mr-1"
-        ></span>
-        Add quiz
-      </button>
+        <button [disabled]="loading || locked" class="btn btn-primary">
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm mr-1"
+          ></span>
+          Add quiz
+        </button>
 
-      <ng-template #noQuizzes>
-        <tbody>
-          <tr>
-            <td colspan="10" class="h1 text-center">No quizzes found.</td>
-          </tr>
-        </tbody>
-      </ng-template>
+        <ng-template #noQuizzes>
+          <tbody>
+            <tr>
+              <td colspan="10" class="h1 text-center">No quizzes found.</td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </fieldset>
     </form>
   </div>
 </div>

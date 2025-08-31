@@ -1,0 +1,74 @@
+<h1 class="mb-3">Subjects Management</h1>
+
+<!-- Filters -->
+<div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
+  <div>
+    <h4>Filters</h4>
+  </div>
+
+  <div class="d-flex">
+    <div class="col">
+      <label>Grade Level</label>
+      <select class="form-control" [(ngModel)]="selectedGradeLevel">
+        <option value="">All</option>
+        <option value="11">Grade 11</option>
+        <option value="12">Grade 12</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>Strand</label>
+      <select class="form-control" [(ngModel)]="selectedStrand">
+        <option value="">All</option>
+        <option value="STEM">STEM</option>
+        <option value="HUMMS">HUMMS</option>
+        <option value="ABM">ABM</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>Semester</label>
+      <select class="form-control" [(ngModel)]="selectedSemester">
+        <option value="">All</option>
+        <option value="1">1st Semester</option>
+        <option value="2">2nd Semester</option>
+      </select>
+    </div>
+
+    <div class="col">
+      <label>School Year</label>
+      <select class="form-control" [(ngModel)]="selectedSchoolYear">
+        <option value="">All</option>
+        <option value="2024-2025">2024-2025</option>
+        <option value="2025-2026">2025-2026</option>
+      </select>
+    </div>
+
+    <div class="d-flex align-items-end">
+      <button class="btn btn-primary btn-sm" (click)="applyFilters()">
+        Search Subjects
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Subject List -->
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th style="width: 10%">Code</th>
+      <th style="width: 40%">Name</th>
+      <th style="width: 10%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let subj of filteredSubjects">
+      <td>{{ subj.code }}</td>
+      <td>{{ subj.name }}</td>
+      <td>{{ subj.type }}</td>
+    </tr>
+    <tr *ngIf="filteredSubjects.length === 0">
+      <td colspan="3" class="text-muted">No subjects found.</td>
+    </tr>
+  </tbody>
+</table>

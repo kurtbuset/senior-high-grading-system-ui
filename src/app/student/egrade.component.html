@@ -14,11 +14,11 @@
     <thead>
       <tr>
         <th style="width: 10%">Code</th>
-        <th style="width: 60%">Subject Name</th>
+        <th style="width: 50%">Subject Name</th>
         <th style="width: 20%">Teacher</th>
-        <th style="width: 10%">First Qtr</th>
-        <th style="width: 10%">Second Qtr</th>
-        <th style="width: 10%">Final</th>
+        <th style="width: 10%">1ST</th>
+        <th style="width: 10%">2ND</th>
+        <th style="width: 10%">SFG</th>
       </tr>
     </thead>
     <tbody>
@@ -34,9 +34,7 @@
         *ngIf="selectedSemester === 'SECOND SEMESTER' && !hasSecondSemSubjects"
       >
         <td colspan="6" class="text-center py-6">
-          <h1>
-            You're not yet enrolled in 2nd sem
-          </h1>
+          <h1>You're not yet enrolled in 2nd sem</h1>
         </td>
       </tr>
 
@@ -48,11 +46,11 @@
           {{ a.teacher ? a.teacher.lastName + " " + a.teacher.firstName : "" }}
         </td>
         <!-- first quarter grade -->
-        <td></td>
-        <!-- second quarter gradee -->
-        <td></td>
+        <td>{{ a.firstQuarter || "" }}</td>
+        <!-- second quarter grade -->
+        <td>{{ a.secondQuarter || "" }}</td>
         <!-- average of two quarter grades -->
-        <td></td>
+        <td>{{ a.finalAverage || "" }}</td>
       </tr>
     </tbody>
   </table>

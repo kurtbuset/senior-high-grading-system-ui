@@ -34,4 +34,5 @@ export class HomeroomService {
   getConsolidatedSheet(homeroomId: string, params: { semester: string }){
     return this.http.get<any>(`${baseUrl}/conso/${homeroomId}`, { params});
   }
+
 }
