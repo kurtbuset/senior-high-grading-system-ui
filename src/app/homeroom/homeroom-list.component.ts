@@ -16,6 +16,8 @@ export class HomeroomListComponent implements OnInit{
 
   constructor(private homeroomService: HomeroomService){}
 
+  
+
   ngOnInit(){
     this.loading = true;
     this.homeroomService

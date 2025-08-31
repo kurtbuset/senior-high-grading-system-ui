@@ -6,7 +6,6 @@ import { HomeComponent } from './home/home.component';
 import { accountRoutes } from './account/account.routes';
 import { profileRoutes } from './profile/profile.routes';
 import { teacherRoutes } from './teacher/subject.routes';
-import { adminRoutes } from './admin/admin.routes';
 import { homeroomRoutes } from './homeroom/homeroom.routes';
 import { Role } from './_models/role';
 import { curriculumSubjectRoutes } from './curriculum_subjects/curriculum-subject.routes';

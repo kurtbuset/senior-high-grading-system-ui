@@ -1,7 +1,7 @@
 <h1 class="mb-3">Subjects Management</h1>
 
 <!-- Filters -->
-<div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
+ <div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
   <div>
     <h4>Filters</h4>
   </div>
@@ -45,12 +45,16 @@
     </div>
 
     <div class="d-flex align-items-end">
-      <button class="btn btn-primary btn-sm" (click)="applyFilters()">
-        Search Subjects
+      <button class="btn btn-primary btn-sm mr-2" (click)="applyFilters()">
+        Apply
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="resetFilters()">
+        Reset
       </button>
     </div>
   </div>
 </div>
+
 
 <!-- Subject List -->
 <table class="table table-hover table-sm">
