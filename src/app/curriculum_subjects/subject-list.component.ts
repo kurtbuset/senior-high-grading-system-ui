@@ -1,17 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Subject {
-  id: number;
-  name: string;
-  code: string;
-  grade_level: string;
-  strand: string;
-  semester: string;
-  school_year: string;
-  type: string;
-}
+import { SubjectService } from '@app/_services/subject.service';
+import { first } from 'rxjs';
+import { AlertService } from '@app/_services/alert.service';
 
 @Component({
   standalone: true,
@@ -25,37 +17,45 @@ export class SubjectListComponent implements OnInit {
   selectedSemester = '';
   selectedSchoolYear = '';
 
-  // mock data (later you fetch from backend API)
-  subjects: Subject[] = [
-    {
-      id: 1,
-      name: 'Oral Communication',
-      code: 'ENGL1',
-      grade_level: '11',
-      strand: 'HUMMS',
-      semester: '1',
-      school_year: '2024-2025',
-      type: 'Core',
-    },
-    {
-      id: 2,
-      name: 'Academic Reading and Writing',
-      code: 'ENGL2',
-      grade_level: '11',
-      strand: 'HUMMS',
-      semester: '2',
-      school_year: '2024-2025',
-      type: 'Core',
-    },
-  ];
+  filteredSubjects: any[] = [];
+  subjects: any[] = [];
 
-  filteredSubjects: Subject[] = [];
+  constructor(
+    private subjectService: SubjectService,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
-    this.applyFilters();
+    this.subjectService
+      .getAllSubjects()
+      .pipe(first())
+      .subscribe({
+        next: (subjects) => {
+          this.filteredSubjects = subjects;
+        },
+      });
   }
 
   applyFilters() {
+    const obj = {
+      grade_level: this.selectedGradeLevel,
+      strand: this.selectedStrand,
+      semester: this.selectedSemester,
+      school_year: this.selectedSchoolYear,
+    };
+
+    this.subjectService
+      .getFilteredSubjects(obj)
+      .pipe(first())
+      .subscribe({
+        next: (filteredSubjects) => {
+          this.filteredSubjects = filteredSubjects;
+        },
+        error: (err) => {
+          console.log('error! ', err);
+        },
+      });
+
     this.filteredSubjects = this.subjects.filter(
       (subj) =>
         (!this.selectedGradeLevel ||
@@ -72,6 +72,12 @@ export class SubjectListComponent implements OnInit {
     this.selectedStrand = '';
     this.selectedSemester = '';
     this.selectedSchoolYear = '';
-    this.filteredSubjects = this.subjects; // reset back to full list
+    this.filteredSubjects = []
+    this.applyFilters()
+  }
+
+  setSubjects() {
+    console.log('Set Subjects button clicked!');
+    // 👉 Add your logic here (e.g., open modal, navigate to form, etc.)
   }
 }

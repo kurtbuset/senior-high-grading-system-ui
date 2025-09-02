@@ -1,7 +1,7 @@
 <h1 class="mb-3">Subjects Management</h1>
 
 <!-- Filters -->
- <div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
+<div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
   <div>
     <h4>Filters</h4>
   </div>
@@ -30,8 +30,8 @@
       <label>Semester</label>
       <select class="form-control" [(ngModel)]="selectedSemester">
         <option value="">All</option>
-        <option value="1">1st Semester</option>
-        <option value="2">2nd Semester</option>
+        <option value="FIRST SEMESTER">1st Semester</option>
+        <option value="SECOND SEMESTER">2nd Semester</option>
       </select>
     </div>
 
@@ -55,7 +55,6 @@
   </div>
 </div>
 
-
 <!-- Subject List -->
 <table class="table table-hover table-sm">
   <thead>
@@ -72,7 +71,14 @@
       <td>{{ subj.type }}</td>
     </tr>
     <tr *ngIf="filteredSubjects.length === 0">
-      <td colspan="3" class="text-muted">No subjects found.</td>
+      <td colspan="3" class="text-center">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <p class="text-muted h1 m-0">No Subjects Found.</p>
+          <button class="btn btn-success btn-sm" (click)="setSubjects()">
+            Set Subjects for this curriculum
+          </button>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>

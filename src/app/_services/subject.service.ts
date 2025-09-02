@@ -8,7 +8,7 @@ import { environment } from '@environments/environment';
 import { Subject } from '@app/_models/Subject';
 
 
-const baseUrl = `${environment.apiUrl}/teacher-subject-assignment`;
+const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
 export class SubjectService {
@@ -25,15 +25,23 @@ export class SubjectService {
   }
 
 
-  getAllSubjects(teacherId: number) {
-    return this.http.get<Subject[]>(`${baseUrl}/list/${teacherId}`)
+  getAllAssignedSubjects(teacherId: number) {
+    return this.http.get<Subject[]>(`${baseUrl}/teacher-subject-assignment/list/${teacherId}`)
   }
 
   getOneSubject(teacherId: number){
-    return this.http.get<Subject>(`${baseUrl}/${teacherId}`)
+    return this.http.get<Subject>(`${baseUrl}/teacher-subject-assignment/${teacherId}`)
   }
 
   eraseSubjects() {
     this.subjectSubject.next(null);
+  }
+
+  getFilteredSubjects(filters: any){
+    return this.http.get<any>(`${baseUrl}/curriculum-subjects/filtered`, { params: filters})
+  }
+
+  getAllSubjects(){
+    return this.http.get<any>(`${baseUrl}/subjects`)
   }
 }

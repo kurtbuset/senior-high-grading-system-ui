@@ -19,6 +19,6 @@ export const routes: Routes = [
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },
   { path: 'egrade', loadComponent: () => import('./student/egrade.component').then(m => m.EgradeComponent), canActivate: [authGuard], data: { roles: [Role.Student] }, title: 'E-Grade' },
   { path: 'homeroom', children: homeroomRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar, Role.Principal] } },
-  { path: 'curriculum-subjects', children: curriculumSubjectRoutes, canActivate: [authGuard], data: { roles: [Role.Principal] } },
+  { path: 'curriculum-subjects', children: curriculumSubjectRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar] } },
   { path: '**', redirectTo: '' }, 
 ];

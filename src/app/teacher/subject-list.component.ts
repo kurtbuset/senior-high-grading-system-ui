@@ -26,7 +26,7 @@ export class SubjectListComponent implements OnInit {
     // console.log(teacher.id)
     // then returning the id of subject_teacher_assignment
     this.subjectService
-      .getAllSubjects(Number(teacher.id))
+      .getAllAssignedSubjects(Number(teacher.id))
       .pipe(first())
       .subscribe({
         next: (subjects) => {
