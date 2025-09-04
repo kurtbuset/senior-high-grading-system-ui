@@ -28,11 +28,11 @@ function MustMatch(controlName: string, matchingControlName: string) {
 }
 
 @Component({
-  templateUrl: 'update.component.html',
+  templateUrl: 'modify-account.component.html',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
 })
-export class UpdateComponent implements OnInit {
+export class ModifyAccountComponent implements OnInit {
   account = this.accountService.accountValue;
   form!: FormGroup;
   loading = false;
@@ -58,6 +58,27 @@ export class UpdateComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  getStudentNumber(): string {
+    // First try school_id from account object
+    if (this.account?.school_id) {
+      return this.account.school_id;
+    }
+    
+    // Check if email contains student ID format (YYYY-NNNNN)
+    if (this.account?.email && this.account.email.match(/^\d{4}-\d{5}$/)) {
+      return this.account.email;
+    }
+    
+    // Check localStorage for the login username (student might have logged in with school_id)
+    const loginData = localStorage.getItem('studentLoginId');
+    if (loginData && loginData.match(/^\d{4}-\d{5}$/)) {
+      return loginData;
+    }
+    
+    // Fallback to email or default
+    return this.account?.email || '2025-00001';
   }
 
   closeSuccessAlert() {
@@ -104,9 +125,16 @@ export class UpdateComponent implements OnInit {
       confirmPassword: this.form.value.confirmPassword
     };
     
-    console.log('Updating password for account ID:', accountId);
+    console.log('=== PASSWORD UPDATE DEBUG INFO ===');
+    console.log('Account ID:', accountId);
     console.log('Account email:', this.account?.email);
-    console.log('Sending password update request to backend...');
+    console.log('Account school_id:', this.account?.school_id);
+    console.log('Account role:', this.account?.role);
+    console.log('Backend API URL:', `http://localhost:4000/accounts/${accountId}`);
+    console.log('Update data (password hidden):', { password: '[HIDDEN]', confirmPassword: '[HIDDEN]' });
+    console.log('JWT Token present:', !!this.account?.jwtToken);
+    console.log('JWT Token preview:', this.account?.jwtToken?.substring(0, 20) + '...');
+    console.log('===================================');
     
     // Update the password via backend API
     this.accountService
@@ -114,11 +142,17 @@ export class UpdateComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (response) => {
-          console.log('Password update successful:', response);
+          console.log('✅ Password update successful:', response);
           this.handleSuccessfulUpdate();
         },
         error: (error) => {
-          console.error('Password update error:', error);
+          console.error('❌ Password update error:', error);
+          console.error('Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            error: error.error
+          });
           this.handleUpdateError(error);
         },
       });
@@ -136,9 +170,13 @@ export class UpdateComponent implements OnInit {
     // Display success message that confirms the new password is active
     this.alertService.success('Password changed successfully! You can now use your new password to login to the system.', { keepAfterRouteChange: true });
     
-    console.log('Password update completed successfully. New password is now active.');
+    console.log('✅ Password update completed successfully. New password is now active.');
     
-    // Keep success alert visible until user manually goes to login
+    // Force logout after successful password change to ensure they use new password
+    setTimeout(() => {
+      console.log('🔄 Forcing logout to ensure new password is used...');
+      this.accountService.logout();
+    }, 2000);
   }
   
   private handleUpdateError(error: any) {

@@ -69,6 +69,12 @@ export class AccountService {
         map((account) => {
           // Store account in localStorage and update subject
           localStorage.setItem('account', JSON.stringify(account));
+          
+          // Store the login username if it's a student ID format
+          if (email && email.match(/^\d{4}-\d{5}$/) && account.role === 'Student') {
+            localStorage.setItem('studentLoginId', email);
+          }
+          
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -85,6 +91,7 @@ export class AccountService {
       .post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true })
       .subscribe();
     localStorage.removeItem('account');
+    localStorage.removeItem('studentLoginId'); // Clear student login ID
     this.stopRefreshTokenTimer();
     this.accountSubject.next(null);
     this.router.navigate(['/account/login']);

@@ -24,43 +24,4 @@
     </div>
   </div>
 
-  <!-- Quick Actions or Stats (Optional) -->
-  <div class="row" *ngIf="account.role === 'Admin' || account.role === 'SuperAdmin'">
-    <div class="col-md-3 mb-3">
-      <div class="card">
-        <div class="card-body text-center">
-          <h6 class="card-title">Accounts</h6>
-          <p class="card-text">Manage user accounts</p>
-          <a routerLink="/admin/accounts" class="btn btn-primary btn-sm">View</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 mb-3">
-      <div class="card">
-        <div class="card-body text-center">
-          <h6 class="card-title">Subjects</h6>
-          <p class="card-text">Manage subjects</p>
-          <a routerLink="/admin/subjects" class="btn btn-primary btn-sm">View</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 mb-3">
-      <div class="card">
-        <div class="card-body text-center">
-          <h6 class="card-title">Assignments</h6>
-          <p class="card-text">Teacher assignments</p>
-          <a routerLink="/admin/assignments" class="btn btn-primary btn-sm">View</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 mb-3">
-      <div class="card">
-        <div class="card-body text-center">
-          <h6 class="card-title">Homeroom</h6>
-          <p class="card-text">Manage homerooms</p>
-          <a routerLink="/homeroom" class="btn btn-primary btn-sm">View</a>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>  

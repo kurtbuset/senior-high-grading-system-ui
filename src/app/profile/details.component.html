@@ -1,3 +1,4 @@
+<!-- Student Profile Page - Matching Design Exactly -->
 <div class="container-fluid p-0" style="background-color: #f8f9fa; min-height: 100vh;">
   <div class="row g-0">
     <!-- Content Area -->
@@ -7,7 +8,7 @@
         <h2 class="mb-0" style="color: #333; font-weight: 600; font-size: 2rem;">My Profile</h2>
         <div class="d-flex gap-4">
           <div class="text-end">
-            <span style="color: #666; font-size: 0.95rem;">Student No: 2025-00001</span>
+            <span style="color: #666; font-size: 0.95rem;">Student No: {{ getStudentNumber() }}</span>
           </div>
           <div class="text-end">
             <span style="color: #666; font-size: 0.95rem;">Year / Strand: 11 - GAS</span>
@@ -28,7 +29,7 @@
           <div class="col-md-6">
             <div class="mb-4">
               <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
-                <strong>Student Name:</strong> {{ account.lastName }}, {{ account.firstName }}
+                <strong>Student Name:</strong> {{ account?.lastName }}, {{ account?.firstName }}
               </div>
             </div>
             <div class="mb-4">
@@ -55,4 +56,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>  

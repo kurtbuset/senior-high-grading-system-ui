@@ -16,6 +16,37 @@ import { Role } from '@app/_models/role';
 const accountsKey = 'accountsKey';
 let accounts = JSON.parse(localStorage.getItem(accountsKey)) || [];
 
+// Initialize with default accounts if none exist
+if (accounts.length === 0) {
+  accounts = [
+    {
+      id: 1,
+      firstName: 'Student',
+      lastName: 'User',
+      email: '2025-00001',
+      password: 'password123',
+      role: Role.Student,
+      isActive: true,
+      isVerified: true,
+      dateCreated: new Date().toISOString(),
+      refreshTokens: []
+    },
+    {
+      id: 2,
+      firstName: 'Super',
+      lastName: 'Admin',
+      email: 'admin@test.com',
+      password: 'admin123',
+      role: Role.SuperAdmin,
+      isActive: true,
+      isVerified: true,
+      dateCreated: new Date().toISOString(),
+      refreshTokens: []
+    }
+  ];
+  localStorage.setItem(accountsKey, JSON.stringify(accounts));
+}
+
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
   constructor(private alertService: AlertService) {}
@@ -39,6 +70,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           return register();
         case url.endsWith('/accounts/revoke-token') && method === 'POST':
           return revokeToken();
+        case url.match(/\/accounts\/\d+$/) && method === 'PUT':
+          return updateAccount();
+        default:
+          // pass through any requests not handled above
+          return next.handle(req);
       }
     }
 
@@ -83,8 +119,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       // assign account id and a few other properties then save
       account.id = newId(accounts);
       if (account.id === 1) {
-        // first registered account is an admin
-        // account.role = Role.Admin;
+        // first registered account is verified
         account.isVerified = true;
       } else {
         account.role = Role.Teacher;
@@ -105,7 +140,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           alertService.info(
             `
                         <h4>First user login</h4>
-                        <p>you can login directly as first user where role is admin and account is verified</p>
+                        <p>you can login directly as first user where account is verified</p>
                         <div><strong>NOTE:</strong> The fake backend displayed this "email" so you can test without an api. A real backend would send a real email.</div>
                     `,
             { autoClose: false }
@@ -135,26 +170,37 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     }
 
     function authenticate() {
-      console.log('asd');
-      const { email, password } = body;
-      const emailExist = accounts.find((x) => x.email === email);
-      if (!emailExist) return error('email doesnt exist');
+      console.log('Fake backend: authentication attempt');
+      const { username, password } = body;
+      console.log('Authentication request for username:', username);
+      
+      // Find account by email or username (for student ID format)
+      const emailExist = accounts.find((x) => x.email === username);
+      if (!emailExist) {
+        console.log('Account not found for username:', username);
+        return error('Account does not exist');
+      }
 
       const account = accounts.find(
-        (x) => x.email === email && x.password === password
+        (x) => x.email === username && x.password === password
       );
-      if (!account) return error('password is incorrect');
+      if (!account) {
+        console.log('Password incorrect for username:', username);
+        return error('Password is incorrect');
+      }
 
       const isActive = accounts.find(
-        (x) => x.email === email && x.password === password && x.isActive
+        (x) => x.email === username && x.password === password && x.isActive
       );
-      if (!isActive)
+      if (!isActive) {
+        console.log('Account inactive for username:', username);
         return error(
-          'Account is inActive. Please contact system Administrator!'
+          'Account is inActive. Please contact system support!'
         );
+      }
 
       const isVerified = accounts.find(
-        (x) => x.email === email && x.password === password && x.isVerified
+        (x) => x.email === username && x.password === password && x.isVerified
       );
       if (!isVerified) {
         setTimeout(() => {
@@ -172,13 +218,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         return error('Email is not verified');
       }
 
-      // const account = accounts.find(x => x.email === email && x.password === password && x.isVerified);
-      // if(!account) return error('hell nah')
-
       // add refresh token to account
       account.refreshTokens.push(generateRefreshToken());
       localStorage.setItem(accountsKey, JSON.stringify(accounts));
 
+      console.log('Authentication successful for:', username, 'Role:', account.role);
       return ok({
         ...basicDetails(account),
         jwtToken: generateJwtToken(account),
@@ -207,6 +251,49 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         ...basicDetails(account),
         jwtToken: generateJwtToken(account),
       });
+    }
+
+    function updateAccount() {
+      if (!isAuthenticated()) return unauthorized();
+
+      // get account id from URL
+      const urlParts = url.split('/');
+      const id = parseInt(urlParts[urlParts.length - 1]);
+      
+      const account = accounts.find(x => x.id === id);
+      if (!account) return error('Account not found');
+
+      console.log('Fake backend: updating account', id, 'with data:', body);
+
+      // update password if provided
+      if (body.password) {
+        if (!body.confirmPassword) {
+          return error('Confirm password is required');
+        }
+        if (body.password !== body.confirmPassword) {
+          return error('Passwords do not match');
+        }
+        if (body.password.length < 6) {
+          return error('Password must be at least 6 characters');
+        }
+        
+        // update the password
+        account.password = body.password;
+        console.log('Fake backend: password updated for account', id);
+      }
+
+      // update other fields if provided
+      if (body.firstName !== undefined) account.firstName = body.firstName;
+      if (body.lastName !== undefined) account.lastName = body.lastName;
+      if (body.email !== undefined) account.email = body.email;
+      if (body.role !== undefined) account.role = body.role;
+
+      // save updated accounts
+      localStorage.setItem(accountsKey, JSON.stringify(accounts));
+      
+      console.log('Fake backend: account update completed, accounts saved to localStorage');
+      
+      return ok({ message: 'Account updated successfully' });
     }
 
     // helper functions

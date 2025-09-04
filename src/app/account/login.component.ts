@@ -71,29 +71,8 @@ export class LoginComponent {
           this.router.navigateByUrl(returnUrl);
         },
         error: (error) => {
-          console.error('Login error details:', error);
-          
-          // Extract error message based on response structure
-          let errorMessage = 'Login failed. Please try again.';
-          
-          if (error instanceof Error) {
-            errorMessage = error.message;
-          } else if (typeof error === 'string') {
-            errorMessage = error;
-          } else if (error && typeof error === 'object') {
-            if (error.status === 0) {
-              errorMessage = 'Unable to connect to the server. Please ensure the backend is running at http://localhost:4000';
-            } else if (error.status === 401) {
-              errorMessage = 'Invalid email or password';
-            } else if (error.error && typeof error.error === 'string') {
-              errorMessage = error.error;
-            } else if (error.message) {
-              errorMessage = error.message;
-            }
-          }
-          
-          console.error('Displaying error to user:', errorMessage);
-          this.alertService.error(errorMessage);
+          console.log('Login error:', error);
+          this.alertService.error(error);
           this.loading = false;
         },
       });
