@@ -69,6 +69,27 @@ export class AccountService {
     return this.http.post(`${baseUrl}/verify-email`, { token });
   }
 
+  // Admin CRUD operations
+  getAllAccounts() {
+    return this.http.get<Account[]>(`${baseUrl}`);
+  }
+
+  getAccountById(id: string) {
+    return this.http.get<Account>(`${baseUrl}/${id}`);
+  }
+
+  createAccount(account: Account) {
+    return this.http.post<Account>(`${baseUrl}`, account);
+  }
+
+  updateAccount(id: string, account: Partial<Account>) {
+    return this.http.put<Account>(`${baseUrl}/${id}`, account);
+  }
+
+  deleteAccount(id: string) {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+
   private refreshTokenTimeout;
 
   private startRefreshTokenTimer() {
