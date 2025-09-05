@@ -21,6 +21,7 @@ export class LoginComponent {
   form: UntypedFormGroup;
   loading = false;
   submitted = false;
+  account = this.accountService.accountValue
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -57,7 +58,12 @@ export class LoginComponent {
       .login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (account) => {
+
+          console.log('Logged in account:', account);
+
+      // Store login date
+      this.accountService.setLoginDate(account.id).subscribe();
           // get return url from query parameters or default to home page
           const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
           this.router.navigateByUrl(returnUrl);
@@ -68,5 +74,6 @@ export class LoginComponent {
           this.loading = false;
         },
       });
+
   }
 }

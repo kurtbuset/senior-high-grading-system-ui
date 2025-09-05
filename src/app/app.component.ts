@@ -18,6 +18,7 @@ export class AppComponent {
   Role = Role;
   account: Account;
   showLogoutModal = false;
+  
 
   constructor(
     private accountService: AccountService,
@@ -38,5 +39,6 @@ export class AppComponent {
     this.showLogoutModal = false;
     this.accountService.logout();
     this.subjectService.eraseSubjects();
+    
   }
 }

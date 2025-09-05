@@ -20,5 +20,6 @@ export const routes: Routes = [
   { path: 'egrade', loadComponent: () => import('./student/egrade.component').then(m => m.EgradeComponent), canActivate: [authGuard], data: { roles: [Role.Student] }, title: 'E-Grade' },
   { path: 'homeroom', children: homeroomRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar, Role.Principal, Role.Teacher] } },
   { path: 'curriculum-subjects', children: curriculumSubjectRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar] } },
+  { path: 'logging-history', loadComponent: () => import('./logging_history/logging_history.component').then(m => m.LoggingHistoryComponent), canActivate: [authGuard], title: 'History Loggin' },
   { path: '**', redirectTo: '' }, 
 ];

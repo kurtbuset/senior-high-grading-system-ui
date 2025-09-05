@@ -41,6 +41,16 @@
           <i class="bi bi-speedometer2 me-2"></i> Dashboard
         </a>
       </li>
+      <li class="nav-item">
+        <a
+          routerLink="/logging-history"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link text-white"
+        >
+          <i class="bi bi-speedometer2 me-2"></i> Logging history
+        </a>
+      </li>
 
       <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
         <a
@@ -192,6 +202,7 @@
     <!-- <breadcrumb-nav *ngIf="account" /> -->
 
     <!-- main router outlet -->
+     <header>header</header>
     <router-outlet></router-outlet>
   </div>
 </div>

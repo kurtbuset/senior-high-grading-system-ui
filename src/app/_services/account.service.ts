@@ -24,12 +24,19 @@ export class AccountService {
     return this.accountSubject.value;
   }
 
+  setLoginDate(id: string){
+    return this.http.post(`${baseUrl}/setLogin`, { accountId: id })
+  }
+
+  setLogoutDate(id: string){
+    return this.http.post(`${baseUrl}/setLogout`, { accountId: id })
+  }
+
   login(username: string, password: string) {
     return this.http
       .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
       .pipe(
         map((account) => {
-          console.log(account)
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -41,12 +48,17 @@ export class AccountService {
     return this.http.post(`${baseUrl}/register`, account);
   }
 
+  loggingHistory(){
+    return this.http.get<any>(`${baseUrl}/historyLogging`);
+  }
+
   logout() {
     this.http
       .post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true })
       .subscribe();
     localStorage.removeItem('account');
     this.stopRefreshTokenTimer();
+    this.setLogoutDate(this.accountValue.id).subscribe()
     this.accountSubject.next(null);
     this.router.navigate(['/account/login']);
   }
