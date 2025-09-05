@@ -4,6 +4,7 @@
 .sidebar {
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   overflow: hidden !important; /* Prevent any scrolling */
+  top: 80px !important; /* Position below header */
 }
 
 /* Student Profile Sidebar Styles */
@@ -102,6 +103,7 @@
 
   .flex-grow-1 {
     margin-left: 0 !important;
+    margin-top: 0 !important;
   }
 
   #print-header,
@@ -111,5 +113,21 @@
 
   button {
     display: none !important;
+  }
+}
+
+/* Header and layout adjustments */
+.app-container {
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    top: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  .flex-grow-1 {
+    margin-left: 0 !important;
   }
 }

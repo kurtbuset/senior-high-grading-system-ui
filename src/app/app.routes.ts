@@ -14,6 +14,9 @@ export const routes: Routes = [
   // redirect root to login if not authenticated, otherwise to home
   { path: '', redirectTo: '/account/login', pathMatch: 'full' },
   { path: 'home', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
+  // redirect root to login if not authenticated, otherwise to home
+  { path: '', redirectTo: '/account/login', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
   // lazily loaded
   { path: 'account', children: accountRoutes },
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },

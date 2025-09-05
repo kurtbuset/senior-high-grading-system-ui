@@ -2,16 +2,11 @@
   <!-- main nav -->
   <nav
     class="sidebar vh-100 p-0"
-    style="width: 170px; position: fixed; top: 0; left: 0; z-index: 1000; background-color: #1e2b6b;"
+    style="width: 170px; position: fixed; top: 80px; left: 0; z-index: 999; background-color: #1e2b6b;"
     *ngIf="account && account.jwtToken"
   >
-    <!-- Logo Section -->
-    <div class="text-center py-4" style="background-color: #1e2b6b;">
-      <img src="../assets/images/bc logo.png" width="80" height="80" alt="bc logo" class="mb-2">
-    </div>
-    
     <!-- Navigation Items -->
-    <ul class="nav flex-column px-0" style="height: calc(100vh - 120px); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
+    <ul class="nav flex-column px-0" style="height: calc(100vh - 80px); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;">
       <!-- Main Navigation -->
       <div>
       <li class="nav-item">
@@ -138,21 +133,25 @@
           'padding': '0'
         } : {
           'margin-left': '170px',
-          'padding': '0',
+          'margin-top': '80px',
+          'padding': '20px',
           'background-color': '#f8f9fa'
           }
     "
   >
+    <!-- Header Component -->
+    <app-header *ngIf="account && account.jwtToken"></app-header>
     
-    <router-outlet name="subnav"></router-outlet>
+    <div style="padding-top: 20px;">
+      <router-outlet name="subnav"></router-outlet>
 
-    <!-- global alert -->
-    <alert></alert>
+      <!-- global alert -->
+      <alert></alert>
 
-    <!-- <breadcrumb-nav *ngIf="account" /> -->
+      <!-- <breadcrumb-nav *ngIf="account" /> -->
 
-    <!-- main router outlet -->
-    <router-outlet></router-outlet>
-  </div>
+      <!-- main router outlet -->
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>
