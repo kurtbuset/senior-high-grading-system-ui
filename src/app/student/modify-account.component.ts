@@ -61,24 +61,44 @@ export class ModifyAccountComponent implements OnInit {
   }
 
   getStudentNumber(): string {
-    // First try school_id from account object
-    if (this.account?.school_id) {
+    console.log('=== STUDENT NUMBER DEBUG ===');
+    console.log('Account object:', this.account);
+    console.log('Account school_id:', this.account?.school_id);
+    console.log('Account email:', this.account?.email);
+    
+    // First priority: Check school_id from account object
+    if (this.account?.school_id && this.account.school_id.match(/^\d{4}-\d{5}$/)) {
+      console.log('Using school_id from account:', this.account.school_id);
       return this.account.school_id;
     }
     
-    // Check if email contains student ID format (YYYY-NNNNN)
+    // Second priority: Check if email contains student ID format (YYYY-NNNNN)
     if (this.account?.email && this.account.email.match(/^\d{4}-\d{5}$/)) {
+      console.log('Using email as student ID:', this.account.email);
       return this.account.email;
     }
     
-    // Check localStorage for the login username (student might have logged in with school_id)
+    // Third priority: Check localStorage for the login username (student logged in with school_id)
     const loginData = localStorage.getItem('studentLoginId');
+    console.log('localStorage studentLoginId:', loginData);
     if (loginData && loginData.match(/^\d{4}-\d{5}$/)) {
+      console.log('Using studentLoginId from localStorage:', loginData);
       return loginData;
     }
     
-    // Fallback to email or default
-    return this.account?.email || '2025-00001';
+    // Fourth priority: Try to extract from email if it contains the ID pattern anywhere
+    if (this.account?.email) {
+      const emailMatch = this.account.email.match(/\d{4}-\d{5}/);
+      if (emailMatch) {
+        console.log('Extracted student ID from email:', emailMatch[0]);
+        return emailMatch[0];
+      }
+    }
+    
+    // Final fallback: Return default format
+    console.log('Using fallback student ID: 2025-00001');
+    console.log('=============================');
+    return '2025-00001';
   }
 
   closeSuccessAlert() {
