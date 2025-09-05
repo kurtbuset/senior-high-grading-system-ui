@@ -4,6 +4,7 @@ import { authGuard } from './_helpers/auth.guard';
 import { HomeComponent } from './home/home.component';
 
 import { accountRoutes } from './account/account.routes';
+import { accountAdminRoutes } from './account_admin/account-admin.routes';
 import { profileRoutes } from './profile/profile.routes';
 import { teacherRoutes } from './teacher/subject.routes';
 import { homeroomRoutes } from './homeroom/homeroom.routes';
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
   // lazily loaded
   { path: 'account', children: accountRoutes },
+  { path: 'account-admin', children: accountAdminRoutes, canActivate: [authGuard], data: { roles: [Role.SuperAdmin] } },
   { path: 'profile', children: profileRoutes, canActivate: [authGuard] },
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },
   { path: 'egrade', loadComponent: () => import('./student/egrade.component').then(m => m.EgradeComponent), canActivate: [authGuard], data: { roles: [Role.Student] }, title: 'E-Grade' },
