@@ -51,7 +51,7 @@
           <i class="bi bi-people me-2"></i> Accounts
         </a>
       </li>
-<!-- test -->
+
       <li class="nav-item" *ngIf="account.role === Role.Teacher || account.role === Role.SuperAdmin">
         <a
           routerLink="/teacher"
@@ -130,6 +130,7 @@
     </ul>
   </nav>
 
+  <!-- Logout Modal -->
   <div
     class="modal fade"
     tabindex="-1"
@@ -167,9 +168,10 @@
     *ngIf="showLogoutModal"
   ></div>
 
+  <!-- Main Content -->
   <div
-    class="flex-grow-1 background"
-    style="padding: 1rem"
+    class="flex-grow-1 d-flex flex-column background"
+    style="padding: 1rem; min-height: 100vh;"
     [ngStyle]="
       !account
         ? {
@@ -184,14 +186,23 @@
           }
     "
   >
+    <!-- Header -->
+
+
     <router-outlet name="subnav"></router-outlet>
 
     <!-- global alert -->
     <alert></alert>
 
-    <!-- <breadcrumb-nav *ngIf="account" /> -->
-
     <!-- main router outlet -->
     <router-outlet></router-outlet>
+
+    <!-- Footer -->
+    <footer
+      class="text-center py-2 mt-auto"
+      style="background-color: rgb(0, 0, 70); color: white; border-radius: 8px;"
+    >
+      © 2025-2026
+    </footer>
   </div>
 </div>
