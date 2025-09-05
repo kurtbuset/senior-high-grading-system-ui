@@ -12,7 +12,7 @@ export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
       return false; // or redirect somewhere else
     }
     return true;
-  }
+  } 
 
   router.navigate(['/account/login']);
   return false;

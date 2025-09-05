@@ -1,0 +1,6 @@
+<div class="d-flex justify-content-between mb-3" *ngIf="homeroom$ | async as homeroom">
+  <strong>Grade: {{ homeroom.grade_level }}</strong>
+  <strong>Section: {{ homeroom.section }}</strong>
+  <strong>School Year: {{ homeroom.school_year }}</strong>
+  <strong>Strand: {{ homeroom.strand }}</strong>
+</div>

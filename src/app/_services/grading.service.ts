@@ -48,6 +48,10 @@ export class GradingService {
     return this.http.put(`${baseUrl}/quiz-scores/update`, params)
   }
 
+  addTransmutedGrade(params){
+    return this.http.post(`${baseUrl}/final-grades`, params)
+  }
+
   getQuarterlyGradeSheet(id: string, params: { quarter: string }){
     return this.http.get<any>(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
   }

@@ -8,6 +8,7 @@ import { environment } from '@environments/environment';
 import { Student } from '@app/_models/student';
 
 const baseUrl = `${environment.apiUrl}/enrollments`
+const studentUrl = `${environment.apiUrl}/students`
 
 @Injectable({ providedIn: 'root' })
 export class StudentService {
@@ -28,4 +29,7 @@ export class StudentService {
     return this.http.get<Student[]>(`${baseUrl}/enrolled/${id}`)
   }
 
+  getSubjectsAndGrades(id: number){
+    return this.http.get<{ schoolYear: string; subjects: any[] }>(`${studentUrl}/egrades/${id}`)
+  }
 }

@@ -1,0 +1,108 @@
+<div class="w-100 d-flex justify-content-end my-3">
+  <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">
+    Print Grades
+  </button>
+  <button 
+    class="btn btn-sml btn-warning ml-3" 
+    (click)="openLockModal()" 
+    [disabled]="allLocked">
+    {{ allLocked ? 'Locked' : 'Lock Grades' }}
+  </button>
+</div>
+
+<div
+  class="modal fade"
+  tabindex="-1"
+  [ngClass]="{ show: showLockModal }"
+  [ngStyle]="{ display: showLockModal ? 'block' : 'none' }"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Lock Grades</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to lock grades for {{quarter}}?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeLockModal()"
+        >
+          No
+        </button>
+        <button type="button" class="btn btn-success" (click)="lockGrades()">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal-backdrop fade"
+  [ngClass]="{ show: showLockModal }"
+  *ngIf="showLockModal"
+></div>
+
+<div id="print-header" class="mb-4 d-flex justify-content-center">
+  <strong>Grading Period: {{ quarter | uppercase }}</strong>
+</div>
+
+
+<table class="table table-bordered table-hover table-sm">
+  <thead>
+    <tr>
+      <th class="text-center h4" colspan="2">STUDENTS</th>
+      <th class="text-center h4" colspan="3">PERCENTAGE SCORES</th>
+      <th class="text-center h4" colspan="3">WEIGHTED SCORES</th>
+      <th colspan="2"></th>
+    </tr>
+
+    <tr>
+      <th style="width: 20%">Lastname</th>
+      <th style="width: 20%">Firstname</th>
+
+      <th class="text-center" style="width: 5%">WRITTEN WORK</th>
+      <th class="text-center" style="width: 5%">PERFORMANCE TASKS</th>
+      <th class="text-center" style="width: 5%">QUARTERLY ASSESSMENT</th>
+
+      <th class="text-center" style="width: 5%">WRITTEN WORK</th>
+      <th class="text-center" style="width: 5%">PERFORMANCE TASKS</th>
+      <th class="text-center" style="width: 5%">QUARTERLY ASSESSMENT</th>
+
+      <th class="text-center" style="width: 5%">INITIAL GRADE</th>
+      <th class="text-center" style="width: 5%">TRANSMUTED GRADE</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.lastName }}</td>
+      <td>{{ student.firstName }}</td>
+
+      <td class="text-center">{{ student.wwPercentageScore }}</td>
+      <td class="text-center">{{ student.ptPercentageScore }}</td>
+      <td class="text-center">{{ student.qaPercentageScore }}</td>
+
+      <td class="text-center">{{ student.wwWeightedScore }}</td>
+      <td class="text-center">{{ student.ptWeightedScore }}</td>
+      <td class="text-center">{{ student.qaWeightedScore }}</td>
+
+      <td class="text-center font-weight-bold">{{ student.initialGrade }}</td>
+      <td class="text-center font-weight-bold">
+        {{ student.transmutedGrade }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div
+  *ngIf="loading"
+  class="d-flex justify-content-center align-items-center my-5"
+  style="min-height: 150px"
+>
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
