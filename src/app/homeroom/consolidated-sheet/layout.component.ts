@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule  } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { SubnavAdminComponent } from './subnav.component';
+import { SubnavComponent } from './subnav.component';
 import { HomeroomService } from '@app/_services/homeroom.service';
 import { HomeroomInformationComponent } from '../homeroom-information.component';
 
@@ -9,7 +9,7 @@ import { HomeroomInformationComponent } from '../homeroom-information.component'
   selector: 'subject-layout',
   standalone: true,
   templateUrl: 'layout.component.html',
-  imports: [RouterModule, CommonModule, SubnavAdminComponent, HomeroomInformationComponent],
+  imports: [RouterModule, CommonModule, SubnavComponent, HomeroomInformationComponent],
 })
 export class LayoutComponent implements OnInit{
   homeroom_id: string

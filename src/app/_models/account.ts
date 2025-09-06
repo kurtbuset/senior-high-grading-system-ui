@@ -6,7 +6,8 @@ export class Account {
     lastName: string;
     email: string;
     role: Role;
-    isActive: boolean
+    isActive: boolean;
+    school_id?: string; // For students - their student number like '2025-00001'
     jwtToken?: string;
     lrn_number: string
     school_year: string

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://capstone-backend-buvt.onrender.com'
+  apiUrl: 'http://localhost:4000'
 };
