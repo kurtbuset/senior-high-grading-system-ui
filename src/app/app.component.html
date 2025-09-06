@@ -3,14 +3,15 @@
   <nav
     class="text-white sidebar p-3 vh-100"
     style="
-      width: 200px;
-      background-color: rgb(0, 0, 70);
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100vh;
-      z-index: 1000;
-      overflow-y: auto;
+        width: 200px;
+        background-color: rgb(0, 0, 70);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        overflow-y: auto;
+    
     "
     *ngIf="account && account.jwtToken"
   >
@@ -18,6 +19,7 @@
       <h4
         class="fw-bold"
         style="letter-spacing: 1px; cursor: pointer"
+        routerLink="/"
         routerLink="/"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -69,9 +71,10 @@
             Homeroom
         </a>
 
+
       <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
         <a
-          routerLink="/admin/accounts"
+          routerLink="/account-admin"
           routerLinkActive="active"
           class="nav-link text-white"
         >
@@ -79,7 +82,7 @@
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="account.role === Role.Teacher">
+      <li class="nav-item" *ngIf="account.role === Role.Teacher || account.role === Role.SuperAdmin">
         <a
           routerLink="/teacher"
           routerLinkActive="active"
@@ -87,20 +90,12 @@
         >
           <i class="bi bi-journal-text me-2"></i> Assigned Subjects
         </a>
-
-        <!-- Teacher Menu Items -->
-        <li class="nav-item" *ngIf="account.role === Role.Teacher">
-          <a routerLink="/teacher" routerLinkActive="active" 
-             class="nav-link text-white py-3 px-4" 
-             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
-            Subjects
-        </a>
       </li>
 
       <li
         class="nav-item"
         *ngIf="
-          account.role === Role.Principal || account.role === Role.Registrar || account.role === Role.Teacher"
+          account.role === Role.Principal || account.role === Role.Registrar || account.role === Role.Teacher || account.role === Role.SuperAdmin"
       >
         <a
           routerLink="/homeroom"  
@@ -111,7 +106,7 @@
         </a>
       </li>   
 
-      <li class="nav-item" *ngIf="account.role === Role.Registrar">
+      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
         <a
           routerLink="/curriculum-subjects"
           routerLinkActive="active"
@@ -125,11 +120,14 @@
         <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-calendar-check me-2"></i> School Year Management
         </a>
+
+      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-calendar-check me-2"></i> School Year Management
+        </a>
       </li>
 
-
-        <!-- Student Menu Items -->
-      <li class="nav-item" *ngIf="account.role === Role.Student">
+      <li class="nav-item" *ngIf="account.role === Role.Student || account.role === Role.SuperAdmin">
         <a
           routerLink="/egrade"
           routerLinkActive="active"
@@ -149,24 +147,9 @@
         </a>
       </li>
 
-        <!-- Student-only Profile Menu Items -->
-        <li class="nav-item" *ngIf="account.role === Role.Student">
-          <a routerLink="/student/profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" 
-             class="nav-link text-white py-3 px-4" 
-             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
-            My Profile
-        </a>
-      </li>
-
       <li class="nav-item">
         <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-gear me-2"></i> Modify Account
-        </a>
-        <li class="nav-item" *ngIf="account.role === Role.Student">
-          <a routerLink="/student/modify-account" routerLinkActive="active" 
-             class="nav-link text-white py-3 px-4" 
-             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
-            Modify Account
         </a>
       </li>
 
@@ -227,8 +210,8 @@
 
   <!-- Main Content Area -->
   <div
-    class="flex-grow-1 background"
-    style="padding: 1rem"
+    class="flex-grow-1 d-flex flex-column background"
+    style="padding: 1rem; min-height: 100vh;"
     [ngStyle]="
       !account
         ? {
@@ -253,18 +236,20 @@
 
     <!-- global alert -->
     <alert></alert>
-
+    
     <!-- <breadcrumb-nav *ngIf="account" /> -->
-
+    
+    
     <!-- main router outlet -->
     <router-outlet></router-outlet>
-      <!-- global alert -->
-      <alert></alert>
 
-      <!-- <breadcrumb-nav *ngIf="account" /> -->
-
-      <!-- main router outlet -->
-      <router-outlet></router-outlet>
+    <!-- Footer -->
+    <footer *ngIf="account"
+      class="text-center py-2 mt-auto"
+      style="background-color: rgb(0, 0, 70); color: white; border-radius: 8px;"
+    >
+      © 2025-2026
+    </footer>
     </div>
   </div>
 </div>

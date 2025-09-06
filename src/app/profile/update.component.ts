@@ -109,19 +109,19 @@ export class UpdateComponent implements OnInit {
     console.log('Sending password update request to backend...');
     
     // Update the password via backend API
-    this.accountService
-      .update(accountId, updateData)
-      .pipe(first())
-      .subscribe({
-        next: (response) => {
-          console.log('Password update successful:', response);
-          this.handleSuccessfulUpdate();
-        },
-        error: (error) => {
-          console.error('Password update error:', error);
-          this.handleUpdateError(error);
-        },
-      });
+    // this.accountService
+    //   .update(accountId, updateData)
+    //   .pipe(first())
+    //   .subscribe({
+    //     next: (response) => {
+    //       console.log('Password update successful:', response);
+    //       this.handleSuccessfulUpdate();
+    //     },
+    //     error: (error) => {
+    //       console.error('Password update error:', error);
+    //       this.handleUpdateError(error);
+    //     },
+    //   });
   }
   
   private handleSuccessfulUpdate() {

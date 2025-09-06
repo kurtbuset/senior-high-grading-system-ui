@@ -75,6 +75,7 @@ export class AccountService {
       .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
       .pipe(
         map((account) => {
+          console.log(account)
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -120,28 +121,24 @@ export class AccountService {
     return this.http.post(`${baseUrl}/verify-email`, { token });
   }
 
-  getAll() {
-    return this.http.get<Account[]>(baseUrl);
+  // Admin CRUD operations
+  getAllAccounts() {
+    return this.http.get<Account[]>(`${baseUrl}`);
   }
 
-  getById(id: string) {
+  getAccountById(id: string) {
     return this.http.get<Account>(`${baseUrl}/${id}`);
   }
 
-  update(id: string, params: any) {
-    console.log('AccountService.update called with ID:', id);
-    console.log('Update URL:', `${baseUrl}/${id}`);
-    console.log('Update params:', { ...params, password: params.password ? '[HIDDEN]' : undefined, confirmPassword: params.confirmPassword ? '[HIDDEN]' : undefined });
-    
-    return this.http.put(`${baseUrl}/${id}`, params).pipe(
-      map((response: any) => {
-        console.log('Account update response:', response);
-        return response;
-      })
-    );
+  createAccount(account: Account) {
+    return this.http.post<Account>(`${baseUrl}`, account);
   }
 
-  delete(id: string) {
+  updateAccount(id: string, account: Partial<Account>) {
+    return this.http.put<Account>(`${baseUrl}/${id}`, account);
+  }
+
+  deleteAccount(id: string) {
     return this.http.delete(`${baseUrl}/${id}`);
   }
 

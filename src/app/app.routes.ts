@@ -11,13 +11,16 @@ import { studentRoutes } from './student/student.routes';
 import { Role } from './_models/role';
 import { curriculumSubjectRoutes } from './curriculum_subjects/curriculum-subject.routes';
 import { profileRoutes } from './profile/profile.routes';
+import { accountAdminRoutes } from './account_admin/account-admin.routes';
 
 export const routes: Routes = [
   // redirect root to login if not authenticated, otherwise to home
    { path: '', component: HomeComponent, canActivate: [authGuard], title: 'Home'}, 
   // lazily loaded
   { path: 'account', children: accountRoutes },
+  { path: 'account-admin', children: accountAdminRoutes, canActivate: [authGuard], data: { roles: [Role.SuperAdmin] } },
   { path: 'profile', children: profileRoutes, canActivate: [authGuard] },
+  { path: 'egrade', loadComponent: () => import('./student/egrade.component').then(m => m.EgradeComponent), canActivate: [authGuard], data: { roles: [Role.Student] }, title: 'E-Grade' },
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },
   { path: 'superadmin', children: superAdminRoutes, canActivate: [authGuard], data: { roles: [Role.SuperAdmin] } },
