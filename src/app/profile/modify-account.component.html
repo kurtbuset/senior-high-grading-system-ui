@@ -1,0 +1,31 @@
+<h1>Edit Password</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-25">
+  <div class="mb-3">
+    <label>Password</label>
+    <input type="password" class="form-control" formControlName="password" />
+    <div *ngIf="form.controls['password'].touched && form.controls['password'].errors">
+      <small class="text-danger" *ngIf="form.controls['password'].errors['required']">
+        Password is required
+      </small>
+      <small class="text-danger" *ngIf="form.controls['password'].errors['minlength']">
+        Password must be at least 6 characters
+      </small>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label>Confirm Password</label>
+    <input type="password" class="form-control" formControlName="confirmPassword" />
+    <div *ngIf="form.controls['confirmPassword'].touched && form.controls['confirmPassword'].errors">
+      <small class="text-danger" *ngIf="form.controls['confirmPassword'].errors['required']">
+        Confirm password is required
+      </small>
+      <small class="text-danger" *ngIf="form.controls['confirmPassword'].errors['mustMatch']">
+        Passwords must match
+      </small>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-sm" [disabled]="loading">Update</button>
+</form>

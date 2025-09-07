@@ -32,4 +32,8 @@ export class StudentService {
   getSubjectsAndGrades(id: number){
     return this.http.get<{ schoolYear: string; subjects: any[] }>(`${studentUrl}/egrades/${id}`)
   }
+
+  getStudentInfo(id: number){
+    return this.http.get<any>(`${studentUrl}/${id}`)
+  }
 }

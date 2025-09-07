@@ -15,7 +15,11 @@ export class AccountService {
   private accountSubject: BehaviorSubject<Account>;
   public account: Observable<Account>;
 
-  constructor(private router: Router, private http: HttpClient, private subjectService: SubjectService) {
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private subjectService: SubjectService
+  ) {
     this.accountSubject = new BehaviorSubject<Account>(null);
     this.account = this.accountSubject.asObservable();
   }
@@ -26,10 +30,14 @@ export class AccountService {
 
   login(username: string, password: string) {
     return this.http
-      .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
+      .post<any>(
+        `${baseUrl}/authenticate`,
+        { username, password },
+        { withCredentials: true }
+      )
       .pipe(
         map((account) => {
-          console.log(account)
+          console.log(account);
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -61,6 +69,13 @@ export class AccountService {
           return account;
         })
       );
+  }
+
+  changePassword(
+    id: number,
+    params: { password: string; confirmPassword: string }
+  ) {
+    return this.http.put(`${baseUrl}/${id}`, params);
   }
 
   verifyEmail(token: string) {

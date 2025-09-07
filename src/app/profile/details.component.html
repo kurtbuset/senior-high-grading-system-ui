@@ -1,12 +1,55 @@
-<h1>My Profile</h1>
-<div class="d-flex justify-content-between">
-  <div>
-    <strong>Firstname: </strong> {{ account.firstName }}
-  </div>
-  
-  <div>
-    <strong>Lastname: </strong> {{ account.lastName }}
+<h1 class="mb-4">My Profile</h1>
+
+<div class="card shadow-sm p-4 rounded-3">
+  <div class="row">
+    <!-- Name (always shown) -->
+    <div class="col-md-6 mb-3">
+      <strong>Name:</strong>
+      <p class="text-muted mb-0">
+        {{ account.firstName }} {{ account.lastName }}
+      </p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <strong>Email Address:</strong>
+      <p class="text-muted mb-0">
+        {{ account.email }} 
+      </p>
+    </div>
+
+    <!-- Student details (only if Student role) -->
+    <ng-container *ngIf="account.role === 'Student' && student">
+      <div class="col-md-6 mb-3">
+        <strong>Student No:</strong>
+        <p class="text-muted mb-0">{{ student.school_id }}</p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <strong>LRN Number:</strong>
+        <p class="text-muted mb-0">{{ student.lrn_number }}</p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <strong>Address:</strong>
+        <p class="text-muted mb-0">{{ student.address }}</p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <strong>Year Level:</strong>
+        <p class="text-muted mb-0">
+          {{ student.homeroom?.grade_level?.level }}
+        </p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <strong>Strand:</strong>
+        <p class="text-muted mb-0">{{ student.homeroom?.strand?.name }}</p>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <strong>Section:</strong>
+        <p class="text-muted mb-0">{{ student.homeroom?.section }}</p>
+      </div>
+    </ng-container>
   </div>
 </div>
-
-<a class="btn btn-sm btn-primary">Update Profile</a>  
