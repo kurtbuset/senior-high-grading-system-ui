@@ -8,6 +8,4 @@ export class Account {
     role: Role;
     isActive: boolean
     jwtToken?: string;
-    lrn_number: string
-    school_year: string
 }

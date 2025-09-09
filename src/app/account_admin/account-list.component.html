@@ -24,8 +24,6 @@
         <th>Email</th>
         <th>Role</th>
         <th>Status</th>
-        <th>LRN Number</th>
-        <th>School Year</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -44,8 +42,6 @@
             {{ account.isActive ? 'Active' : 'Inactive' }}
           </span>
         </td>
-        <td>{{ account.lrn_number || 'N/A' }}</td>
-        <td>{{ account.school_year || 'N/A' }}</td>
         <td>
           <div class="btn-group" role="group">
             <a [routerLink]="['edit', account.id]" class="btn btn-sm btn-outline-primary">
@@ -53,10 +49,11 @@
             </a>
             <button 
               type="button" 
-              class="btn btn-sm btn-outline-danger"
-              (click)="deleteAccount(account.id)"
+              class="btn btn-sm"
+              [class]="account.isActive ? 'btn-outline-danger' : 'btn-outline-success'"
+              (click)="toggleAccountStatus(account.id, account.isActive)"
             >
-              <i class="bi bi-trash"></i>
+              {{ account.isActive ? 'Deactivate' : 'Activate' }}
             </button>
           </div>
         </td>

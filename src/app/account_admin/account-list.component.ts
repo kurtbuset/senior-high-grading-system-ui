@@ -38,24 +38,31 @@ export class AccountListComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          this.alertService.error('Failed to load accounts');
+          this.alertService.error('Failed to load accounts: ' + error);
+          console.error('Failed to load accounts:', error);
           this.loading = false;
         },
       });
   }
 
-  deleteAccount(id: string) {
-    if (confirm('Are you sure you want to delete this account?')) {
+  toggleAccountStatus(id: string, isActive: boolean) {
+    const action = isActive ? 'deactivate' : 'activate';
+    if (confirm(`Are you sure you want to ${action} this account?`)) {
+      // Send only the isActive field to update
+      const updateData = { isActive: !isActive };
+      
       this.accountService
-        .deleteAccount(id)
+        .updateAccount(id, updateData)
         .pipe(first())
         .subscribe({
           next: () => {
-            this.alertService.success('Account deleted successfully');
+            this.alertService.success(`Account ${action}d successfully`);
             this.loadAccounts();
           },
           error: (error) => {
-            this.alertService.error('Failed to delete account');
+            console.error(`Failed to ${action} account:`, error);
+            console.error('Update data being sent:', updateData);
+            this.alertService.error(`Failed to ${action} account: ` + error);
           },
         });
     }

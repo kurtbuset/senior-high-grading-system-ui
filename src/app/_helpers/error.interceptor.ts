@@ -11,13 +11,24 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
+            // Only auto logout for authentication-related errors
             if ([401, 403].includes(err.status) && this.accountService.accountValue) {
-                // auto logout if 401 or 403 response returned from api
-                this.accountService.logout();
+                // Check if this is an authentication endpoint
+                const isAuthEndpoint = request.url.includes('/authenticate') || 
+                                      request.url.includes('/refresh-token') || 
+                                      request.url.includes('/revoke-token');
+                
+                // For account operations, we should not logout automatically
+                const isAccountOperation = request.url.includes('/accounts/');
+                
+                // Only logout for authentication endpoints, not for account operations
+                if (isAuthEndpoint && !isAccountOperation) {
+                    this.accountService.logout();
+                }
             }
 
-            const error = (err && err.error && err.error.message) || err.statusText;
-            console.error(err);
+            const error = (err && err.error && err.error.message) || err.statusText || 'An unknown error occurred!';
+            console.error('HTTP Error:', err);
             return throwError(error);
         }))
     }

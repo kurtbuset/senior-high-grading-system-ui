@@ -52,7 +52,7 @@
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="account.role === Role.Teacher || account.role === Role.SuperAdmin">
+      <li class="nav-item" *ngIf="account.role === Role.Teacher">
         <a
           routerLink="/teacher"
           routerLinkActive="active"
@@ -65,7 +65,7 @@
       <li
         class="nav-item"
         *ngIf="
-          account.role === Role.Principal || account.role === Role.Registrar || account.role === Role.Teacher || account.role === Role.SuperAdmin"
+          account.role === Role.Principal || account.role === Role.Registrar || account.role === Role.Teacher"
       >
         <a
           routerLink="/homeroom"  
@@ -76,7 +76,7 @@
         </a>
       </li>   
 
-      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
+      <li class="nav-item" *ngIf="account.role === Role.Registrar">
         <a
           routerLink="/curriculum-subjects"
           routerLinkActive="active"
@@ -86,13 +86,13 @@
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
+      <li class="nav-item" *ngIf="account.role === Role.Registrar">
         <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
           <i class="bi bi-calendar-check me-2"></i> School Year Management
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="account.role === Role.Student || account.role === Role.SuperAdmin">
+      <li class="nav-item" *ngIf="account.role === Role.Student">
         <a
           routerLink="/egrade"
           routerLinkActive="active"

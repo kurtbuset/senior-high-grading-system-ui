@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
 import { Account } from '@app/_models/account';
@@ -29,6 +30,7 @@ export class AddEditAccountComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private accountService: AccountService,
     private alertService: AlertService
   ) {}
@@ -43,8 +45,6 @@ export class AddEditAccountComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required],
       isActive: [true],
-      lrn_number: [''],
-      school_year: [''],
       password: ['', this.id ? [] : [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['']
     }, {
@@ -62,8 +62,11 @@ export class AddEditAccountComponent implements OnInit {
             this.loading = false;
           },
           error: (error) => {
-            this.alertService.error('Failed to load account');
+            this.alertService.error('Failed to load account: ' + error);
+            console.error('Failed to load account:', error);
             this.loading = false;
+            // Navigate back to account list on error
+            this.cancel();
           }
         });
     }
@@ -80,12 +83,27 @@ export class AddEditAccountComponent implements OnInit {
     }
 
     this.submitting = true;
-    const account = this.form.value;
     
+    // Create a clean object with only the fields we want to send
+    const formValue = this.form.value;
+    const accountData: any = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      email: formValue.email,
+      role: formValue.role,
+      isActive: formValue.isActive
+    };
+
+    // Only include password fields if they have values
+    if (formValue.password && formValue.password.length > 0) {
+      accountData.password = formValue.password;
+      accountData.confirmPassword = formValue.confirmPassword;
+    }
+
     if (this.id) {
-      this.updateAccount(account);
+      this.updateAccount(accountData);
     } else {
-      this.createAccount(account);
+      this.createAccount(accountData);
     }
   }
 
@@ -95,10 +113,11 @@ export class AddEditAccountComponent implements OnInit {
       .subscribe({
         next: () => {
           this.alertService.success('Account created successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['../'], { relativeTo: this.route });
+          this.cancel();
         },
         error: (error) => {
-          this.alertService.error(error);
+          this.alertService.error('Failed to create account: ' + error);
+          console.error('Failed to create account:', error);
           this.submitting = false;
         }
       });
@@ -110,12 +129,19 @@ export class AddEditAccountComponent implements OnInit {
       .subscribe({
         next: () => {
           this.alertService.success('Account updated successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['../../'], { relativeTo: this.route });
+          this.cancel();
         },
         error: (error) => {
-          this.alertService.error(error);
+          console.error('Failed to update account:', error);
+          console.error('Account data being sent:', account);
+          this.alertService.error('Failed to update account: ' + error);
           this.submitting = false;
         }
       });
+  }
+
+  cancel() {
+    // Go back to the previous page in the browser history
+    this.location.back();
   }
 }
