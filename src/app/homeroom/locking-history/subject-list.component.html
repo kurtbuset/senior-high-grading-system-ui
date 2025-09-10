@@ -1,24 +1,80 @@
-<h1>list of subject na gi lock</h1>
+<div class="container mt-4">
+  <h2 class="mb-4 text-primary">📌 Locked Subjects History</h2>
 
-<table class="table table-hover tabl-sm">
-    <thead>
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle">
+      <thead class="table-primary text-center">
         <tr>
-            <th class="text-center" style="width: 15%;">Date</th>
-            <th class="text-center" style="width: 30%;">Subject Name</th>
-            <th class="text-center" style="width: 10%;">Semester</th>
-            <th class="text-center" style="width: 10%;">Quarter</th>
-            <th class="text-center" class="text-center" style="width: 20%;">Subject Teacher</th>
-            
+          <th style="width: 25%">Subject Name</th>
+          <th style="width: 10%">Semester</th>
+          <th style="width: 10%">Quarter</th>
+          <th style="width: 20%">Subject Teacher</th>
         </tr>
-    </thead>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let record of history">
+          <!-- Subject Row -->
+          <tr
+            (click)="record.expanded = !record.expanded"
+            class="table-light"
+            style="cursor: pointer"
+          >
+            <td class="fw-bold">{{ record.subject_name }}</td>
+            <td class="text-center">{{ record.semester }}</td>
+            <td class="text-center">{{ record.quarter }}</td>
+            <td class="text-center">{{ record.teacher_name }}</td>
+          </tr>
 
-    <tbody>
-        <tr>
-            <td class="text-center">Aug 29, 2025 5:00PM</td>
-            <td class="text-center">Oral Communication</td>
-            <td class="text-center">FIRST SEMESTER</td>
-            <td class="text-center">First Quarter</td>
-            <td class="text-center">Yams Lamilo</td>
-        </tr>
-    </tbody>
-</table>
+          <!-- Expandable Locked Dates -->
+          <!-- Expandable Locked Dates -->
+          <tr *ngIf="record.expanded">
+            <td colspan="4" class="p-3">
+              <div class="d-flex flex-wrap gap-3">
+                <div
+                  *ngFor="let batch of record.locked_batches"
+                  class="card border-primary shadow-sm flex-fill"
+                  style="min-width: 280px; max-width: 350px"
+                >
+                  <div class="card-header bg-primary text-white py-2">
+                    <strong
+                      >📅 Locked at:
+                      {{ batch.locked_at | date : "MMM d, y h:mm a" }}</strong
+                    >
+                  </div>
+                  <div class="card-body p-0">
+                    <table class="table table-bordered table-sm mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th style="width: 70%">Student Name</th>
+                          <th style="width: 30%">Final Grade</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let student of batch.students">
+                          <td>
+                            {{ student.lastName }}, {{ student.firstName }}
+                          </td>
+                          <td class="text-center fw-bold">
+                            <span
+                              class="badge"
+                              [ngClass]="{
+                                'bg-success': student.final_grade >= 75,
+                                'bg-danger': student.final_grade < 75
+                              }"
+                            >
+                              {{ student.final_grade }}
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

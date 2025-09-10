@@ -12,88 +12,101 @@ import { first } from 'rxjs';
   imports: [CommonModule],
 })
 export class QuarterlyGradeSheetComponent implements OnInit {
-  quarter: string;
-  loading: boolean = false;
-  students: any;
-  teacher_subject_id: string;
-  account = this.accountService.accountValue;
+  quarter!: string;
+  teacherSubjectId!: string;
+  students: any[] = [];
+  loading = false;
   showLockModal = false;
 
-  allLocked: boolean = false;
+  allLocked: any
+
+  account = this.accountService.accountValue;
 
   constructor(
     private route: ActivatedRoute,
     private gradingService: GradingService,
     private alertService: AlertService,
-    private accountService: AccountService,
-  ) {
+    private accountService: AccountService
+  ) {}
+
+  ngOnInit(): void {
     this.route.parent?.paramMap.subscribe((params) => {
-      this.teacher_subject_id = params.get('id')!;
+      this.teacherSubjectId = params.get('id')!;
+      this.loadQuarterData();
     });
   }
 
-  ngOnInit(): void {
+  private loadQuarterData(): void {
     this.loading = true;
+
     this.route.paramMap.subscribe((params) => {
       this.quarter = params.get('quarter')!;
-      console.log(this.quarter)
+
       this.gradingService
-        .getQuarterlyGradeSheet(this.teacher_subject_id, {
-          quarter: this.quarter,
-        })
+        .getQuarterlyGradeSheet(this.teacherSubjectId, { quarter: this.quarter })
         .pipe(first())
         .subscribe({
-          next: (students) => {
-            this.students = students;
-            this.allLocked = students.every((s: any) => s.locked);
-            this.loading = false
+          next: (res) => {
+            this.allLocked = res.isLocked;
+            this.students = res.students;
+            this.loading = false;
           },
           error: (error) => {
-            console.error('Error loading student:', error);
+            console.error('Error loading students:', error);
+            this.loading = false;
           },
         });
     });
   }
 
-  printGradeSheet() {
-    console.log('print time');
+  printGradeSheet(): void {
     window.print();
   }
 
-
-  openLockModal() {
+  openLockModal(): void {
     this.showLockModal = true;
   }
 
-  closeLockModal() {
+  closeLockModal(): void {
     this.showLockModal = false;
   }
 
-  lockGrades() {
+  lockGrades(): void {
+    if (!this.students.length) return;
+
     this.showLockModal = false;
-    this.alertService.success('grades are now LOCK!')
+    this.alertService.success('Grades are now LOCKED!');
 
-    console.log(this.teacher_subject_id)
+    const gradesPayload = this.students.map((s: any) => ({
+      enrollment_id: s.enrollment_id,
+      final_grade: s.transmutedGrade,
+      quarter: this.quarter,
+    }));
 
-     const values = this.students.map((s: any) => ({
-        enrollment_id: s.enrollment_id,
-        final_grade: s.transmutedGrade,
-        quarter: this.quarter
-      }));
-    
-      console.log(values)
+    // Lock subject first
+    this.gradingService
+      .lockSubject({
+        teacher_subject_id: this.teacherSubjectId,
+        quarter: this.quarter,
+      })
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          console.log('Locking grade successful');
 
-      this.gradingService
-        .addTransmutedGrade(values)
-        .pipe(first())
-        .subscribe({
-          next: _ => {
-            console.log('success!')
-            this.ngOnInit(); 
-          },
-          error: err => {
-            console.log(err)
-          }
-        })
+          // Insert transmuted grades only after lock succeeds
+          this.gradingService
+            .addTransmutedGrade(gradesPayload)
+            .pipe(first())
+            .subscribe({
+              next: () => {
+                console.log('Inserting new grade successful!');
+                this.loadQuarterData();
+              },
+              error: (err) => console.error('Insert grade error:', err),
+            });
+        },
+        error: (err) => console.error('Lock subject error:', err),
+      });
   }
 }

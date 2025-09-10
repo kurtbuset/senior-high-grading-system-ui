@@ -21,8 +21,8 @@ export class HomeroomListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.account.role)
-    console.log(this.account.id)
+    // console.log(this.account.role)
+    // console.log(this.account.id)
 
     this.loading = true;
     this.homeroomService
@@ -30,7 +30,7 @@ export class HomeroomListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: (homerooms) => {
-          console.log(homerooms)
+          // console.log(homerooms)
           this.homerooms = homerooms;
           this.loading = false;
         },

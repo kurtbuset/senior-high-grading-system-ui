@@ -18,7 +18,6 @@
       </thead>
       <tbody *ngIf="quizzes && quizzes.length > 0; else noQuizzes">
         <tr *ngFor="let quiz of quizzes">
-          <!-- <td>{{ quiz.id }}</td> -->
           <td>
             <div
               *ngIf="editingQuizId !== quiz.id; else editHps"

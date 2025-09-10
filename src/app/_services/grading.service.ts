@@ -63,4 +63,12 @@ export class GradingService {
   deleteQuiz(id){
     return this.http.delete(`${baseUrl}/quizzes/${id}`)
   }
+
+  getSubjectsLockingHistory(id: number){
+    return this.http.get<any>(`${baseUrl}/final-grades/${id}`)
+  }
+
+  lockSubject(params: { teacher_subject_id: string, quarter: string}){
+    return this.http.post(`${baseUrl}/subject-quarter-locks`, params)
+  }
 }

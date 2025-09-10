@@ -3,11 +3,13 @@
     Print Grades
   </button>
   <button 
-    class="btn btn-sml btn-warning ml-3" 
-    (click)="openLockModal()" 
-    [disabled]="allLocked">
-    {{ allLocked ? 'Locked' : 'Lock Grades' }}
-  </button>
+  class="btn btn-sml btn-warning ml-3" 
+  (click)="openLockModal()" 
+  [disabled]="allLocked || loading">
+  {{ allLocked ? 'Locked' : 'Lock Grades' }}
+</button>
+
+
 </div>
 
 <div
