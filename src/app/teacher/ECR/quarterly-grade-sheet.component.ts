@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
 import { GradingService } from '@app/_services/grading.service';
-import { SubjectService } from '@app/_services/subject.service';
 import { first } from 'rxjs';
 
 @Component({
@@ -20,12 +19,13 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   account = this.accountService.accountValue;
   showLockModal = false;
 
+  allLocked: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private gradingService: GradingService,
     private alertService: AlertService,
     private accountService: AccountService,
-    private subjectService: SubjectService
   ) {
     this.route.parent?.paramMap.subscribe((params) => {
       this.teacher_subject_id = params.get('id')!;
@@ -45,6 +45,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
         .subscribe({
           next: (students) => {
             this.students = students;
+            this.allLocked = students.every((s: any) => s.locked);
             this.loading = false
           },
           error: (error) => {
@@ -74,12 +75,25 @@ export class QuarterlyGradeSheetComponent implements OnInit {
 
     console.log(this.teacher_subject_id)
 
-     const grades = this.students.map((s: any) => ({
+     const values = this.students.map((s: any) => ({
         enrollment_id: s.enrollment_id,
-        transmutedGrade: s.transmutedGrade,
+        final_grade: s.transmutedGrade,
         quarter: this.quarter
       }));
     
-      console.log(grades)
+      console.log(values)
+
+      this.gradingService
+        .addTransmutedGrade(values)
+        .pipe(first())
+        .subscribe({
+          next: _ => {
+            console.log('success!')
+            this.ngOnInit(); 
+          },
+          error: err => {
+            console.log(err)
+          }
+        })
   }
 }

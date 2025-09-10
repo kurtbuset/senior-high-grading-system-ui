@@ -21,6 +21,7 @@ export class LoginComponent {
   form: UntypedFormGroup;
   loading = false;
   submitted = false;
+  account = this.accountService.accountValue
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -32,7 +33,7 @@ export class LoginComponent {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: ['', [Validators.required]],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
@@ -49,24 +50,58 @@ export class LoginComponent {
 
     // stop here if form is invalid
     if (this.form.invalid) {
+      console.log('Form is invalid:', this.form.errors);
       return;
     }
 
     this.loading = true;
+    const email = this.f.email.value;
+    const password = this.f.password.value;
+    
+    console.log('Attempting login with email:', email);
+    
     this.accountService
-      .login(this.f.username.value, this.f.password.value)
+      .login(email, password)
       .pipe(first())
       .subscribe({
-        next: () => {
+        next: (account) => {
+
+          console.log('Logged in account:', account);
+
+      // Store login date
+      this.accountService.setLoginDate(account.id).subscribe();
           // get return url from query parameters or default to home page
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+          console.log('Redirecting to:', returnUrl);
           this.router.navigateByUrl(returnUrl);
         },
         error: (error) => {
-          console.log(error);
-          this.alertService.error(error);
+          console.error('Login error details:', error);
+          
+          // Extract error message based on response structure
+          let errorMessage = 'Login failed. Please try again.';
+          
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          } else if (typeof error === 'string') {
+            errorMessage = error;
+          } else if (error && typeof error === 'object') {
+            if (error.status === 0) {
+              errorMessage = 'Unable to connect to the server. Please ensure the backend is running at http://localhost:4000';
+            } else if (error.status === 401) {
+              errorMessage = 'Invalid email or password';
+            } else if (error.error && typeof error.error === 'string') {
+              errorMessage = error.error;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+          }
+          
+          console.error('Displaying error to user:', errorMessage);
+          this.alertService.error(errorMessage);
           this.loading = false;
         },
       });
+
   }
 }

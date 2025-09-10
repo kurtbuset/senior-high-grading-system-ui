@@ -14,6 +14,7 @@ export class EgradeComponent implements OnInit {
   account_id = this.accountService.accountValue.id;
   subjects: any[];
   selectedSemester: string = '';
+  schoolYear: string;
 
   constructor(
     private accountService: AccountService,
@@ -23,11 +24,11 @@ export class EgradeComponent implements OnInit {
   ngOnInit(): void {
     this.studentService
       .getSubjectsAndGrades(Number(this.account_id))
-      .pipe(first())  
+      .pipe(first())
       .subscribe({
-        next: (subjects) => {
-          // console.log(subjects)
-          this.subjects = subjects;
+        next: (res) => {
+          this.schoolYear = res.schoolYear; // ✅ capture schoolYear
+          this.subjects = res.subjects; // ✅ store subjects array
         },
         error: (error) => {
           console.error('Error:', error);

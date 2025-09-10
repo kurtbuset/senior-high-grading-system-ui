@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   templateUrl: 'semestral-consolidated.component.html',
+  styleUrls: ['semestral-consolidated.component.css'],
   standalone: true,
   imports: [CommonModule]
 })
@@ -14,6 +15,8 @@ export class SemestralConsolidatedComponent implements OnInit {
   loading: boolean = false;
   homeroomId: string;
   sheet: any;
+
+  
 
   constructor(
     private route: ActivatedRoute,

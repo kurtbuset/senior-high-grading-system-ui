@@ -1,12 +1,58 @@
-<h1>My Profile</h1>
-<div class="d-flex justify-content-between">
-  <div>
-    <strong>Firstname: </strong> {{ account.firstName }}
-  </div>
-  
-  <div>
-    <strong>Lastname: </strong> {{ account.lastName }}
+<div class="container-fluid p-0" style="background-color: #f8f9fa; min-height: 100vh;">
+  <div class="row g-0">
+    <!-- Content Area -->
+    <div class="col" style="padding: 40px 60px;">
+      <!-- Header Section -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0" style="color: #333; font-weight: 600; font-size: 2rem;">My Profile</h2>
+        <div class="d-flex gap-4">
+          <div class="text-end">
+            <span style="color: #666; font-size: 0.95rem;">Student No: {{ getStudentNumber() }}</span>
+          </div>
+          <div class="text-end">
+            <span style="color: #666; font-size: 0.95rem;">Year / Strand: 11 - GAS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Data Section -->
+      <div style="border: 3px solid #000; background: white; padding: 30px 25px; margin: 20px 0; position: relative;">
+        <!-- Personal Data text in top left -->
+        <div style="position: absolute; top: -15px; left: 15px; background: #f8f9fa; padding: 0 15px;">
+          <span style="color: #000; font-weight: 600; font-size: 1.1rem;">Personal Data</span>
+        </div>
+        
+        <!-- Content -->
+        <div class="row">
+          <!-- Left Column -->
+          <div class="col-md-6">
+            <div class="mb-4">
+              <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
+                <strong>Student Name:</strong> {{ account?.lastName }}, {{ account?.firstName }}
+              </div>
+            </div>
+            <div class="mb-4">
+              <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
+                <strong>Guardian Name:</strong> Wilfredo Cagulang
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column -->
+          <div class="col-md-6">
+            <div class="mb-4">
+              <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
+                <strong>Address:</strong> Mangga 2B, Poblacion, Liloan
+              </div>
+            </div>
+            <div class="mb-4">
+              <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
+                <strong>Guardian Contact:</strong> 09123456789
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<a class="btn btn-sm btn-primary">Update Profile</a>  

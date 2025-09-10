@@ -35,6 +35,9 @@ export class AssessmentTypeComponent implements OnInit {
   values: Object;
 
   quizzes: any;
+
+  locked = false;
+
   constructor(
     private route: ActivatedRoute,
     private gradingService: GradingService,
@@ -61,7 +64,7 @@ export class AssessmentTypeComponent implements OnInit {
         type: this.type,
       };
       this.loadQuizzes();
-      console.log(this.type)
+      console.log(this.type);
     });
 
     this.form = this.formBuilder.group({
@@ -71,13 +74,15 @@ export class AssessmentTypeComponent implements OnInit {
   }
 
   loadQuizzes() {
-    this.gradingService 
+    this.gradingService
       .getQuizzes(this.teacher_subject_id, this.values)
       .subscribe({
-        next: (quizzes) => {
-          console.log(quizzes)
-          this.quizzes = quizzes;
-          for (let quiz of quizzes) {
+        next: (result) => {
+          console.log(result);
+          this.quizzes = result.quizzes;
+          this.locked = result.isLocked; // 🔑 set flag
+
+          for (let quiz of this.quizzes) {
             this.quizForms[quiz.id] = this.formBuilder.group({
               hps: new FormControl(quiz.hps),
               description: new FormControl(quiz.description),
@@ -166,19 +171,21 @@ export class AssessmentTypeComponent implements OnInit {
       });
   }
 
-  deleteQuiz(id){
-    const confirmed = window.confirm('Are you sure you want to delete this quiz?');
+  deleteQuiz(id) {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this quiz?'
+    );
 
     if (!confirmed) return;
 
-    const quiz = this.quizzes.find(x => x.id === id);
+    const quiz = this.quizzes.find((x) => x.id === id);
     quiz.isDeleting = true;
-    this.gradingService 
+    this.gradingService
       .deleteQuiz(id)
       .pipe(first())
       .subscribe(() => {
-        this.quizzes = this.quizzes.filter(x => x.id !== id)
-        this.alertService.success('succesfully deleted!')
-      })
+        this.quizzes = this.quizzes.filter((x) => x.id !== id);
+        this.alertService.success('succesfully deleted!');
+      });
   }
 }

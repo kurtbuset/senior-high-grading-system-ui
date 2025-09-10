@@ -1,38 +1,52 @@
-<!-- <div class="table-responsive-lg"> -->
-  <table class="table table-hover table-sm text-center" *ngIf="sheet">
-  <thead>
-    <tr>
-      <th rowspan="2">Students</th>
-      <th *ngFor="let subj of sheet.subjects" colspan="3">
-        {{ subj.subject.name }}
-      </th>
-    </tr>
-    <tr>
-      <ng-container *ngFor="let subj of sheet.subjects">
-        <th>1st</th>
-        <th>2nd</th>
-        <th>Ave</th>
-      </ng-container>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let student of sheet.students">
-      <td>{{ student.account.lastname }}, {{ student.account.firstname }}</td>
-      <ng-container *ngFor="let subj of sheet.subjects">
-        <!-- placeholder grades, you can replace with real quiz/score data -->
-         <!-- first quarter grade per student per subject -->
-        <td>-</td>
-        <!-- second quarter grade per student per subject -->
-        <td>-</td>
-        <!-- ave of 2 quarter grade per student per subject -->
-        <td>-</td>
-      </ng-container>
-    </tr>
-  </tbody>
-</table>
+<div 
+  style="max-width: 1200px; height: 500px; overflow: auto; margin: auto; width: 100%;"
+>
+  <table class="table table-hover table-sm text-center" *ngIf="sheet" style="border-collapse: collapse;">
+    <thead>
+      <!-- First row: Subject names -->
+      <tr>
+        <th  
+            style="position: sticky; left: 0; top: 0; background: #fff; z-index: 3;">
+        </th>
+        <th *ngFor="let subj of sheet.subjects" colspan="3" 
+            style="position: sticky; top: 0; background: #fff; z-index: 2;">
+          {{ subj.subject.name }}
+        </th>
+      </tr>
 
-<!-- </div> -->
+      <!-- Second row: 1ST / 2ND / SFG -->
+      <tr style="position: sticky; left: 0; top: 150px; background: #fff; z-index: 3;">
+        <th
+            >
+          Students
+        </th>
+        <ng-container *ngFor="let subj of sheet.subjects">
+          <th style=" background: #fff; z-index: 2;">1ST</th>
+          <th style=" background: #fff; z-index: 2;">2ND</th>
+          <th style=" background: #fff; z-index: 2;">SFG</th>
+        </ng-container>
+      </tr>
+    </thead>
 
-<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
+    <tbody>
+      <tr *ngFor="let student of sheet.students">
+        <td style="position: sticky; left: 0; background: #fff; z-index: 1;">
+          {{ student.name }}
+        </td>
+        <ng-container *ngFor="let subj of sheet.subjects">
+          <td>{{ student.grades[subj.subject.id]?.first ?? ' ' }}</td>
+          <td>{{ student.grades[subj.subject.id]?.second ?? ' ' }}</td>
+          <td>{{ student.grades[subj.subject.id]?.ave ?? ' ' }}</td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  *ngIf="loading"
+  class="d-flex justify-content-center align-items-center my-5"
+  style="min-height: 150px"
+>
   <div class="spinner-border text-primary" role="status"></div>
 </div>

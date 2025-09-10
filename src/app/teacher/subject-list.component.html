@@ -37,6 +37,6 @@
   <div class="spinner-border text-primary" role="status"></div>
 </div>
 
-<ng-template #noData>
-  <p>No subjects assigned yet.</p>
-</ng-template>
+<div *ngIf="!loading && (!subjects || subjects.length === 0)">
+  <h3 class="text-center">No subjects assigned yet.</h3>
+</div>

@@ -7,17 +7,19 @@ import { AccountService } from './_services/account.service';
 import { SubjectService } from './_services/subject.service';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from './_components/alert.component';
+import { HeaderComponent } from './_components/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AlertComponent, RouterModule],
+  imports: [CommonModule, RouterOutlet, AlertComponent, HeaderComponent, RouterModule],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
   Role = Role;
   account: Account;
   showLogoutModal = false;
+  
 
   constructor(
     private accountService: AccountService,
@@ -38,5 +40,6 @@ export class AppComponent {
     this.showLogoutModal = false;
     this.accountService.logout();
     this.subjectService.eraseSubjects();
+    
   }
 }

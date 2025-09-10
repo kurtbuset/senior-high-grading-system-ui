@@ -4,10 +4,40 @@ export function appInitializer(accountService: AccountService) {
   console.log('app initialize')
   return () =>
     new Promise<void>((resolve) => {
-      // attempt to refresh token on app start up to auto authenticate
-      accountService.refreshToken().subscribe({
-        next: () => resolve(),
-        error: () => resolve(), // even if it fails, resolve so app can load
-      });
+      // Check if there's an account in localStorage first
+      const storedAccount = localStorage.getItem('account');
+      if (storedAccount) {
+        try {
+          const account = JSON.parse(storedAccount);
+          // Only attempt refresh if we have a JWT token
+          if (account && account.jwtToken) {
+            console.log('Found stored account with JWT token, attempting refresh');
+            accountService.refreshToken().subscribe({
+              next: () => {
+                console.log('Token refreshed successfully');
+                resolve();
+              },
+              error: (error) => {
+                console.log('Token refresh failed:', error);
+                // Clear invalid account data
+                localStorage.removeItem('account');
+                resolve();
+              }
+            });
+          } else {
+            console.log('Stored account has no JWT token, clearing storage');
+            localStorage.removeItem('account');
+            resolve();
+          }
+        } catch (error) {
+          console.log('Error parsing stored account:', error);
+          localStorage.removeItem('account');
+          resolve();
+        }
+      } else {
+        // No stored account, just resolve
+        console.log('No stored account found');
+        resolve();
+      }
     });
 }

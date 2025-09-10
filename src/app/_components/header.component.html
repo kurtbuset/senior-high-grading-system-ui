@@ -1,0 +1,67 @@
+<div class="header-container" *ngIf="account && account.jwtToken">
+  <div class="header-content">
+    <!-- Logo and School Name -->
+    <div class="logo-section" *ngIf="!isEditing">
+      <img [src]="logoPath" alt="School Logo" class="school-logo">
+      <div class="school-info">
+        <h1 class="school-name">{{ schoolName }}</h1>
+        <!-- Edit Icon Button (SuperAdmin only) -->
+        <button class="edit-icon-btn" *ngIf="isSuperAdmin()" (click)="startEditing()">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Editing Form (SuperAdmin only) -->
+    <div class="editing-section" *ngIf="isEditing">
+      <div class="form-group">
+        <label for="schoolName">School Name:</label>
+        <input 
+          id="schoolName" 
+          type="text" 
+          [(ngModel)]="editedSchoolName" 
+          class="form-control"
+          placeholder="Enter school name">
+      </div>
+      <div class="form-group">
+        <label>Logo:</label>
+        <div class="logo-preview-section">
+          <img [src]="logoPreview || logoPath" alt="Logo Preview" class="logo-preview">
+          <div class="logo-upload-controls">
+            <input 
+              type="file" 
+              accept="image/*" 
+              (change)="onLogoFileChange($event)"
+              class="form-control-file"
+              id="logoFile">
+            <small class="form-text text-muted">Upload a new logo (PNG, JPG, GIF)</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="logoPath">Or enter logo URL:</label>
+        <input 
+          id="logoPath" 
+          type="text" 
+          [(ngModel)]="editedLogoPath" 
+          class="form-control"
+          placeholder="Enter logo URL">
+      </div>
+      <div class="button-group">
+        <button class="btn btn-success" (click)="saveChanges()">Save</button>
+        <button class="btn btn-secondary" (click)="cancelEditing()">Cancel</button>
+      </div>
+    </div>
+    
+    <!-- Date and Time -->
+    <div class="datetime-section" *ngIf="!isEditing">
+      <span class="datetime">{{ currentDateTime }}</span>
+    </div>
+    
+    <!-- User Info -->
+    <div class="user-info" *ngIf="!isEditing">
+      <span class="user-name">{{ account.firstName }} {{ account.lastName }}</span>
+      <span class="user-role">({{ account.role }})</span>
+    </div>
+  </div>
+</div>

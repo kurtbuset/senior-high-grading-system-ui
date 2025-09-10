@@ -30,6 +30,6 @@ export class StudentService {
   }
 
   getSubjectsAndGrades(id: number){
-    return this.http.get<any[]>(`${studentUrl}/egrades/${id}`)
+    return this.http.get<{ schoolYear: string; subjects: any[] }>(`${studentUrl}/egrades/${id}`)
   }
 }

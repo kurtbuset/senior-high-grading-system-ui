@@ -83,8 +83,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       // assign account id and a few other properties then save
       account.id = newId(accounts);
       if (account.id === 1) {
-        // first registered account is an admin
-        // account.role = Role.Admin;
+        // first registered account is verified
         account.isVerified = true;
       } else {
         account.role = Role.Teacher;
@@ -105,7 +104,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
           alertService.info(
             `
                         <h4>First user login</h4>
-                        <p>you can login directly as first user where role is admin and account is verified</p>
+                        <p>you can login directly as first user where account is verified</p>
                         <div><strong>NOTE:</strong> The fake backend displayed this "email" so you can test without an api. A real backend would send a real email.</div>
                     `,
             { autoClose: false }
@@ -150,7 +149,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       );
       if (!isActive)
         return error(
-          'Account is inActive. Please contact system Administrator!'
+          'Account is inActive. Please contact system support!'
         );
 
       const isVerified = accounts.find(

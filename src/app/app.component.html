@@ -1,88 +1,176 @@
-<div class="app-container d-flex" [ngClass]="{ 'bg-light': account }">
+<div class="app-container d-flex">
   <!-- main nav -->
   <nav
     class="text-white sidebar p-3 vh-100"
     style="
-    width: 200px;
-    background-color: rgb(0, 0, 70);
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 1000;
-    overflow-y: auto;"
-    *ngIf="account"
+        width: 200px;
+        background-color: rgb(0, 0, 70);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        overflow-y: auto;
+    
+    "
+    *ngIf="account && account.jwtToken"
   >
     <div class="mt-2 mb-4 text-center">
       <h4
         class="fw-bold"
         style="letter-spacing: 1px; cursor: pointer"
-        routerLink="/"  
+        routerLink="/"
+        routerLink="/"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <img src="../assets/images/bc logo.png" width="100" height="100" alt="bc logo">
+        <img
+          src="../assets/images/bc logo.png"
+          width="100"
+          height="100"
+          alt="bc logo"
+        />  
       </h4>
     </div>
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link text-white">Dashboard</a
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link text-white"
         >
+          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
       </li>
-      
+      <li class="nav-item">
+        <a
+          routerLink="/logging-history"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link text-white"
+        >
+          <i class="bi bi-speedometer2 me-2"></i> Logging history
+        </a>
+      </li>
+
+        <!-- SuperAdmin Menu Items -->
+        <li class="nav-item" *ngIf="account.role === Role.SuperAdmin">
+          <a routerLink="/superadmin" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
+            SuperAdmin Panel
+        </a>
+      </li>   
+
+        <!-- Principal/Registrar Menu Items -->
+        <li class="nav-item" *ngIf="account.role === Role.Principal || account.role === Role.Registrar">
+          <a routerLink="/homeroom" routerLinkActive="active" 
+             class="nav-link text-white py-3 px-4" 
+             style="border: none; background: transparent; font-size: 14px; font-weight: 500; text-decoration: none;">
+            Homeroom
+        </a>
+
+
       <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
-        <a routerLink="/admin/accounts" routerLinkActive="active" class="nav-link text-white"
-          >Accounts</a
+        <a
+          routerLink="/account-admin"
+          routerLinkActive="active"
+          class="nav-link text-white"
         >
+          <i class="bi bi-people me-2"></i> Accounts
+        </a>
       </li>
-      <li class="nav-item" *ngIf="account.role === Role.Teacher">
-        <a routerLink="/teacher" routerLinkActive="active" class="nav-link text-white"
-          >Subjects</a
+
+      <li class="nav-item" *ngIf="account.role === Role.Teacher || account.role === Role.SuperAdmin">
+        <a
+          routerLink="/teacher"
+          routerLinkActive="active"
+          class="nav-link text-white"
         >
-      <li class="nav-item" *ngIf="account.role === Role.Admin">
-      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-        >Subjects List</a
-      >
+          <i class="bi bi-journal-text me-2"></i> Assigned Subjects
+        </a>
       </li>
-      <!-- <li class="nav-item" *ngIf="account.role === Role.Admin">
-      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-        >Subject Assignments</a
+
+      <li
+        class="nav-item"
+        *ngIf="
+          account.role === Role.Principal || account.role === Role.Registrar || account.role === Role.Teacher || account.role === Role.SuperAdmin"
       >
-      </li> -->
-      <li class="nav-item" *ngIf="account.role === Role.Principal || account.role === Role.Registrar">
-      <a routerLink="/homeroom" routerLinkActive="active" class="nav-link text-white"
-        >Homerooms</a
-      >
-      </li>
-      <li class="nav-item" *ngIf="account.role === Role.Student">
-        <a routerLink="/egrade" routerLinkActive="active" class="nav-link text-white"
-          >E-Grade</a
+        <a
+          routerLink="/homeroom"  
+          routerLinkActive="active"
+          class="nav-link text-white"
         >
+          <i class="bi bi-house-door me-2"></i> Homeroom Management
+        </a>
+      </li>   
+
+      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
+        <a
+          routerLink="/curriculum-subjects"
+          routerLinkActive="active"
+          class="nav-link text-white"
+        >
+          <i class="bi bi-book me-2"></i> Subject Management
+        </a>
       </li>
+
+      <li class="nav-item" *ngIf="account.role === Role.Registrar">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-calendar-check me-2"></i> School Year Management
+        </a>
+
+      <li class="nav-item" *ngIf="account.role === Role.Registrar || account.role === Role.SuperAdmin">
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-calendar-check me-2"></i> School Year Management
+        </a>
+      </li>
+
+      <li class="nav-item" *ngIf="account.role === Role.Student || account.role === Role.SuperAdmin">
+        <a
+          routerLink="/egrade"
+          routerLinkActive="active"
+          class="nav-link text-white"
+        >
+          <i class="bi bi-bar-chart-line me-2"></i> E-Grade
+        </a>
+      </li>
+
       <li class="nav-item">
         <a
           routerLink="/profile"
           routerLinkActive="active"
           class="nav-link text-white"
-          >My Profile</a
         >
+          <i class="bi bi-person-circle me-2"></i> My Profile
+        </a>
       </li>
+
       <li class="nav-item">
-      <a routerLink="/" routerLinkActive="active" class="nav-link text-white"
-        >Modify Account</a
-      >
+        <a routerLink="/" routerLinkActive="active" class="nav-link text-white">
+          <i class="bi bi-gear me-2"></i> Modify Account
+        </a>
       </li>
+
+      <!-- </div> -->
+
+      <!-- Logout at bottom -->
+      <div>
       <li class="nav-item">
         <a
           (click)="openLogoutModal()"
           class="nav-link text-white"
           style="cursor: pointer"
-          >Logout</a
         >
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
       </li>
+      </div>
     </ul>
   </nav>
 
+  <!-- Logout Modal -->
   <div
     class="modal fade"
     tabindex="-1"
@@ -120,24 +208,31 @@
     *ngIf="showLogoutModal"
   ></div>
 
+  <!-- Main Content Area -->
   <div
-    class="flex-grow-1 background"
-    style="padding: 1rem;"
-    [ngStyle]="!account   
-      ? 
-      {
-          'background-image':
-            'url(https://media.licdn.com/dms/image/v2/C561BAQEGwJUSWC5Dfw/company-background_10000/company-background_10000/0/1633699511389/benedicto_college_cover?e=2147483647&v=beta&t=Iiz-yGR2m0qFmUID-2wZehq_DmBizxAbccTxIoinYoc)',
-          'background-size': 'cover',
-          'background-position': 'center',
-          'background-repeat': 'no-repeat'
-        } : {
-          'margin-left': '200px'  
-        }
+    class="flex-grow-1 d-flex flex-column background"
+    style="padding: 1rem; min-height: 100vh;"
+    [ngStyle]="
+      !account
+        ? {
+            'background-image':
+              'url(https://media.licdn.com/dms/image/v2/C561BAQEGwJUSWC5Dfw/company-background_10000/company-background_10000/0/1633699511389/benedicto_college_cover?e=2147483647&v=beta&t=Iiz-yGR2m0qFmUID-2wZehq_DmBizxAbccTxIoinYoc)',
+            'background-size': 'cover',
+            'background-position': 'center',
+            'background-repeat': 'no-repeat'
+          }
+        : {
+            'margin-left': '200px'
+          }
     "
   >
+    <router-outlet name="subnav"></router-outlet>
+  
+    <!-- Header Component -->
+    <app-header *ngIf="account && account.jwtToken"></app-header>
     
-    <router-outlet name="subnav"></router-outlet> 
+    <div style="padding-top: 20px;">
+      <router-outlet name="subnav"></router-outlet>
 
     <!-- global alert -->
     <alert></alert>
@@ -147,5 +242,14 @@
     
     <!-- main router outlet -->
     <router-outlet></router-outlet>
+
+    <!-- Footer -->
+    <footer *ngIf="account"
+      class="text-center py-2 mt-auto"
+      style="background-color: rgb(0, 0, 70); color: white; border-radius: 8px;"
+    >
+      © 2025-2026
+    </footer>
+    </div>
   </div>
 </div>

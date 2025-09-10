@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, finalize } from 'rxjs/operators';
+import { map, finalize, tap } from 'rxjs/operators';
 
 import { SubjectService } from './subject.service';
 import { environment } from '@environments/environment';
@@ -16,12 +16,58 @@ export class AccountService {
   public account: Observable<Account>;
 
   constructor(private router: Router, private http: HttpClient, private subjectService: SubjectService) {
-    this.accountSubject = new BehaviorSubject<Account>(null);
+    // Check if there's an existing account in localStorage on init
+    const storedAccount = localStorage.getItem('account');
+    let initialAccount = null;
+    
+    if (storedAccount) {
+      try {
+        const parsedAccount = JSON.parse(storedAccount);
+        // Only use stored account if it has a valid JWT token
+        if (parsedAccount && parsedAccount.jwtToken) {
+          // Additional check to see if token is not expired
+          try {
+            const jwtToken = JSON.parse(atob(parsedAccount.jwtToken.split('.')[1]));
+            const expires = new Date(jwtToken.exp * 1000);
+            if (expires.getTime() > Date.now()) {
+              initialAccount = parsedAccount;
+            } else {
+              // Token is expired, clear it
+              localStorage.removeItem('account');
+            }
+          } catch (tokenError) {
+            // Invalid token format, clear it
+            localStorage.removeItem('account');
+          }
+        } else {
+          // Clear invalid account data
+          localStorage.removeItem('account');
+        }
+      } catch (error) {
+        // Clear corrupted account data
+        localStorage.removeItem('account');
+      }
+    }
+    
+    this.accountSubject = new BehaviorSubject<Account>(initialAccount);
     this.account = this.accountSubject.asObservable();
+    
+    // Start refresh token timer if we have a valid account
+    if (initialAccount) {
+      this.startRefreshTokenTimer();
+    }
   }
 
   public get accountValue(): Account {
     return this.accountSubject.value;
+  }
+
+  setLoginDate(id: string){
+    return this.http.post(`${baseUrl}/setLogin`, { accountId: id })
+  }
+
+  setLogoutDate(id: string){
+    return this.http.post(`${baseUrl}/setLogout`, { accountId: id })
   }
 
   login(username: string, password: string) {
@@ -29,6 +75,7 @@ export class AccountService {
       .post<any>(`${baseUrl}/authenticate`, { username, password }, { withCredentials: true })
       .pipe(
         map((account) => {
+          console.log(account)
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -40,12 +87,18 @@ export class AccountService {
     return this.http.post(`${baseUrl}/register`, account);
   }
 
+  loggingHistory(){
+    return this.http.get<any>(`${baseUrl}/historyLogging`);
+  }
+
   logout() {
     this.http
       .post<any>(`${baseUrl}/revoke-token`, {}, { withCredentials: true })
       .subscribe();
     localStorage.removeItem('account');
+    localStorage.removeItem('studentLoginId'); // Clear student login ID
     this.stopRefreshTokenTimer();
+    this.setLogoutDate(this.accountValue.id).subscribe()
     this.accountSubject.next(null);
     this.router.navigate(['/account/login']);
   }
@@ -55,6 +108,8 @@ export class AccountService {
       .post<any>(`${baseUrl}/refresh-token`, {}, { withCredentials: true })
       .pipe(
         map((account) => {
+          // Store updated account in localStorage
+          localStorage.setItem('account', JSON.stringify(account));
           this.accountSubject.next(account);
           this.startRefreshTokenTimer();
           return account;
@@ -64,6 +119,27 @@ export class AccountService {
 
   verifyEmail(token: string) {
     return this.http.post(`${baseUrl}/verify-email`, { token });
+  }
+
+  // Admin CRUD operations
+  getAllAccounts() {
+    return this.http.get<Account[]>(`${baseUrl}`);
+  }
+
+  getAccountById(id: string) {
+    return this.http.get<Account>(`${baseUrl}/${id}`);
+  }
+
+  createAccount(account: Account) {
+    return this.http.post<Account>(`${baseUrl}`, account);
+  }
+
+  updateAccount(id: string, account: Partial<Account>) {
+    return this.http.put<Account>(`${baseUrl}/${id}`, account);
+  }
+
+  deleteAccount(id: string) {
+    return this.http.delete(`${baseUrl}/${id}`);
   }
 
   private refreshTokenTimeout;

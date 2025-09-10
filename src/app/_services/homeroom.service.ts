@@ -27,11 +27,11 @@ export class HomeroomService {
     return this.http.get<Homeroom>(`${baseUrl}/${homeroomId}`);
   }
 
-  getHomerooms() {
-    return this.http.get<any>(`${baseUrl}`);
+  getHomerooms(role: string, accountId: string) {
+    return this.http.get<any>(`${baseUrl}?role=${role}&accountId=${accountId}`);
   }
 
-  getConsolidatedSheet(homeroomId: string, params: { semester: string }){
-    return this.http.get<any>(`${baseUrl}/conso/${homeroomId}`, { params});
+  getConsolidatedSheet(homeroomId: string, params: { semester: string }) {
+    return this.http.get<any>(`${baseUrl}/conso/${homeroomId}`, { params });
   }
 }

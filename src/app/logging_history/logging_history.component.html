@@ -1,0 +1,22 @@
+<table border="1" cellpadding="5">
+  <thead>
+    <tr>
+      <th>Firstname</th>
+      <th>Lastname</th>
+      <th>Role</th>
+      <th>Status</th>
+      <th>Login Date</th>
+      <th>Logout Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let h of histories">
+      <td>{{ h.firstName }}</td>
+      <td>{{ h.lastName }}</td>
+      <td>{{ h.role }}</td>
+      <td>{{ h.status }}</td>
+      <td *ngIf="h.login_date">{{ h.login_date | date:'short' }}</td>
+      <td *ngIf="h.logout_date">{{ h.logout_date | date:'short' }}</td>
+    </tr>
+  </tbody>
+</table>
