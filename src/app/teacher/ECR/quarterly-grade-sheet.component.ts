@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms'; // ✅ Needed for ngModel
 import { AccountService } from '@app/_services/account.service';
 import { AlertService } from '@app/_services/alert.service';
 import { GradingService } from '@app/_services/grading.service';
@@ -9,7 +10,7 @@ import { first } from 'rxjs';
 @Component({
   standalone: true,
   templateUrl: 'quarterly-grade-sheet.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule], // ✅ Import FormsModule
 })
 export class QuarterlyGradeSheetComponent implements OnInit {
   quarter!: string;
@@ -17,8 +18,13 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   students: any[] = [];
   loading = false;
   showLockModal = false;
+  showUnlockModal = false; // ✅ modal toggle for request unlock
+  unlockReason: string = ""; // ✅ stores reason input
 
-  allLocked: any
+  lockStatus: string | null = null;
+
+
+  allLocked: any;
 
   account = this.accountService.accountValue;
 
@@ -49,6 +55,7 @@ export class QuarterlyGradeSheetComponent implements OnInit {
           next: (res) => {
             this.allLocked = res.isLocked;
             this.students = res.students;
+            this.lockStatus = res.lockStatus;
             this.loading = false;
           },
           error: (error) => {
@@ -71,6 +78,15 @@ export class QuarterlyGradeSheetComponent implements OnInit {
     this.showLockModal = false;
   }
 
+  openUnlockModal(): void {
+    this.showUnlockModal = true;
+  }
+
+  closeUnlockModal(): void {
+    this.showUnlockModal = false;
+    this.unlockReason = "";
+  }
+
   lockGrades(): void {
     if (!this.students.length) return;
 
@@ -83,7 +99,6 @@ export class QuarterlyGradeSheetComponent implements OnInit {
       quarter: this.quarter,
     }));
 
-    // Lock subject first
     this.gradingService
       .lockSubject({
         teacher_subject_id: this.teacherSubjectId,
@@ -93,8 +108,6 @@ export class QuarterlyGradeSheetComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Locking grade successful');
-
-          // Insert transmuted grades only after lock succeeds
           this.gradingService
             .addTransmutedGrade(gradesPayload)
             .pipe(first())
@@ -107,6 +120,31 @@ export class QuarterlyGradeSheetComponent implements OnInit {
             });
         },
         error: (err) => console.error('Lock subject error:', err),
+      });
+  }
+
+  submitUnlockRequest(): void {
+    if (!this.unlockReason.trim()) {
+      this.alertService.error("Please provide a reason.");
+      return;
+    }
+
+    this.loading = true;
+    this.gradingService
+      .requestToUnlock(this.teacherSubjectId, { reason: this.unlockReason, quarter: this.quarter })
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.alertService.success('Request to unlock submitted successfully!');
+          this.closeUnlockModal();
+          this.ngOnInit()
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error('Failed to submit request.');
+          this.loading = false;
+        },
       });
   }
 }

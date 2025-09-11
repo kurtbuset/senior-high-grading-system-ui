@@ -2,15 +2,87 @@
   <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">
     Print Grades
   </button>
-  <button 
-  class="btn btn-sml btn-warning ml-3" 
-  (click)="openLockModal()" 
-  [disabled]="allLocked || loading">
-  {{ allLocked ? 'Locked' : 'Lock Grades' }}
-</button>
 
+  <!-- If NOT locked and NOT pending → show Lock button -->
+  <button
+    *ngIf="lockStatus !== 'LOCKED' && lockStatus !== 'PENDING'"
+    class="btn btn-sml btn-danger ml-3"
+    (click)="openLockModal()"
+    [disabled]="loading"
+  >
+    Lock Grades
+  </button>
 
+  <!-- If LOCKED → hide Request Unlock -->
+  <button
+    *ngIf="lockStatus === 'LOCKED'"
+    class="btn btn-sml btn-warning ml-3"
+    (click)="openUnlockModal()"
+    [disabled]="loading"
+  >
+    Request to Unlock
+  </button>
+
+  <!-- If PENDING → disable both buttons -->
+  <button
+    *ngIf="lockStatus === 'PENDING'"
+    class="btn btn-sml btn-secondary ml-3"
+    disabled
+  >
+    Request Pending...
+  </button>
 </div>
+
+
+<!-- Request Unlock Modal -->
+<div
+  class="modal fade"
+  tabindex="-1"
+  [ngClass]="{ show: showUnlockModal }"
+  [ngStyle]="{ display: showUnlockModal ? 'block' : 'none' }"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Request to Unlock Grades</h3>
+      </div>
+      <div class="modal-body">
+        <p>Please provide a reason why you want to unlock grades for <strong>{{ quarter }}</strong>.</p>
+        <textarea
+          [(ngModel)]="unlockReason"
+          rows="4"
+          class="form-control"
+          placeholder="Enter reason here..."
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeUnlockModal()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="submitUnlockRequest()"
+          [disabled]="!unlockReason || loading"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal-backdrop fade"
+  [ngClass]="{ show: showUnlockModal }"
+  *ngIf="showUnlockModal"
+></div>
+
 
 <div
   class="modal fade"

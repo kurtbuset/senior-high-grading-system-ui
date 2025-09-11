@@ -5,10 +5,12 @@
     <table class="table table-hover align-middle">
       <thead class="table-primary text-center">
         <tr>
+          <th style="width: 5%">#</th>
           <th style="width: 25%">Subject Name</th>
           <th style="width: 10%">Semester</th>
           <th style="width: 10%">Quarter</th>
           <th style="width: 20%">Subject Teacher</th>
+          <th style="width: 10%">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -19,16 +21,53 @@
             class="table-light"
             style="cursor: pointer"
           >
+            <td class="text-center">{{ record.assignment_id }}</td>
             <td class="fw-bold">{{ record.subject_name }}</td>
             <td class="text-center">{{ record.semester }}</td>
             <td class="text-center">{{ record.quarter }}</td>
             <td class="text-center">{{ record.teacher_name }}</td>
+            <td class="text-center">
+              <!-- Status badges -->
+              <ng-container [ngSwitch]="record.lock_status">
+                <!-- 🔒 Locked -->
+                <span *ngSwitchCase="'LOCKED'" class="badge bg-danger">
+                  🔒 LOCKED
+                </span>
+
+                <!-- ⏳ Pending with View button -->
+                <span
+                  *ngSwitchCase="'PENDING'"
+                  class="badge bg-warning text-dark"
+                >
+                  ⏳ PENDING
+                </span>
+                <button
+                  *ngIf="
+                    record.lock_status === 'PENDING' &&
+                    account.role === 'Registrar'
+                  "
+                  class="btn btn-sm btn-warning ms-2"
+                  (click)="openRequestModal(record)"
+                >
+                  View Request
+                </button>
+
+                <!-- ✅ Unlocked -->
+                <span *ngSwitchCase="'UNLOCKED'" class="badge bg-success">
+                  ✅ UNLOCKED
+                </span>
+
+                <!-- ❔ Unknown -->
+                <span *ngSwitchDefault class="badge bg-secondary">
+                  ❔ Unknown
+                </span>
+              </ng-container>
+            </td>
           </tr>
 
           <!-- Expandable Locked Dates -->
-          <!-- Expandable Locked Dates -->
           <tr *ngIf="record.expanded">
-            <td colspan="4" class="p-3">
+            <td colspan="6" class="p-3">
               <div class="d-flex flex-wrap gap-3">
                 <div
                   *ngFor="let batch of record.locked_batches"
@@ -36,10 +75,10 @@
                   style="min-width: 280px; max-width: 350px"
                 >
                   <div class="card-header bg-primary text-white py-2">
-                    <strong
-                      >📅 Locked at:
-                      {{ batch.locked_at | date : "MMM d, y h:mm a" }}</strong
-                    >
+                    <strong>
+                      📅 Locked at:
+                      {{ batch.locked_at | date : "MMM d, y h:mm a" }}
+                    </strong>
                   </div>
                   <div class="card-body p-0">
                     <table class="table table-bordered table-sm mb-0">
@@ -78,3 +117,86 @@
     </table>
   </div>
 </div>
+
+<!-- Request Modal (Angular-driven, no bootstrap JS) -->
+<div
+  class="modal fade"
+  [ngClass]="{ show: showRequestModal }"
+  [ngStyle]="{ display: showRequestModal ? 'block' : 'none' }"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="modal-dialog"
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    "
+  >
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title">Unlock Request</h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeRequestModal()"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Reason:</strong></p>
+        <ng-container *ngIf="selectedRecord?.reason_to_unlock; else noRequest">
+          <p class="text-muted">{{ selectedRecord.reason_to_unlock }}</p>
+        </ng-container>
+        <ng-template #noRequest>
+          <div
+            style="
+              padding: 1rem;
+              background-color: #f8f9fa;
+              border: 1px dashed #ccc;
+              border-radius: 8px;
+              text-align: center;
+              color: #6c757d;
+              font-style: italic;
+            "
+          >
+            ✅ No unlock request has been submitted by this subject teacher.
+          </div>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeRequestModal()"
+        >
+          Close
+        </button>
+
+        <ng-container *ngIf="account.role === 'Registrar'">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="respondToRequest('UNLOCKED')"
+          >
+            ✅ Accept
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="respondToRequest('LOCKED')"
+          >
+            ❌ Reject
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal-backdrop fade"
+  [ngClass]="{ show: showRequestModal }"
+  *ngIf="showRequestModal"
+></div>

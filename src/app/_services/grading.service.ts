@@ -71,4 +71,16 @@ export class GradingService {
   lockSubject(params: { teacher_subject_id: string, quarter: string}){
     return this.http.post(`${baseUrl}/subject-quarter-locks`, params)
   }
+
+  requestToUnlock(teacher_subject_id: string, payload: { reason: string, quarter: string }){
+    return this.http.put(`${baseUrl}/subject-quarter-locks/request/${teacher_subject_id}`, payload)
+  }
+
+  updateSubjectStatus(teacher_subject_id: string, payload: { status: string, quarter: string }) {
+  return this.http.put(
+    `${baseUrl}/subject-quarter-locks/${teacher_subject_id}`,
+    payload
+  );
+}
+
 }

@@ -1,6 +1,26 @@
-<div class="border border-1 border-blackp p-2 mb-4">
+<div class="border p-2 mb-4 d-flex justify-content-between align-items-center">
   <h4 class="m-0">{{ quarter }}: {{ type }}</h4>
+
+  <!-- Status badge -->
+  <ng-container [ngSwitch]="lockStatus">
+    <span *ngSwitchCase="undefined" class="badge bg-secondary">
+      ⏳ Loading status...
+    </span>
+    <span *ngSwitchCase="'LOCKED'" class="badge bg-danger">
+      🔒 Locked
+    </span>
+    <span *ngSwitchCase="'PENDING'" class="badge bg-warning text-dark">
+      ⏳ Request Pending to Unlock
+    </span>
+    <span *ngSwitchCase="'UNLOCKED'" class="badge bg-success">
+      ✅ Open
+    </span>
+    <span *ngSwitchDefault class="badge bg-info">
+      ❔ Unknown Status
+    </span>
+  </ng-container>
 </div>
+
 
 <div class="d-flex justify-content-between p-3">
   <div style="width: 75%">
@@ -56,7 +76,7 @@
               *ngIf="editingQuizId !== quiz.id"
               class="btn btn-sm btn-info"
               (click)="onEdit(quiz)"
-              [disabled]="locked"
+              [disabled]="isLockedOrPending"
             >
               Edit
             </button>
@@ -64,7 +84,7 @@
               *ngIf="editingQuizId === quiz.id"
               class="btn btn-sm btn-success"
               (click)="updateQuiz(quiz)"
-              [disabled]="locked"
+              [disabled]="isLockedOrPending"
             >
               Save
             </button>
@@ -75,23 +95,23 @@
               [routerLink]="['./add', quiz.id]"
               [queryParams]="{ hps: quiz.hps }"
               class="btn btn-sm btn-success mr-3"
-              [class.disabled]="locked"
-              [attr.tabindex]="locked ? -1 : 0"
+              [class.disabled]="isLockedOrPending"
+              [attr.tabindex]="isLockedOrPending ? -1 : 0"
               >Add Scores</a
             >
             <a
               [routerLink]="['./edit', quiz.id]"
               [queryParams]="{ hps: quiz.hps }"
               class="btn btn-sm btn-primary"
-              [class.disabled]="locked"
-              [attr.tabindex]="locked ? -1 : 0"
+              [class.disabled]="isLockedOrPending"
+              [attr.tabindex]="isLockedOrPending ? -1 : 0"
               >Update Scores</a
             >
           </td>
 
           <td>
             <button
-              [disabled]="quiz.isDeleting || locked"
+              [disabled]="quiz.isDeleting || isLockedOrPending"
               (click)="deleteQuiz(quiz.id)"
               class="btn btn-sm btn-danger btn-delete-account"
             >
@@ -109,7 +129,7 @@
 
   <div style="width: 20%" class="pb-3 px-3">
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <fieldset [disabled]="locked">
+      <fieldset [disabled]="isLockedOrPending">
         <h4 class="mb-3">Add quiz</h4>
         <div class="mb-2 d-flex">
           <label class="form-label d-inline w-50">Perfect Score:</label>
@@ -142,7 +162,7 @@
           </div>
         </div>
 
-        <button [disabled]="loading || locked" class="btn btn-primary">
+        <button [disabled]="loading || isLockedOrPending" class="btn btn-primary">
           <span
             *ngIf="loading"
             class="spinner-border spinner-border-sm mr-1"
