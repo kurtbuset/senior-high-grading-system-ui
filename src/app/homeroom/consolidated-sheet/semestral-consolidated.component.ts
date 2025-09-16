@@ -16,8 +16,6 @@ export class SemestralConsolidatedComponent implements OnInit {
   homeroomId: string;
   sheet: any;
 
-  
-
   constructor(
     private route: ActivatedRoute,
     private homeroomService: HomeroomService

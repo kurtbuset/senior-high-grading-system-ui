@@ -19,6 +19,13 @@ export class AppComponent {
   account: Account;
   showLogoutModal = false;
 
+  // Sample notifications (replace with API call later)
+  notifications = [
+    { message: 'Grades locked by Teacher A', date: new Date() },
+    { message: 'New subject added to your class', date: new Date() },
+  ];
+  
+  
   constructor(
     private accountService: AccountService,
     private subjectService: SubjectService

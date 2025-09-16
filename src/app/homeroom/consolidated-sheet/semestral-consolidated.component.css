@@ -1,0 +1,35 @@
+/* Base header styles */
+.subject-header,
+.subject-col {
+  min-width: 120px;
+  max-width: 150px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Light pastel colors cycling */
+.subject-0 { background-color: #f8d7da; } /* light red */
+.subject-1 { background-color: #d1ecf1; } /* light cyan */
+.subject-2 { background-color: #d4edda; } /* light green */
+.subject-3 { background-color: #fff3cd; } /* light yellow */
+.subject-4 { background-color: #e2e3f3; } /* light purple */
+.subject-5 { background-color: #fce5cd; } /* light orange */
+
+/* Make sure sticky keeps the color visible */
+.subject-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.subject-col {
+  position: sticky;
+  top: 30px;
+  z-index: 2;
+}
+
+/* Keep students column white */
+tbody td:first-child {
+  background: #fff;
+  font-weight: 500;
+}
