@@ -34,7 +34,6 @@
         <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle position-relative"
-            href="#"
             id="notificationDropdown"
             role="button"
             data-toggle="dropdown"
@@ -57,7 +56,7 @@
             class="dropdown-menu"
             aria-labelledby="notificationDropdown"
             style="
-              width: 300px;
+              width: 600px;
               max-height: 400px;
               overflow-y: auto;
               right: 0;
@@ -71,12 +70,13 @@
                 *ngFor="let notif of notifications"
                 class="dropdown-item small"
                 href="javascript:void(0)"
+                (click)="markAsReadAndGo(notif)"
               >
                 {{ notif.message }}
                 <br />
-                <small class="text-muted">{{
-                  notif.date | date : "short"
-                }}</small>
+                <small class="text-muted">
+                  {{ notif.createdAt | date : "MMM d, y, h:mm a" }}
+                </small>
               </a>
             </ng-container>
 

@@ -1,112 +1,139 @@
 <div class="container mt-4">
-  <h2 class="mb-4 text-primary">📌 Locked Subjects History</h2>
+  <div class="mb-3 d-flex justify-content-between">
+    <h2 class="mb-4 text-primary">Locked Subjects History</h2>
 
-  <div class="table-responsive shadow-sm rounded">
+      <input
+        type="text"
+        class="form-control w-25"
+        placeholder="Search..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      />
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Fetching locked subjects...</p>
+  </div>
+
+  <!-- No Records -->
+  <div
+    *ngIf="!loading && filteredHistory.length === 0"
+    class="text-center my-5"
+  >
+    <p class="text-muted">✅ No locked subjects found for this homeroom.</p>
+  </div>
+
+  <div
+    class="table-responsive shadow-sm rounded"
+    *ngIf="!loading && filteredHistory.length > 0"
+  >
     <table class="table table-hover align-middle">
       <thead class="table-primary text-center">
         <tr>
-          <th style="width: 5%">#</th>
-          <th style="width: 25%">Subject Name</th>
-          <th style="width: 10%">Semester</th>
-          <th style="width: 10%">Quarter</th>
-          <th style="width: 20%">Subject Teacher</th>
-          <th style="width: 10%">Status</th>
+          <!-- <th style="width: 5%">#</th> -->
+          <th style="width: 35%">Subject Name</th>
+          <th style="width: 15%">Semester</th>
+          <th style="width: 30%">Quarters</th>
+          <th style="width: 20%">Teacher</th>
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let record of history">
-          <!-- Subject Row -->
+        <ng-container *ngFor="let group of filteredHistory; let i = index">
           <tr
-            (click)="record.expanded = !record.expanded"
+            (click)="group.expanded = !group.expanded"
             class="table-light"
             style="cursor: pointer"
           >
-            <td class="text-center">{{ record.assignment_id }}</td>
-            <td class="fw-bold">{{ record.subject_name }}</td>
-            <td class="text-center">{{ record.semester }}</td>
-            <td class="text-center">{{ record.quarter }}</td>
-            <td class="text-center">{{ record.teacher_name }}</td>
-            <td class="text-center">
-              <!-- Status badges -->
-              <ng-container [ngSwitch]="record.lock_status">
-                <!-- 🔒 Locked -->
-                <span *ngSwitchCase="'LOCKED'" class="badge bg-danger">
-                  🔒 LOCKED
-                </span>
-
-                <!-- ⏳ Pending with View button -->
+            <!-- <td class="text-center">{{ i + 1 }}</td> -->
+            <td class="fw-bold">{{ group.subject_name }}</td>
+            <td class="text-center">{{ group.semester }}</td>
+            <td class="text-center align-middle">
+              <div class="d-flex justify-content-center flex-wrap">
                 <span
-                  *ngSwitchCase="'PENDING'"
-                  class="badge bg-warning text-dark"
+                  *ngFor="let q of group.quarters"
+                  class="badge bg-info text-dark me-1 mb-1"
                 >
-                  ⏳ PENDING
+                  {{ q.quarter }}
                 </span>
-                <button
-                  *ngIf="
-                    record.lock_status === 'PENDING' &&
-                    account.role === 'Registrar'
-                  "
-                  class="btn btn-sm btn-warning ms-2"
-                  (click)="openRequestModal(record)"
-                >
-                  View Request
-                </button>
-
-                <!-- ✅ Unlocked -->
-                <span *ngSwitchCase="'UNLOCKED'" class="badge bg-success">
-                  ✅ UNLOCKED
-                </span>
-
-                <!-- ❔ Unknown -->
-                <span *ngSwitchDefault class="badge bg-secondary">
-                  ❔ Unknown
-                </span>
-              </ng-container>
+              </div>
             </td>
+
+            <td class="text-center">{{ group.teacher_name }}</td>
           </tr>
 
-          <!-- Expandable Locked Dates -->
-          <tr *ngIf="record.expanded">
-            <td colspan="6" class="p-3">
-              <div class="d-flex flex-wrap gap-3">
-                <div
-                  *ngFor="let batch of record.locked_batches"
-                  class="card border-primary shadow-sm flex-fill"
-                  style="min-width: 280px; max-width: 350px"
-                >
-                  <div class="card-header bg-primary text-white py-2">
-                    <strong>
-                      📅 Locked at:
-                      {{ batch.locked_at | date : "MMM d, y h:mm a" }}
-                    </strong>
-                  </div>
-                  <div class="card-body p-0">
-                    <table class="table table-bordered table-sm mb-0">
-                      <thead class="table-light">
-                        <tr>
-                          <th style="width: 70%">Student Name</th>
-                          <th style="width: 30%">Final Grade</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let student of batch.students">
-                          <td>
-                            {{ student.lastName }}, {{ student.firstName }}
-                          </td>
-                          <td class="text-center fw-bold">
-                            <span
-                              class="badge"
-                              [ngClass]="{
-                                'bg-success': student.final_grade >= 75,
-                                'bg-danger': student.final_grade < 75
-                              }"
-                            >
-                              {{ student.final_grade }}
-                            </span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+          <!-- Expand Quarters -->
+          <tr *ngIf="group.expanded">
+            <td colspan="5" class="p-3">
+              <div *ngFor="let quarter of group.quarters" class="mb-4">
+                <h6 class="fw-bold text-primary d-flex align-items-center">
+                  📖 {{ quarter.quarter }}
+                  <span
+                    class="badge ms-2"
+                    [ngClass]="{
+                      'bg-danger': quarter.lock_status === 'LOCKED',
+                      'bg-warning text-dark': quarter.lock_status === 'PENDING',
+                      'bg-success': quarter.lock_status === 'UNLOCKED'
+                    }"
+                  >
+                    {{ quarter.lock_status }}
+                  </span>
+
+                  <!-- View Request Button for Registrar -->
+                  <button
+                    *ngIf="
+                      quarter.lock_status === 'PENDING' &&
+                      account.role === 'Registrar'
+                    "
+                    class="btn btn-sm btn-warning ms-2"
+                    (click)="openRequestModal(group, quarter)"
+                  >
+                    View Request
+                  </button>
+                </h6>
+
+                <!-- Locked Batches -->
+                <div class="d-flex flex-wrap gap-3">
+                  <div
+                    *ngFor="let batch of quarter.locked_batches"
+                    class="card border-primary shadow-sm flex-fill"
+                    style="min-width: 280px; max-width: 350px"
+                  >
+                    <div class="card-header bg-primary text-white py-2">
+                      <strong>
+                        📅 Locked at:
+                        {{ batch.locked_at | date : "MMM d, y h:mm a" }}
+                      </strong>
+                    </div>
+                    <div class="card-body p-0">
+                      <table class="table table-bordered table-sm mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th style="width: 70%">Student Name</th>
+                            <th style="width: 30%">Final Grade</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let student of batch.students">
+                            <td>
+                              {{ student.lastName }}, {{ student.firstName }}
+                            </td>
+                            <td class="text-center fw-bold">
+                              <span
+                                class="badge"
+                                [ngClass]="{
+                                  'bg-success': student.final_grade >= 75,
+                                  'bg-danger': student.final_grade < 75
+                                }"
+                              >
+                                {{ student.final_grade }}
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -118,7 +145,7 @@
   </div>
 </div>
 
-<!-- Request Modal (Angular-driven, no bootstrap JS) -->
+<!-- Request Modal -->
 <div
   class="modal fade"
   [ngClass]="{ show: showRequestModal }"
@@ -126,15 +153,7 @@
   role="dialog"
   aria-modal="true"
 >
-  <div
-    class="modal-dialog"
-    style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    "
-  >
+  <div class="modal-dialog d-flex align-items-center justify-content-center">
     <div class="modal-content">
       <div class="modal-header bg-warning text-dark">
         <h5 class="modal-title">Unlock Request</h5>
@@ -146,8 +165,8 @@
       </div>
       <div class="modal-body">
         <p><strong>Reason:</strong></p>
-        <ng-container *ngIf="selectedRecord?.reason_to_unlock; else noRequest">
-          <p class="text-muted">{{ selectedRecord.reason_to_unlock }}</p>
+        <ng-container *ngIf="selectedQuarter?.reason_to_unlock; else noRequest">
+          <p class="text-muted">{{ selectedQuarter.reason_to_unlock }}</p>
         </ng-container>
         <ng-template #noRequest>
           <div

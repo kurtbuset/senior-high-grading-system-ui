@@ -8,6 +8,7 @@ import { StudentService } from '@app/_services/student.service';
 import { RouterModule } from '@angular/router';
 import { GradingService } from '@app/_services/grading.service';
 import { AccountService } from '@app/_services/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: 'final-semester-grade-sheet.component.html',
@@ -25,7 +26,8 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
     private route: ActivatedRoute,
     private subjectService: SubjectService,
     private gradingService: GradingService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -49,5 +51,9 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
   printGradeSheet() {
     console.log('print time');
     window.print();
+  }
+
+  goToStudentList() {
+    this.router.navigate([`/teacher/students/${this.id}`]);
   }
 }

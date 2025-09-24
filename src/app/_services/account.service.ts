@@ -9,6 +9,7 @@ import { environment } from '@environments/environment';
 import { Account } from '@app/_models/account';
 
 const baseUrl = `${environment.apiUrl}/accounts`;
+const notificationUrl = `${environment.apiUrl}/notifications`
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -80,6 +81,14 @@ export class AccountService {
 
   verifyEmail(token: string) {
     return this.http.post(`${baseUrl}/verify-email`, { token });
+  }
+
+  getNotifications(id: string){
+    return this.http.get<any>(`${notificationUrl}/${id}`)
+  }
+
+  updateIsRead(id: string){
+    return this.http.put(`${notificationUrl}/${id}`, {})
   }
 
   private refreshTokenTimeout;

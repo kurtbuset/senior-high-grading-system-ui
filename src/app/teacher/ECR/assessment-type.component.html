@@ -36,7 +36,15 @@
           <th style="width: 10%">Delete Score</th>
         </tr>
       </thead>
-      <tbody *ngIf="quizzes && quizzes.length > 0; else noQuizzes">
+      <tbody *ngIf="loadingQuizzes">
+        <tr>
+          <td colspan="10" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Loading quizzes...</p>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="!loadingQuizzes && quizzes && quizzes.length > 0">
         <tr *ngFor="let quiz of quizzes">
           <td>
             <div
@@ -124,6 +132,13 @@
           </td>
         </tr>
       </tbody>
+      <tbody>
+        <tr *ngIf="!loadingQuizzes && (!quizzes || quizzes.length === 0)">
+          <td colspan="10" class="h5 text-center text-muted py-4">
+            No quizzes found.
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
@@ -170,13 +185,6 @@
           Add quiz
         </button>
 
-        <ng-template #noQuizzes>
-          <tbody>
-            <tr>
-              <td colspan="10" class="h1 text-center">No quizzes found.</td>
-            </tr>
-          </tbody>
-        </ng-template>
       </fieldset>
     </form>
   </div>

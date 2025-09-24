@@ -32,6 +32,7 @@ export class AssessmentTypeComponent implements OnInit, OnDestroy {
 
   loading = false;
   submitted = false;
+  loadingQuizzes = false
 
   private destroy$ = new Subject<void>();
 
@@ -89,6 +90,7 @@ export class AssessmentTypeComponent implements OnInit, OnDestroy {
   }
 
   loadQuizzes() {
+    this.loadingQuizzes = true
     this.gradingService
       .getQuizzes(this.teacher_subject_id, {
         quarter: this.quarter,
@@ -104,6 +106,7 @@ export class AssessmentTypeComponent implements OnInit, OnDestroy {
           for (let quiz of this.quizzes) {
             this.quizForms[quiz.id] = this.buildQuizForm(quiz);
           }
+          this.loadingQuizzes = false
         },
         error: (error) => this.alertService.error(error),
       });
@@ -155,7 +158,10 @@ export class AssessmentTypeComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.form.reset();
+          this.form.reset({
+            hps: '',
+            description: ''
+          });
           this.alertService.success('Quiz added successfully');
           this.submitted = false;
           this.loadQuizzes();
