@@ -10,6 +10,7 @@ import { teacherRoutes } from './teacher/subject.routes';
 import { homeroomRoutes } from './homeroom/homeroom.routes';
 import { Role } from './_models/role';
 import { curriculumSubjectRoutes } from './curriculum_subjects/curriculum-subject.routes';
+import { teacherAssignmentRoutes } from './teacher-assignment/teacher-assignment.routes';
 
 export const routes: Routes = [
   // eagerly loaded component 
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'account-admin', children: accountAdminRoutes, canActivate: [authGuard], data: { roles: [Role.SuperAdmin] } },
   { path: 'profile', children: profileRoutes, canActivate: [authGuard] },
   { path: 'teacher', children: teacherRoutes, canActivate: [authGuard] },
+  { path: 'teacher-assignment', children: teacherAssignmentRoutes, canActivate: [authGuard], data: { roles: [Role.Principal] }, title: 'Teacher Assignment' },
   { path: 'egrade', loadComponent: () => import('./student/egrade.component').then(m => m.EgradeComponent), canActivate: [authGuard], data: { roles: [Role.Student] }, title: 'E-Grade' },
   { path: 'homeroom', children: homeroomRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar, Role.Principal, Role.Teacher] } },
   { path: 'curriculum-subjects', children: curriculumSubjectRoutes, canActivate: [authGuard], data: { roles: [Role.Registrar] } },

@@ -36,19 +36,35 @@
           routerLink="/"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link text-white"
+          class="nav-link text-primary fw-semibold sidebar-link"
         >
-          <i class="bi bi-speedometer2 me-2"></i> Dashboard
+          <i class="bi bi-speedometer2 me-2 text-primary"></i> Dashboard
         </a>
       </li>
 
-      <li *ngIf="account.role === Role.SuperAdmin" class="nav-item">
+      <li
+        *ngIf="account.role === Role.SuperAdmin"
+        class="nav-item border-bottom"
+      >
         <a
-          routerLink="/account-admin"
+          routerLink="/admin/accounts"
           routerLinkActive="active"
-          class="nav-link text-white"
+          class="nav-link text-primary fw-semibold sidebar-link"
         >
-          <i class="bi bi-people me-2"></i> Accounts
+          <i class="bi bi-people me-2 text-primary"></i> Accounts
+        </a>
+      </li>
+
+      <li
+        *ngIf="account.role === Role.Principal"
+        class="nav-item border-bottom"
+      >
+        <a
+          routerLink="/teacher-assignment"
+          routerLinkActive="active"
+          class="nav-link text-primary fw-semibold sidebar-link"
+        >
+          <i class="bi bi-person-badge me-2 text-primary"></i> Teacher Assignment
         </a>
       </li>
 

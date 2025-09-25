@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   templateUrl: 'login.component.html',
+  styleUrls: ['login.component.less'],
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
 })
