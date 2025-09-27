@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
     this.accountService.getNotifications(this.account.id).subscribe({
       next: (notifications) => {
         this.notifications = notifications;
-        console.log('fetched notifications: ', notifications);
+        // console.log('fetched notifications: ', notifications);
       },
       error: (err) => console.error('Failed to load notifications: ', err),
     });

@@ -1,13 +1,11 @@
 <div class="w-100 d-flex justify-content-end my-3">
-  <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">
-    Print Grade
-  </button>
-</div>
-
-<div id="print-header" class="mb-4" *ngIf="subject$ | async as subject">
-  <strong class="text-center"
-    >Grading Period: {{ subject.semester }} FINAL GRADE</strong
+  <button
+    class="btn btn-sml btn-success ml-3"
+    (click)="exportToExcel()"
+    [disabled]="loading"
   >
+    Export to ECR
+  </button>
 </div>
 
 <table class="table table-bordered table-hover table-sm">

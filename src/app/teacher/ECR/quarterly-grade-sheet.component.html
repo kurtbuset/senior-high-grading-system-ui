@@ -1,7 +1,13 @@
 <div class="w-100 d-flex justify-content-end my-3">
-  <button class="btn btn-sml btn-primary" (click)="printGradeSheet()">
-    Print Grades
+
+  <button
+    class="btn btn-sml btn-success ml-3"
+    (click)="exportToExcel()"
+    [disabled]="loading"
+  >
+    Export to ECR Format
   </button>
+
 
   <!-- If NOT locked and NOT pending → show Lock button -->
   <button
@@ -121,9 +127,6 @@
   *ngIf="showLockModal"
 ></div>
 
-<div id="print-header" class="mb-4 d-flex justify-content-center">
-  <strong>Grading Period: {{ quarter | uppercase }}</strong>
-</div>
 
 
 <table class="table table-bordered table-hover table-sm">
