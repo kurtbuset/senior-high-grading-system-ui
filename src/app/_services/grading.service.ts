@@ -72,7 +72,7 @@ export class GradingService {
     return this.http.post(`${baseUrl}/subject-quarter-locks`, params)
   }
 
-  requestToUnlock(teacher_subject_id: string, payload: { reason: string, quarter: string }){
+  requestToUnlock(teacher_subject_id: string, payload: { quarter: string }){
     return this.http.put(`${baseUrl}/subject-quarter-locks/request/${teacher_subject_id}`, payload)
   }
 

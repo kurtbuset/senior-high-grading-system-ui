@@ -149,7 +149,7 @@
           routerLinkActive="active"
           class="nav-link text-primary fw-semibold sidebar-link"
         >
-          <i class="bi bi-journal-text me-2 text-primary"></i> Assigned Subjects
+          <i class="bi bi-journal-text me-2 text-primary"></i> My Subjects
         </a>
       </li>
 
@@ -172,7 +172,7 @@
 
       <li
         class="nav-item border-bottom"
-        *ngIf="account.role === Role.Registrar"
+        *ngIf="account.role === Role.Principal"
       >
         <a
           routerLink="/curriculum-subjects"

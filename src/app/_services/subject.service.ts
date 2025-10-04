@@ -44,4 +44,8 @@ export class SubjectService {
   getAllSubjects(){
     return this.http.get<any>(`${baseUrl}/subjects`)
   }
+
+  assignSubjectToTeacher(payload: any){
+    return this.http.post(`${baseUrl}/teacher-subject-assignment`, payload)
+  }
 }

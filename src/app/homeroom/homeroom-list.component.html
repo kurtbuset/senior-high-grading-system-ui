@@ -2,7 +2,7 @@
 
 <!-- 🔍 Search Bar -->
 <div class="mb-3 d-flex justify-content-between">
-  <h1>Homeroom Management</h1>
+  <h3>Homeroom Management</h3>
 
   <input
     type="text"
@@ -33,10 +33,10 @@
       <td>{{ h.strand }}</td>
       <td>{{ h.school_year }}</td>
       <td class="d-flex justify-content-center gap-2">
-        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" class="mx-2 btn btn-sm btn-primary">
+        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" class="btn btn-sm btn-primary">
           Consolidated Sheet
         </a>
-        <a [routerLink]="['./locking-history', h.id]" class="btn btn-sm btn-success">
+        <a [routerLink]="['./locking-history', h.id]" class="btn mx-2 btn-sm btn-success">
           Locking History
         </a>
       </td>

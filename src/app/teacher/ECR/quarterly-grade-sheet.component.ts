@@ -126,21 +126,16 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   }
 
   submitUnlockRequest(): void {
-    if (!this.unlockReason.trim()) {
-      this.alertService.error('Please provide a reason.');
-      return;
-    }
     this.loading = true;
     this.gradingService
       .requestToUnlock(this.teacherSubjectId, {
-        reason: this.unlockReason,
         quarter: this.quarter,
       })
       .pipe(first())
       .subscribe({
         next: () => {
           this.alertService.success(
-            'Request to unlock submitted successfully!'
+            'Unlocking Grades successfully!'
           );
           this.closeUnlockModal();
           this.ngOnInit();

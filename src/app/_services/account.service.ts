@@ -29,6 +29,10 @@ export class AccountService {
     return this.accountSubject.value;
   }
 
+  getAllTeachers(){
+    return this.http.get<any>(`${baseUrl}/teachers`)
+  }
+
   login(username: string, password: string) {
     return this.http
       .post<any>(
