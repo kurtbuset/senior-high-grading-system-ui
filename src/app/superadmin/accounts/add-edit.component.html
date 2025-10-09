@@ -1,0 +1,181 @@
+<div class="card shadow-sm p-4 mt-3 border-0 rounded-4">
+  <h3 class="text-primary fw-bold mb-4">{{ title }}</h3>
+
+  <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- BASIC INFO -->
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">First Name</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          placeholder="Enter first name"
+          class="form-control form-control-lg rounded-3"
+          [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+        />
+        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+          First name is required
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Last Name</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          placeholder="Enter last name"
+          class="form-control form-control-lg rounded-3"
+          [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+        />
+        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+          Last name is required
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL + ROLE -->
+    <div class="row g-3 mt-2">
+      <div class="col-md-7">
+        <label class="form-label fw-semibold">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter email address"
+          class="form-control form-control-lg rounded-3"
+          [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+        />
+        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+          <div *ngIf="f.email.errors.required">Email is required</div>
+          <div *ngIf="f.email.errors.email">Must be a valid email address</div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <label class="form-label fw-semibold">Role</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-0">
+            <i class="bi bi-person-badge"></i>
+          </span>
+          <select
+            formControlName="role"
+            class="form-select form-select-lg rounded-end-3 border-start-0"
+            [ngClass]="{ 'is-invalid': submitted && f.role.errors }"
+          >
+            <option value="">Select role...</option>
+            <option value="SuperAdmin">Super Admin</option>
+            <option value="Principal">Principal</option>
+            <option value="Registrar">Registrar</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Student">Student</option>
+          </select>
+        </div>
+        <div *ngIf="submitted && f.role.errors" class="invalid-feedback d-block">
+          Role is required
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT STATUS TOGGLE -->
+    <div *ngIf="id" class="d-flex align-items-center mt-4">
+      <div
+        class="form-check form-switch form-switch-lg ps-0 d-flex align-items-center gap-3"
+      >
+        <input
+          class="form-check-input border-0 shadow-sm"
+          type="checkbox"
+          formControlName="isActive"
+          id="isActiveSwitch"
+          style="width: 3rem; height: 1.5rem"
+        />
+        <label
+          class="form-check-label fw-semibold"
+          [ngClass]="{
+            'text-success': f.isActive.value,
+            'text-danger': !f.isActive.value
+          }"
+          for="isActiveSwitch"
+        >
+          <i
+            [ngClass]="{
+              'bi bi-check-circle-fill text-success': f.isActive.value,
+              'bi bi-x-circle-fill text-danger': !f.isActive.value
+            }"
+          ></i>
+          {{ f.isActive.value ? 'Account Active' : 'Account Inactive' }}
+        </label>
+      </div>
+    </div>
+
+    <!-- PASSWORD SECTION -->
+    <div *ngIf="id" class="border-top mt-4 pt-3">
+      <h5 class="fw-semibold text-secondary">Change Password</h5>
+      <p class="text-muted small mb-0">
+        Leave blank if you don’t want to change the password
+      </p>
+    </div>
+
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Password</label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Enter new password"
+          class="form-control form-control-lg rounded-3"
+          [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+        />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <div *ngIf="f.password.errors.required">Password is required</div>
+          <div *ngIf="f.password.errors.minlength">
+            Must be at least 6 characters
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Confirm Password</label>
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Re-enter password"
+          class="form-control form-control-lg rounded-3"
+          [ngClass]="{ 'is-invalid': submitted && f.confirmPassword.errors }"
+        />
+        <div
+          *ngIf="submitted && f.confirmPassword.errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="f.confirmPassword.errors.required">
+            Confirm password is required
+          </div>
+          <div *ngIf="f.confirmPassword.errors.mustMatch">
+            Passwords must match
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="d-flex align-items-center gap-2 mt-4">
+      <button [disabled]="submitting" class="btn btn-primary btn-sml mr-2 px-4">
+        <span
+          *ngIf="submitting"
+          class="spinner-border spinner-border-sm me-2"
+        ></span>
+        Save Changes
+      </button>
+      <a routerLink="/accounts" class="btn btn-outline-secondary btn-sml px-4"
+        >Cancel</a
+      >
+    </div>
+  </form>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+    ></div>
+    <p class="text-muted mt-2">Loading account details...</p>
+  </div>
+</div>

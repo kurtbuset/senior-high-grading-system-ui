@@ -9,7 +9,7 @@ import { environment } from '@environments/environment';
 import { Account } from '@app/_models/account';
 
 const baseUrl = `${environment.apiUrl}/accounts`;
-const notificationUrl = `${environment.apiUrl}/notifications`
+const notificationUrl = `${environment.apiUrl}/notifications`;
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -29,8 +29,43 @@ export class AccountService {
     return this.accountSubject.value;
   }
 
-  getAllTeachers(){
-    return this.http.get<any>(`${baseUrl}/teachers`)
+  getAllTeachers() {
+    return this.http.get<any>(`${baseUrl}/teachers`);
+  }
+
+  getAll() {
+    return this.http.get<Account[]>(baseUrl);
+  }
+
+  getById(id: string) {
+    return this.http.get<Account>(`${baseUrl}/${id}`);
+  }
+
+  create(params: any) {
+    return this.http.post(baseUrl, params);
+  }
+
+  update(id: string, params: any) {
+    return this.http.put(`${baseUrl}/${id}`, params).pipe(
+      map((account: any) => {
+        // update the current account if it was updated
+        if (account.id === this.accountValue?.id) {
+          // publish updated account to subscribers
+          account = { ...this.accountValue, ...account };
+          this.accountSubject.next(account);
+        }
+        return account;
+      })
+    );
+  }
+
+  delete(id: string) {
+    return this.http.delete(`${baseUrl}/${id}`).pipe(
+      finalize(() => {
+        // auto logout if the logged in account was deleted
+        if (id === this.accountValue?.id) this.logout();
+      })
+    );
   }
 
   login(username: string, password: string) {
@@ -80,19 +115,19 @@ export class AccountService {
     id: number,
     params: { password: string; confirmPassword: string }
   ) {
-    return this.http.put(`${baseUrl}/${id}`, params);
+    return this.http.put(`${baseUrl}/update-password/${id}`, params);
   }
 
   verifyEmail(token: string) {
     return this.http.post(`${baseUrl}/verify-email`, { token });
   }
 
-  getNotifications(id: string){
-    return this.http.get<any>(`${notificationUrl}/${id}`)
+  getNotifications(id: string) {
+    return this.http.get<any>(`${notificationUrl}/${id}`);
   }
 
-  updateIsRead(id: string){
-    return this.http.put(`${notificationUrl}/${id}`, {})
+  updateIsRead(id: string) {
+    return this.http.put(`${notificationUrl}/${id}`, {});
   }
 
   private refreshTokenTimeout;
