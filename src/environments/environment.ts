@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // apiUrl: 'http://localhost:4000'
-  apiUrl: 'grading-system.up.railway.app'
+  apiUrl: 'https://grading-system.up.railway.app'
 };
 
 /*
