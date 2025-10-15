@@ -41,7 +41,7 @@
               <small class="text-muted">
                 {{ subj.teacher || "No Teacher Assigned" }}
               </small>
-              <button
+              <button *ngIf="account.role === Role.Principal"
                 class="btn btn-sm btn-outline-primary mt-1"
                 (click)="openTeacherModal(subj)"
               >

@@ -8,6 +8,8 @@ import { SubjectService } from '@app/_services/subject.service';
 import { FormsModule } from '@angular/forms';
 import { AlertComponent } from '@app/_components/alert.component';
 import { AlertService } from '@app/_services/alert.service';
+import { Account } from '../../_models/account';
+import { Role } from '../../_models/role';
 
 @Component({
   templateUrl: 'semestral-consolidated.component.html',
@@ -21,10 +23,12 @@ export class SemestralConsolidatedComponent implements OnInit {
   homeroomId: string;
   sheet: any;
   teachers: any[] = [];
+  account: Account;
 
   showTeacherModal = false;
   selectedSubject: any = null;
   isUpdateMode: boolean = false;
+  Role = Role;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +40,11 @@ export class SemestralConsolidatedComponent implements OnInit {
     this.route.parent?.paramMap.subscribe((params) => {
       this.homeroomId = params.get('id')!;
       console.log('homeroom id: ', this.homeroomId);
+    });
+
+    accountService.account.subscribe((x) => {
+      this.account = x;
+      console.log(this.account.role)
     });
   }
 
