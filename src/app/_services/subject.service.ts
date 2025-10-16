@@ -7,7 +7,6 @@ import { map, finalize } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { Subject } from '@app/_models/Subject';
 
-
 const baseUrl = `${environment.apiUrl}`;
 
 @Injectable({ providedIn: 'root' })
@@ -16,36 +15,62 @@ export class SubjectService {
   public subject: Observable<Subject>;
 
   constructor(private http: HttpClient) {
-    this.subjectSubject = new BehaviorSubject<Subject>(null)
-    this.subject = this.subjectSubject.asObservable()
+    this.subjectSubject = new BehaviorSubject<Subject>(null);
+    this.subject = this.subjectSubject.asObservable();
   }
 
-  public get subjectValue(): Subject{
-    return this.subjectSubject.value
+  public get subjectValue(): Subject {
+    return this.subjectSubject.value;
   }
-
 
   getAllAssignedSubjects(teacherId: number) {
-    return this.http.get<Subject[]>(`${baseUrl}/teacher-subject-assignment/list/${teacherId}`)
+    return this.http.get<Subject[]>(
+      `${baseUrl}/teacher-subject-assignment/list/${teacherId}`
+    );
   }
 
-  getOneSubject(teacherId: number){
-    return this.http.get<Subject>(`${baseUrl}/teacher-subject-assignment/${teacherId}`)
+  getOneSubject(teacherId: number) {
+    return this.http.get<Subject>(
+      `${baseUrl}/teacher-subject-assignment/${teacherId}`
+    );
   }
 
   eraseSubjects() {
     this.subjectSubject.next(null);
   }
 
-  getFilteredSubjects(filters: any){
-    return this.http.get<any>(`${baseUrl}/curriculum-subjects/filtered`, { params: filters})
+  getFilteredSubjects(filters: any) {
+    return this.http.get<any>(`${baseUrl}/curriculum-subjects/filtered`, {
+      params: filters,
+    });
   }
 
-  getAllSubjects(){
-    return this.http.get<any>(`${baseUrl}/subjects`)
+  getAllSubjects() {
+    return this.http.get<any>(`${baseUrl}/subjects`);
   }
 
-  assignSubjectToTeacher(payload: any){
-    return this.http.post(`${baseUrl}/teacher-subject-assignment`, payload)
+  assignSubjectToTeacher(payload: any) {
+    return this.http.post(`${baseUrl}/teacher-subject-assignment`, payload);
   }
+
+  getGradeLevels() {
+    return this.http.get<any[]>(`${baseUrl}/grade-level`);
+  }
+
+  getStrands() {
+    return this.http.get<any[]>(`${baseUrl}/strand`);
+  }
+
+  getSchoolYears() {
+    return this.http.get<any[]>(`${baseUrl}/school-year`);
+  }
+
+  saveSubjects(payload: any) {
+    return this.http.post(
+      `${baseUrl}/curriculum-subjects/set-subject`,
+      payload
+    );
+  }
+
+  
 }

@@ -1,29 +1,27 @@
 <h1 class="mb-3">Subjects Management</h1>
 
 <!-- Filters -->
-<div class="d-flex flex-column mb-4 p-3 border border-1 border-black">
+<div class="d-flex flex-column mb-4 p-3 border border-1 border-black rounded-3">
   <div>
     <h4>Filters</h4>
   </div>
 
-  <div class="d-flex">
+  <div class="d-flex gap-3 flex-wrap">
     <div class="col">
       <label>Grade Level</label>
-      <select class="form-control" [(ngModel)]="selectedGradeLevel">
+      <select class="form-control" [(ngModel)]="selectedGradeLevelId">
         <option value="">All</option>
-        <option value="11">Grade 11</option>
-        <option value="12">Grade 12</option>
+        <option *ngFor="let g of gradeLevels" [value]="g.id">
+          Grade {{ g.level }}
+        </option>
       </select>
     </div>
 
     <div class="col">
       <label>Strand</label>
-      <select class="form-control" [(ngModel)]="selectedStrand">
+      <select class="form-control" [(ngModel)]="selectedStrandId">
         <option value="">All</option>
-        <option value="STEM">STEM</option>
-        <option value="HUMMS">HUMMS</option>
-        <option value="ABM">ABM</option>
-        <option value="GAS">GAS</option>
+        <option *ngFor="let s of strands" [value]="s.id">{{ s.name }}</option>
       </select>
     </div>
 
@@ -37,16 +35,15 @@
     </div>
 
     <div class="col">
-      <label>School Year</label>
-      <select class="form-control" [(ngModel)]="selectedSchoolYear">
-        <option value="">All</option>
-        <option value="2024-2025">2024-2025</option>
-        <option value="2025-2026">2025-2026</option>
-      </select>
-    </div>
+  <label>School Year</label>
+  <select class="form-control" [(ngModel)]="selectedSchoolYearId">
+    <option value="">All</option>
+    <option *ngFor="let sy of schoolYears" [value]="sy.id">{{ sy.school_year }}</option>
+  </select>
+</div>
 
-    <div class="d-flex align-items-end">
-      <button class="btn btn-primary btn-sm mr-2" (click)="applyFilters()">
+    <div class="d-flex align-items-end gap-2">
+      <button class="btn btn-primary btn-sm" (click)="applyFilters()">
         Apply
       </button>
       <button class="btn btn-secondary btn-sm" (click)="resetFilters()">
@@ -71,15 +68,83 @@
       <td>{{ subj.name }}</td>
       <td>{{ subj.type }}</td>
     </tr>
-    <tr *ngIf="filteredSubjects.length === 0">
+
+    <!-- No subjects found -->
+    <tr *ngIf="filteredSubjects.length === 0 && !showSetSubjectsModal">
       <td colspan="3" class="text-center">
-        <div class="d-flex justify-content-center align-items-center gap-2">
-          <p class="text-muted h1 m-0">No Subjects Found.</p>
-          <button class="btn btn-success btn-sm" (click)="setSubjects()">
-            Set Subjects for this curriculum
+        <div
+          class="d-flex flex-column justify-content-center align-items-center text-center p-4 border rounded-3 shadow-sm bg-light"
+          style="min-height: 200px"
+        >
+          <p class="text-muted h3 mb-3">
+            <i class="bi bi-journal-x me-2"></i> No Subjects Found.
+          </p>
+          <button
+            class="btn btn-success btn-sm px-3 py-2"
+            (click)="openSetSubjectsModal()"
+          >
+            <i class="bi bi-plus-circle me-1"></i> Set Subjects for this
+            Curriculum
           </button>
         </div>
       </td>
     </tr>
   </tbody>
 </table>
+
+<!-- Dynamic Set Subjects Section -->
+<div
+  *ngIf="showSetSubjectsModal"
+  class="border rounded-3 p-3 mt-4 shadow-sm bg-white"
+>
+  <h4 class="mb-3">Set Subjects</h4>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-sm align-middle">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 40%">Subject</th>
+          <th style="width: 10%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subj of selectedSubjects; let i = index">
+          <td>
+            <select class="form-select" [(ngModel)]="subj.subject_id">
+              <option value="">-- Select Subject --</option>
+              <option *ngFor="let s of subjects" [value]="s.id">
+                {{ s.name }} ------ <strong>{{ s.type }}</strong>
+              </option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="removeSubject(i)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="selectedSubjects.length === 0">
+          <td colspan="2" class="text-center text-muted">
+            No subjects added yet.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-between mt-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="addSubject()">
+      <i class="bi bi-plus-circle"></i> Add Subject
+    </button>
+
+    <div>
+      <button class="btn btn-success btn-sm me-2" (click)="saveSubjects()">
+        <i class="bi bi-save me-1"></i> Save
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="closeModal()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

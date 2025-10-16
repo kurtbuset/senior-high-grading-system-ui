@@ -12,37 +12,93 @@ import { AlertService } from '@app/_services/alert.service';
 })
 export class SubjectListComponent implements OnInit {
   // filters
-  selectedGradeLevel = '';
-  selectedStrand = '';
+  selectedGradeLevelId = '';
+  selectedStrandId = '';
   selectedSemester = '';
-  selectedSchoolYear = '';
+  selectedSchoolYearId = '';
 
-  filteredSubjects: any[] = [];
+  gradeLevels: any[] = [];
+  strands: any[] = [];
+  schoolYears: any[] = [];
+
   subjects: any[] = [];
+  filteredSubjects: any[] = [];
+  allSubjects: any[] = [];
 
+  showSetSubjectsModal = false;
+  selectedSubjects: any[] = [];
+
+  
   constructor(
     private subjectService: SubjectService,
     private alertService: AlertService
   ) {}
 
   ngOnInit() {
+    this.loadDropdownData();
+    this.loadSubjects();
+  }
+
+  
+
+  loadDropdownData() {
+    this.subjectService
+      .getGradeLevels()
+      .pipe(first())
+      .subscribe({
+        next: (data) => (this.gradeLevels = data),
+      });
+
+    this.subjectService
+      .getStrands()
+      .pipe(first())
+      .subscribe({
+        next: (data) => (this.strands = data),
+      });
+
+    this.subjectService
+      .getSchoolYears()
+      .pipe(first())
+      .subscribe({
+        next: (data) => (this.schoolYears = data),
+      });
+  }
+
+  loadSubjects() {
     this.subjectService
       .getAllSubjects()
       .pipe(first())
       .subscribe({
         next: (subjects) => {
+          this.subjects = subjects;
           this.filteredSubjects = subjects;
+          this.allSubjects = subjects.map((s: any) => ({
+            ...s,
+            selected: false,
+          }));
         },
       });
   }
 
   applyFilters() {
+    // Find the actual values instead of IDs
+    const gradeLevel =
+      this.gradeLevels.find((g) => g.id == this.selectedGradeLevelId)?.level ||
+      '';
+    const strand =
+      this.strands.find((s) => s.id == this.selectedStrandId)?.code || '';
+    const schoolYear =
+      this.schoolYears.find((sy) => sy.id == this.selectedSchoolYearId)
+        ?.school_year || '';
+
     const obj = {
-      grade_level: this.selectedGradeLevel,
-      strand: this.selectedStrand,
+      grade_level: gradeLevel,
+      strand: strand,
       semester: this.selectedSemester,
-      school_year: this.selectedSchoolYear,
+      school_year: schoolYear,
     };
+
+    console.log('🧩 Sending filter VALUES instead of IDs:', obj);
 
     this.subjectService
       .getFilteredSubjects(obj)
@@ -52,32 +108,72 @@ export class SubjectListComponent implements OnInit {
           this.filteredSubjects = filteredSubjects;
         },
         error: (err) => {
-          console.log('error! ', err);
+          console.log('error!', err);
         },
       });
-
-    this.filteredSubjects = this.subjects.filter(
-      (subj) =>
-        (!this.selectedGradeLevel ||
-          subj.grade_level === this.selectedGradeLevel) &&
-        (!this.selectedStrand || subj.strand === this.selectedStrand) &&
-        (!this.selectedSemester || subj.semester === this.selectedSemester) &&
-        (!this.selectedSchoolYear ||
-          subj.school_year === this.selectedSchoolYear)
-    );
   }
 
   resetFilters() {
-    this.selectedGradeLevel = '';
-    this.selectedStrand = '';
+    this.selectedGradeLevelId = '';
+    this.selectedStrandId = '';
     this.selectedSemester = '';
-    this.selectedSchoolYear = '';
-    this.filteredSubjects = []
-    this.applyFilters()
+    this.selectedSchoolYearId = '';
+    this.filteredSubjects = this.subjects;
   }
 
-  setSubjects() {
-    console.log('Set Subjects button clicked!');
-    // 👉 Add your logic here (e.g., open modal, navigate to form, etc.)
+  openSetSubjectsModal() {
+    this.showSetSubjectsModal = true;
+    this.selectedSubjects = [];
   }
+
+  closeModal() {
+    this.showSetSubjectsModal = false;
+    this.selectedSubjects = [];
+  }
+
+  addSubject() {
+    this.selectedSubjects.push({
+      subject_id: '',
+      grade_level_id: this.selectedGradeLevelId || null,
+      strand_id: this.selectedStrandId || null,
+      semester: this.selectedSemester || null,
+      school_year_id: this.selectedSchoolYearId || null,
+    });
+  }
+
+  removeSubject(index: number) {
+    this.selectedSubjects.splice(index, 1);
+  }
+
+  saveSubjects() {
+    const payload = this.selectedSubjects.map((s) => ({
+      subject_id: s.subject_id,
+      grade_level_id: this.selectedGradeLevelId || null,
+      strand_id: this.selectedStrandId || null,
+      semester: this.selectedSemester || null,
+      school_year_id: this.selectedSchoolYearId || null,
+    }));
+
+    console.log('✅ Subjects to Save (IDs):', payload);
+
+    this.subjectService
+      .saveSubjects(payload)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.alertService.success('Subjects saved successfully!');
+          // ✅ Refresh the filtered list immediately
+          this.applyFilters();
+
+          // ✅ Close modal
+          this.closeModal();
+        },
+        error: (err) => {
+          console.error('❌ Error saving subjects:', err);
+          this.alertService.error('Failed to save subjects');
+        },
+      });
+  }
+
+  
 }
