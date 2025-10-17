@@ -28,7 +28,11 @@ export class SubjectListComponent implements OnInit {
   showSetSubjectsModal = false;
   selectedSubjects: any[] = [];
 
-  
+  filtersApplied = false;
+
+  currentFilterTextValue = '';
+
+
   constructor(
     private subjectService: SubjectService,
     private alertService: AlertService
@@ -38,8 +42,6 @@ export class SubjectListComponent implements OnInit {
     this.loadDropdownData();
     this.loadSubjects();
   }
-
-  
 
   loadDropdownData() {
     this.subjectService
@@ -81,7 +83,8 @@ export class SubjectListComponent implements OnInit {
   }
 
   applyFilters() {
-    // Find the actual values instead of IDs
+    this.filtersApplied = true; // only set when Apply is clicked
+
     const gradeLevel =
       this.gradeLevels.find((g) => g.id == this.selectedGradeLevelId)?.level ||
       '';
@@ -106,6 +109,16 @@ export class SubjectListComponent implements OnInit {
       .subscribe({
         next: (filteredSubjects) => {
           this.filteredSubjects = filteredSubjects;
+          // ✅ Update filter text only when Apply is clicked
+          this.currentFilterTextValue = `Subjects for ${
+            gradeLevel || 'All Grades'
+          } - ${strand || 'All Strands'} - ${
+            this.selectedSemester
+              ? this.selectedSemester === 'FIRST SEMESTER'
+                ? '1st Semester'
+                : '2nd Semester'
+              : 'All Semesters'
+          } - ${schoolYear || 'All Years'}`;
         },
         error: (err) => {
           console.log('error!', err);
@@ -119,11 +132,14 @@ export class SubjectListComponent implements OnInit {
     this.selectedSemester = '';
     this.selectedSchoolYearId = '';
     this.filteredSubjects = this.subjects;
+    this.filtersApplied = false;
   }
 
   openSetSubjectsModal() {
     this.showSetSubjectsModal = true;
-    this.selectedSubjects = [];
+    if (this.selectedSubjects.length === 0) {
+      this.addSubject(); // pre-add a blank row
+    }
   }
 
   closeModal() {
@@ -175,5 +191,49 @@ export class SubjectListComponent implements OnInit {
       });
   }
 
-  
+  deleteSubject(curriculumSubjectId: number) {
+    if (!curriculumSubjectId) return;
+
+    if (!confirm('Are you sure you want to delete this subject?')) return;
+
+    this.subjectService
+      .deleteSubject(curriculumSubjectId)
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          this.alertService.success('Subject removed successfully!');
+          // Refresh the filtered list
+          this.applyFilters();
+        },
+        error: (err) => {
+          console.error('Error deleting subject:', err);
+          if (err.error?.message) {
+            this.alertService.error(err.error.message);
+          } else {
+            this.alertService.error('Failed to remove subject. A teacher was assigned to this subject.');
+          }
+        },
+      });
+  }
+
+  get currentFilterText(): string {
+    if (!this.filtersApplied) return '';
+
+    const gradeLevel =
+      this.gradeLevels.find((g) => g.id == this.selectedGradeLevelId)?.level ||
+      'All Grades';
+    const strand =
+      this.strands.find((s) => s.id == this.selectedStrandId)?.name ||
+      'All Strands';
+    const semester = this.selectedSemester
+      ? this.selectedSemester === 'FIRST SEMESTER'
+        ? '1st Semester'
+        : '2nd Semester'
+      : 'All Semesters';
+    const schoolYear =
+      this.schoolYears.find((sy) => sy.id == this.selectedSchoolYearId)
+        ?.school_year || 'All Years';
+
+    return `Subjects for ${gradeLevel} - ${strand} - ${semester} - ${schoolYear}`;
+  }
 }
