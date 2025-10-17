@@ -1,0 +1,78 @@
+<div class="container py-4" *ngIf="!loading && account; else loadingTpl">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Account Information</h4>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <strong>Name:</strong>
+          <div>{{ account.firstName }} {{ account.lastName }}</div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <strong>Email:</strong>
+          <div>{{ account.email }}</div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <strong>Role:</strong>
+          <div>{{ account.role }}</div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <strong>Status:</strong>
+          <div>
+            <span
+              class="badge"
+              [class.bg-success]="account.isActive"
+              [class.bg-danger]="!account.isActive"
+            >
+              {{ account.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Info -->
+      <div *ngIf="account.role === 'Student'" class="border-top pt-4 mt-4">
+        <h5 class="text-primary mb-3">Student Information</h5>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <strong>School ID:</strong>
+            <div>{{ account.school_id }}</div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <strong>Sex:</strong>
+            <div>{{ account.sex }}</div>
+          </div>
+
+          <div class="col-12">
+            <strong>Address:</strong>
+            <div>{{ account.address }}</div>
+          </div>
+
+          <div class="col-12 mt-2">
+            <strong>Homeroom:</strong>
+            <div *ngIf="account.homeroom; else noHomeroom">
+              {{ account.homeroom.grade_level }} - {{ account.homeroom.strand }}
+              <span class="text-muted">(Section {{ account.homeroom.section }})</span>
+            </div>
+            <ng-template #noHomeroom>
+              <span class="text-muted">No homeroom assigned</span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="text-center p-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-3 mb-0">Loading account...</p>
+  </div>
+</ng-template>

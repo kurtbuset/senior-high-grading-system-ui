@@ -1,55 +1,100 @@
+<div class="p-2">
+  <!-- 🔍 Search Filter -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h3>Homeroom Management</h3>
 
 
-<!-- 🔍 Search Bar -->
-<div class="mb-3 d-flex justify-content-between">
-  <h3>Homeroom Management</h3>
+    <input
+      type="text"
+      class="form-control w-50"
+      placeholder="Search by grade level, section, strand, or school year..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()"
+    />
+  </div>
 
-  <input
-    type="text"
-    class="form-control w-25"
-    placeholder="Search..."
-    [(ngModel)]="searchTerm"
-    (input)="onSearch()"
-  />
-</div>
+  <!-- 🧾 Table -->
+  <table
+    class="table table-hover table-sm text-center"
+    *ngIf="!loading; else loadingTpl"
+  >
+    <thead>
+      <tr>
+        <th style="width: 10%">Grade Level</th>
+        <th style="width: 15%">Section</th>
+        <th style="width: 20%">Strand</th>
+        <th style="width: 10%">School Year</th>
+        <th style="width: 25%">Actions</th>
+      </tr>
+    </thead>
 
-<table class="table table-hover table-sm text-center" *ngIf="!loading && filteredHomerooms.length > 0">
-  <thead>
-    <tr>
-      <!-- <th style="width: 5%;">#</th> -->
-      <th style="width: 10%;">Grade Level</th>
-      <th style="width: 15%;">Section</th>
-      <th style="width: 20%;">Strand</th> 
-      <th style="width: 10%;">School Year</th>
-      <th style="width: 20%;">Actions</th>
-    </tr>
-  </thead>
+    <tbody>
+      <tr *ngFor="let h of paginatedHomerooms">
+        <td>{{ h.grade_level }}</td>
+        <td>{{ h.section }}</td>
+        <td>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-primary': h.strand === 'STEM',
+              'bg-success': h.strand === 'ABM',
+              'bg-warning text-dark': h.strand === 'HUMMS',
+              'bg-info text-dark': h.strand === 'GAS',
+            }"
+          >
+            {{ h.strand }}
+          </span>
+        </td>
+        <td>{{ h.school_year }}</td>
+        <td>
+          <button
+            [routerLink]="['./', h.id, 'FIRST SEMESTER']"
+            class="btn btn-sm btn-outline-primary mr-2"
+          >
+            <i class="bi bi-file-earmark-text"></i> Consolidated Sheet
+          </button>
+          <button
+            [routerLink]="['./locking-history', h.id]"
+            class="btn btn-sm btn-outline-success"
+          >
+            <i class="bi bi-clock-history"></i> Locking History
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <tbody>
-    <tr *ngFor="let h of filteredHomerooms; let i = index">
-      <!-- <td>{{ h.id }}</td> -->
-      <td>{{ h.grade_level }}</td>
-      <td>{{ h.section }}</td>
-      <td>{{ h.strand }}</td>
-      <td>{{ h.school_year }}</td>
-      <td class="d-flex justify-content-center gap-2">
-        <a [routerLink]="['./', h.id, 'FIRST SEMESTER']" class="btn btn-sm btn-primary">
-          Consolidated Sheet
-        </a>
-        <a [routerLink]="['./locking-history', h.id]" class="btn mx-2 btn-sm btn-success">
-          Locking History
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <!-- 🔢 Pagination -->
+  <div
+    *ngIf="!loading && filteredHomerooms.length > pageSize"
+    class="d-flex justify-content-center align-items-center mt-3"
+  >
+    <button
+      class="btn btn-outline-secondary btn-sm me-2"
+      [disabled]="currentPage === 1"
+      (click)="prevPage()"
+    >
+      Previous
+    </button>
 
-<!-- Spinner -->
-<div *ngIf="loading" class="d-flex justify-content-center align-items-center my-5" style="min-height: 150px;">
-  <div class="spinner-border text-primary" role="status"></div>
-</div>
+    <span class="mx-2">Page {{ currentPage }} of {{ totalPages }}</span>
 
-<!-- No Data -->
-<div *ngIf="!loading && (!filteredHomerooms || filteredHomerooms.length === 0)">
-  <h3 class="text-center">No homerooms found.</h3>
+    <button
+      class="btn btn-outline-secondary btn-sm ms-2"
+      [disabled]="currentPage === totalPages"
+      (click)="nextPage()"
+    >
+      Next
+    </button>
+  </div>
+
+  <!-- 🌀 Loading -->
+  <ng-template #loadingTpl>
+    <div class="text-center p-3">Loading homerooms...</div>
+  </ng-template>
+
+  <!-- 🚫 No Data -->
+  <div *ngIf="!loading && filteredHomerooms.length === 0">
+    <h5 class="text-center text-muted">No homerooms found.</h5>
+  </div>
 </div>

@@ -3,7 +3,9 @@
 
   <!-- 🔍 Search Filter -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <button routerLink="add" class="btn btn-sml btn-primary">Add Account</button>
+    <button routerLink="add" class="btn btn-sml btn-primary">
+      Add Account
+    </button>
 
     <input
       type="text"
@@ -14,15 +16,17 @@
     />
   </div>
 
-  <table class="table table-hover table-sm text-center" *ngIf="!loading; else loadingTpl">
+  <table
+    class="table table-hover table-sm text-center"
+    *ngIf="!loading; else loadingTpl"
+  >
     <thead>
       <tr>
-        <th style="width: 5%;">#</th>
-        <th style="width: 20%;">Name</th>
-        <th style="width: 25%;">Email</th>
-        <th style="width: 15%;">Role</th>
-        <th style="width: 10%;">Status</th>
-        <th style="width: 25%;">Action</th>
+        <th style="width: 5%">#</th>
+        <th style="width: 20%">Name</th>
+        <th style="width: 15%">Role</th>
+        <th style="width: 10%">Status</th>
+        <th style="width: 25%">Action</th>
       </tr>
     </thead>
 
@@ -30,7 +34,6 @@
       <tr *ngFor="let acc of paginatedAccounts; let i = index">
         <td>{{ acc.id }}</td>
         <td>{{ acc.firstName }} {{ acc.lastName }}</td>
-        <td>{{ acc.email }}</td>
         <td>
           <span
             class="badge"
@@ -53,12 +56,21 @@
               'bg-danger': acc.isActive == 0
             }"
           >
-            {{ acc.isActive == 1 ? 'Active' : 'Inactive' }}
+            {{ acc.isActive == 1 ? "Active" : "Inactive" }}
           </span>
         </td>
         <td>
-          <button [routerLink]="['/accounts/edit', acc.id]" class="btn btn-sm btn-outline-primary me-1" >
+          <button
+            [routerLink]="['/accounts/edit', acc.id]"
+            class="btn btn-sm btn-outline-primary me-1"
+          >
             <i class="bi bi-pencil-square"></i> Edit
+          </button>
+          <button
+            class="btn btn-sm btn-outline-success mx-2"
+            [routerLink]="['/accounts/view', acc.id]"
+          >
+            <i class="bi bi-eye"></i> View
           </button>
           <button class="btn btn-sm btn-outline-danger" (click)="onDelete(acc)">
             <i class="bi bi-trash"></i> Delete
@@ -69,10 +81,27 @@
   </table>
 
   <!-- 🔢 Pagination -->
-  <div *ngIf="!loading && filteredAccounts.length > pageSize" class="d-flex justify-content-center mt-3">
-    <button class="btn btn-outline-secondary btn-sm me-2" [disabled]="currentPage === 1" (click)="prevPage()">Previous</button>
-    <span class="align-self-center">Page {{ currentPage }} of {{ totalPages }}</span>
-    <button class="btn btn-outline-secondary btn-sm ms-2" [disabled]="currentPage === totalPages" (click)="nextPage()">Next</button>
+  <div
+    *ngIf="!loading && filteredAccounts.length > pageSize"
+    class="d-flex justify-content-center mt-3"
+  >
+    <button
+      class="btn btn-outline-secondary btn-sm me-2"
+      [disabled]="currentPage === 1"
+      (click)="prevPage()"
+    >
+      Previous
+    </button>
+    <span class="align-self-center"
+      >Page {{ currentPage }} of {{ totalPages }}</span
+    >
+    <button
+      class="btn btn-outline-secondary btn-sm ms-2"
+      [disabled]="currentPage === totalPages"
+      (click)="nextPage()"
+    >
+      Next
+    </button>
   </div>
 
   <ng-template #loadingTpl>
