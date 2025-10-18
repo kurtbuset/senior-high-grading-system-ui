@@ -25,6 +25,7 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
   account = this.accountService.accountValue;
   loading: boolean = false;
   subjectInfo: any;
+  exporting = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,6 +65,7 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
   }
 
   async exportToExcel(): Promise<void> {
+    this.exporting = true;
     try {
       const fileName = 'assets/FINAL SEMESTER GRADE.xlsx';
       const response = await fetch(fileName);
@@ -150,6 +152,8 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
     } catch (error) {
       console.log('Export to Excel failed:', error);
       alert('Export failed. Check console.');
+    } finally {
+      this.exporting = false
     }
   }
 }

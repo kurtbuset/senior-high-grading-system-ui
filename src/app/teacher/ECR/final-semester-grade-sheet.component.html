@@ -1,12 +1,14 @@
 <div class="w-100 d-flex justify-content-end my-3">
   <button
-    class="btn btn-sml btn-success ml-3"
+    class="btn btn-sml btn-success ml-3 d-flex align-items-center gap-2"
     (click)="exportToExcel()"
-    [disabled]="loading"
+    [disabled]="loading || exporting"
   >
-    Export to ECR
+    <span *ngIf="exporting" class="spinner-border spinner-border-sm"></span>
+    <span>{{ exporting ? 'Exporting...' : 'Export to ECR' }}</span>
   </button>
 </div>
+
 
 <table class="table table-bordered table-hover table-sm">
   <thead>
