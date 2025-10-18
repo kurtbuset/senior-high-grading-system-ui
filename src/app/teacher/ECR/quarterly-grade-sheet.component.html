@@ -1,18 +1,20 @@
 <div class="w-100 d-flex justify-content-end my-3">
+
   <button
-    class="btn btn-sml btn-success ml-3 d-flex align-items-center gap-2"
-    (click)="exportGrades()"
-    [disabled]="loading || exporting"
-  >
-    <span *ngIf="!exporting">Export to ECR Format</span>
-    <span *ngIf="exporting" class="d-flex align-items-center">
-      <span
-        class="spinner-border spinner-border-sm text-light me-2"
-        role="status"
-      ></span>
-      Exporting...
-    </span>
-  </button>
+  class="btn btn-sml btn-success ml-3"
+  (click)="exportToExcel()"
+  [disabled]="loading"
+>
+  <ng-container *ngIf="!loading; else loadingTemplate">
+    Export to ECR Format
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <span class="spinner-border spinner-border-sm me-2"></span>
+    Exporting...
+  </ng-template>
+</button>
+
+
 
   <!-- If NOT locked and NOT pending → show Lock button -->
   <button
@@ -35,6 +37,7 @@
   </button>
 </div>
 
+
 <!-- Request Unlock Modal -->
 <div
   class="modal fade"
@@ -50,7 +53,7 @@
         <h3 class="modal-title">Unlock Grades</h3>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to unlock grades for {{ quarter }}?</p>
+        <p>Are you sure you want to unlock grades for {{quarter}}?</p>
       </div>
       <div class="modal-footer">
         <button
@@ -60,11 +63,7 @@
         >
           No
         </button>
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="submitUnlockRequest()"
-        >
+        <button type="button" class="btn btn-success" (click)="submitUnlockRequest()">
           Yes
         </button>
       </div>
@@ -76,6 +75,7 @@
   [ngClass]="{ show: showUnlockModal }"
   *ngIf="showUnlockModal"
 ></div>
+
 
 <div
   class="modal fade"
@@ -91,7 +91,7 @@
         <h3 class="modal-title">Lock Grades</h3>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to lock grades for {{ quarter }}?</p>
+        <p>Are you sure you want to lock grades for {{quarter}}?</p>
       </div>
       <div class="modal-footer">
         <button
@@ -113,6 +113,8 @@
   [ngClass]="{ show: showLockModal }"
   *ngIf="showLockModal"
 ></div>
+
+
 
 <table class="table table-bordered table-hover table-sm">
   <thead>

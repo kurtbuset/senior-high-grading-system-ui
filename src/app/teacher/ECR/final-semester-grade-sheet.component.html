@@ -1,14 +1,18 @@
 <div class="w-100 d-flex justify-content-end my-3">
   <button
-    class="btn btn-sml btn-success ml-3 d-flex align-items-center gap-2"
+    class="btn btn-sml btn-success ml-3"
     (click)="exportToExcel()"
-    [disabled]="loading || exporting"
+    [disabled]="loading"
   >
-    <span *ngIf="exporting" class="spinner-border spinner-border-sm"></span>
-    <span>{{ exporting ? 'Exporting...' : 'Export to ECR' }}</span>
+    <ng-container *ngIf="!loading; else loadingTemplate">
+      Export to ECR Format
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <span class="spinner-border spinner-border-sm me-2"></span>
+      Exporting...
+    </ng-template>
   </button>
 </div>
-
 
 <table class="table table-bordered table-hover table-sm">
   <thead>

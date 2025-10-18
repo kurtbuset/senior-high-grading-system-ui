@@ -29,7 +29,6 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   subjectInfo: any;
 
   account = this.accountService.accountValue;
-  exporting = false; // <-- add this
 
   constructor(
     private subjectService: SubjectService,
@@ -135,7 +134,9 @@ export class QuarterlyGradeSheetComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.alertService.success('Unlocking Grades successfully!');
+          this.alertService.success(
+            'Unlocking Grades successfully!'
+          );
           this.closeUnlockModal();
           this.ngOnInit();
           this.loading = false;
@@ -149,20 +150,19 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   }
 
   // ✅ Fixed export function (no Node 'stream')
-  async exportGrades(): Promise<void> {
-    this.exporting = true;
-
+  async exportToExcel(): Promise<void> {
+    this.loading = true;
     try {
-      // 🟢 Validate quarter and template file
-      const templates: Record<string, string> = {
-        'First Quarter': 'assets/FIRST QUARTER.xlsx',
-        'Second Quarter': 'assets/SECOND QUARTER.xlsx',
-      };
+      // choose template based on quarter
+      const fileName =
+        this.quarter === 'First Quarter'
+          ? 'assets/FIRST QUARTER.xlsx'
+          : this.quarter === 'Second Quarter'
+          ? 'assets/SECOND QUARTER.xlsx'
+          : null;
 
-      const fileName = templates[this.quarter];
       if (!fileName) throw new Error(`Unsupported quarter: ${this.quarter}`);
 
-      // 🟢 Load Excel template
       const response = await fetch(fileName);
       if (!response.ok) throw new Error('Template not found in assets');
 
@@ -170,92 +170,102 @@ export class QuarterlyGradeSheetComponent implements OnInit {
       const workbook = new Workbook();
       await workbook.xlsx.load(arrayBuffer);
 
-      // 🟢 Select worksheet
-      const sheetNames: Record<string, string> = {
-        'First Quarter': 'FIRST QTR GRADE SHEET',
-        'Second Quarter': 'SECOND QTR GRADE SHEET',
-      };
-      const worksheet =
-        workbook.getWorksheet(sheetNames[this.quarter]) ||
-        workbook.worksheets[0];
-
-      if (!worksheet)
-        throw new Error(`Worksheet for ${this.quarter} not found`);
-      if (!this.students?.length)
-        return this.alertService.error('No students to export!');
-
-      // 🟢 Column map (kept for clarity)
-      const col = {
+      let worksheet;
+      let startRow = 12;
+      const colMap: Record<string, number> = {
         lastName: 2,
         firstName: 4,
         middleInitial: 6,
         sex: 7,
-        wwPercentage: 9,
-        ptPercentage: 13,
-        qaPercentage: 17,
-        wwWeighted: 20,
-        ptWeighted: 24,
-        qaWeighted: 29,
-        initialGrade: 32,
-        transmuted: 35,
-        description: 36,
+        wwPercentageScore: 9, // I
+        ptPercentageScore: 13, // M
+        qaPercentageScore: 17, // Q
+        wwWeightedScore: 20, // T
+        ptWeightedScore: 24, // X
+        qaWeightedScore: 29, // AC
+        initialGrade: 32, // AF
+        transmutedGrade: 35, // AI
+        description: 36, // AJ
       };
 
-      // 🟢 Fill in subject and teacher info
-      const { subjectInfo, account } = this;
-      worksheet.getRow(6).getCell(20).value = subjectInfo?.school_year || ''; // T
-      worksheet.getRow(6).getCell(29).value = subjectInfo?.grade_level || ''; // AC
-      worksheet.getRow(6).getCell(35).value = subjectInfo?.section || ''; // AI
-      worksheet.getRow(8).getCell(17).value = subjectInfo?.subjectName || ''; // Q
-      worksheet
-        .getRow(8)
-        .getCell(31).value = `${account.firstName} ${account.lastName}`; // AE
-      worksheet
-        .getRow(102)
-        .getCell(2).value = `${account.firstName} ${account.lastName}`; // B102
+      // select worksheet by name
+      worksheet =
+        this.quarter === 'First Quarter'
+          ? workbook.getWorksheet('FIRST QTR GRADE SHEET') ||
+            workbook.worksheets[0]
+          : workbook.getWorksheet('SECOND QTR GRADE SHEET') ||
+            workbook.worksheets[0];
 
-      // 🟢 Write student data
-      const startRow = 12;
-      for (let i = 0; i < this.students.length; i++) {
-        const s = this.students[i];
-        const row = worksheet.getRow(startRow + i);
-
-        Object.assign(row.values, {
-          [col.lastName]: s.lastName,
-          [col.firstName]: s.firstName,
-          [col.middleInitial]: s.middleInitial || '',
-          [col.sex]: s.sex || '',
-          [col.wwPercentage]: s.wwPercentageScore,
-          [col.ptPercentage]: s.ptPercentageScore,
-          [col.qaPercentage]: s.qaPercentageScore,
-          [col.wwWeighted]: s.wwWeightedScore,
-          [col.ptWeighted]: s.ptWeightedScore,
-          [col.qaWeighted]: s.qaWeightedScore,
-          [col.initialGrade]: s.initialGrade,
-          [col.transmuted]: s.transmutedGrade,
-          [col.description]: s.description || '',
-        });
-
-        row.commit();
+      if (!worksheet)
+        throw new Error(`Worksheet for ${this.quarter} not found`);
+      if (!this.students.length) {
+        this.alertService.error('No students to export!');
+        return;
       }
 
-      // 🟢 Export and save
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      // Subject and teacher info
+      worksheet.getRow(6).getCell(20).value =
+        this.subjectInfo?.school_year || ''; // T
+      worksheet.getRow(6).getCell(29).value =
+        this.subjectInfo?.grade_level || ''; // AC
+      worksheet.getRow(6).getCell(35).value = this.subjectInfo?.section || ''; // AI
+      worksheet.getRow(8).getCell(17).value =
+        this.subjectInfo?.subjectName || ''; // Q
+      worksheet
+        .getRow(8)
+        .getCell(
+          31
+        ).value = `${this.account.firstName} ${this.account.lastName}`; // AE
+
+      worksheet
+        .getRow(102)
+        .getCell(
+          2
+        ).value = `${this.account.firstName} ${this.account.lastName}`;
+
+      this.students.forEach((student, index) => {
+        const rowIndex = startRow + index;
+        const row = worksheet.getRow(rowIndex);
+
+        // student info
+        row.getCell(colMap.lastName).value = student.lastName;
+        row.getCell(colMap.firstName).value = student.firstName;
+        row.getCell(colMap.middleInitial).value = student.middleInitial || '';
+        row.getCell(colMap.sex).value = student.sex || '';
+
+        // percentage scores
+        row.getCell(colMap.wwPercentageScore).value = student.wwPercentageScore;
+        row.getCell(colMap.ptPercentageScore).value = student.ptPercentageScore;
+        row.getCell(colMap.qaPercentageScore).value = student.qaPercentageScore;
+
+        // weighted scores
+        row.getCell(colMap.wwWeightedScore).value = student.wwWeightedScore;
+        row.getCell(colMap.ptWeightedScore).value = student.ptWeightedScore;
+        row.getCell(colMap.qaWeightedScore).value = student.qaWeightedScore;
+
+        // grades
+        row.getCell(colMap.initialGrade).value = student.initialGrade;
+        row.getCell(colMap.transmutedGrade).value = student.transmutedGrade;
+
+        // description
+        row.getCell(colMap.description).value = student.description || '';
+
+        row.commit();
       });
 
+      const buffer = await workbook.xlsx.writeBuffer();
       FileSaver.saveAs(
-        blob,
-        `Grades - ${subjectInfo?.subjectName || ''} - ${
-          subjectInfo?.section || ''
-        } - ${this.quarter}.xlsx`
+        new Blob([buffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        }),
+        `Grades for K-12 ${this.subjectInfo?.subjectName} ${this.subjectInfo?.section} ${this.quarter}.xlsx`
       );
-    } catch (err) {
-      console.error('Export to Excel failed:', err);
+    } catch (error) {
+      console.log('Export to Excel failed:', error);
       this.alertService.error('Export failed. Check console.');
-    } finally {
-      this.exporting = false;
+    }
+    finally {
+      this.loading = false; // ✅ stop loading after everything
     }
   }
 }
