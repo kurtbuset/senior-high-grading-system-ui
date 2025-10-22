@@ -27,7 +27,7 @@
           <!-- <td style="width: 2%" class="text-center">#</td> -->
           <th style="width: 10%">Perfect Score</th>
           <th style="width: 30%">Description</th>
-          <th style="width: 20%">Quiz Created</th>
+          <th style="width: 20%">Assesment Created</th>
           <th style="width: 10%" class="text-center">Edit Score</th>
           <th style="width: 15%" class="text-center">Actions</th>
           <th style="width: 10%">Delete Score</th>
@@ -37,7 +37,7 @@
         <tr>
           <td colspan="10" class="text-center py-5">
             <div class="spinner-border text-primary" role="status"></div>
-            <p class="mt-2">Loading quizzes...</p>
+            <p class="mt-2">Loading assesments...</p>
           </td>
         </tr>
       </tbody>
@@ -132,7 +132,7 @@
       <tbody>
         <tr *ngIf="!loadingQuizzes && (!quizzes || quizzes.length === 0)">
           <td colspan="10" class="h5 text-center text-muted py-4">
-            No quizzes found.
+            No assesments found.
           </td>
         </tr>
       </tbody>
@@ -179,7 +179,7 @@
             *ngIf="loading"
             class="spinner-border spinner-border-sm mr-1"
           ></span>
-          Add quiz
+          Add assesment
         </button>
 
       </fieldset>
