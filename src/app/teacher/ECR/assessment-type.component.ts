@@ -172,7 +172,7 @@ export class AssessmentTypeComponent implements OnInit, OnDestroy {
   }
 
   deleteQuiz(id: number) {
-    if (!confirm('Are you sure you want to delete this quiz?')) return;
+    if (!confirm('Are you sure you want to delete this?')) return;
 
     const quiz = this.quizzes.find((q) => q.id === id);
     if (!quiz) return;
