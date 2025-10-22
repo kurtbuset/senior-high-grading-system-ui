@@ -33,12 +33,10 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a
-            class="nav-link dropdown-toggle position-relative"
             id="notificationDropdown"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
+            class="nav-link position-relative"
+            (click)="toggleNotifications($event)"
+            style="cursor: pointer"
           >
             <span class="bi bi-bell"></span>
             <!-- Badge -->
@@ -51,9 +49,10 @@
             </span>
           </a>
 
-          <!-- Dropdown Menu (inline fix: opens left) -->
+          <!-- Dropdown Menu -->
           <div
-            class="dropdown-menu"
+            class="dropdown-menu show"
+            *ngIf="showNotifications"
             aria-labelledby="notificationDropdown"
             style="
               width: 600px;
