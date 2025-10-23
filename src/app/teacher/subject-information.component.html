@@ -1,15 +1,27 @@
+<div class="pt-4 container" *ngIf="subject$ | async as subject">
 
-<div class="pt-4 d-flex flex-column" *ngIf="subject$ | async as subject">
-
-  <div class="d-flex justify-content-between mb-3">
-    <strong>School Name: Benedicto College</strong>
-    <strong>School Year: {{ subject.school_year }}</strong>
-    <strong>Grade: {{subject.grade_level}}</strong>
-    <strong>Section: {{subject.section}}</strong>
+  <div class="row mb-3 text-center align-items-center">
+    <div class="col-md-4">
+      <strong>School Name: Benedicto College</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>School Year: {{ subject.school_year }}</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>Grade: {{ subject.grade_level }}</strong>
+    </div>
   </div>
 
-  <div class="d-flex justify-content-around ">
-    <strong>Subject: {{subject.subjectName}}</strong>
-    <strong>Teacher: {{ account.firstName }} {{ account.lastName }}</strong>
+  <div class="row text-center align-items-center">
+    <div class="col-md-4">
+      <strong>Section: {{ subject.section }}</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>Subject: {{ subject.subjectName }}</strong>
+    </div>
+    <div class="col-md-4">
+      <strong>Teacher: {{ account.firstName }} {{ account.lastName }}</strong>
+    </div>
   </div>
+
 </div>
