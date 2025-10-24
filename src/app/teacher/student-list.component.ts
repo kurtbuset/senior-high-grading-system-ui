@@ -18,6 +18,7 @@ export class StudentListComponent implements OnInit {
   students: any[] = [];
   id: string;
   isLoading = true;
+  searchTerm: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -25,6 +26,16 @@ export class StudentListComponent implements OnInit {
     private alertService: AlertService,
     private subjectService: SubjectService
   ) {}
+
+  get filteredStudents() {
+  if (!this.searchTerm) return this.students;
+  const term = this.searchTerm.toLowerCase();
+  return this.students.filter(
+    (s) =>
+      s.firstName.toLowerCase().includes(term) ||
+      s.lastName.toLowerCase().includes(term)
+  );
+}
 
   ngOnInit() {
     // teacher_subject_id
