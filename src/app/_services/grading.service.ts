@@ -56,6 +56,10 @@ export class GradingService {
     return this.http.get<any>(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
   }
 
+  getStudentsAndRawScores(id: string){
+    return this.http.get<any>(`${baseUrl}/quiz-scores/student-raw-scores/${id}`)
+  }
+
   getFinalSemesterGradeSheet(id: string){
     return this.http.get(`${baseUrl}/quizzes/semestral-final-grade/${id}`)
   }

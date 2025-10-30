@@ -1,7 +1,7 @@
 <div class="w-100 d-flex justify-content-end my-3">
   <button
-    class="btn btn-sml btn-success ml-3"
-    (click)="exportToExcel()"
+    class="btn btn-sml btn-outline-success ml-3"
+    (click)="exportToEcr()"
     [disabled]="loading"
   >
     <ng-container *ngIf="!loading; else loadingTemplate">
@@ -28,7 +28,7 @@
   </thead>
   <tbody>
     <tr *ngIf="students?.length === 0">
-      <td colspan="8" class="text-center text-muted">
+      <td colspan="8" class="text-center text-muted"> 
         No students enrolled yet
         <div class="mt-3">
           <button class="btn btn-primary btn-sm" (click)="goToStudentList()">

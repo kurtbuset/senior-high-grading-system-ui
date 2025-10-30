@@ -171,6 +171,19 @@
 
       <li
         class="nav-item border-bottom"
+        *ngIf="account.role === Role.Registrar"
+      >
+        <a
+          routerLink="/students-list"
+          routerLinkActive="active"
+          class="nav-link text-primary fw-semibold sidebar-link"
+        >
+          <i class="bi bi-house-door me-2 text-primary"></i> Student's List
+        </a>
+      </li>
+
+      <li
+        class="nav-item border-bottom"
         *ngIf="account.role === Role.Principal"
       >
         <a

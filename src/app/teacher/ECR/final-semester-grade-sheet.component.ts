@@ -63,168 +63,124 @@ export class FinalSemesterGradeSheetComponent implements OnInit {
     this.router.navigate([`/teacher/students/${this.id}`]);
   }
 
-  async exportToExcel(): Promise<void> {
+  async exportToEcr(): Promise<void> {
     this.loading = true;
-    try {
-      // ✅ 1. Load the base workbook template
-      const fileName = 'assets/FINAL SEMESTER GRADE.xlsx';
-      const response = await fetch(fileName);
-      if (!response.ok) throw new Error('Template not found in assets');
 
+    try {
+      const { hps, students } = await this.gradingService
+        .getStudentsAndRawScores(this.id)
+        .toPromise();
+
+      const response = await fetch('assets/BLANK ECR.xlsx');
       const arrayBuffer = await response.arrayBuffer();
       const workbook = new Workbook();
       await workbook.xlsx.load(arrayBuffer);
 
-      // ✅ 2. Fetch both quarters in parallel
-      const [firstQuarterRes, secondQuarterRes] = await Promise.all([
-        this.gradingService
-          .getQuarterlyGradeSheet(this.id, { quarter: 'First Quarter' })
-          .pipe(first())
-          .toPromise(),
-        this.gradingService
-          .getQuarterlyGradeSheet(this.id, { quarter: 'Second Quarter' })
-          .pipe(first())
-          .toPromise(),
-      ]);
+      // 🔹 Sheet[4] → Insert student names
+      const sheetStudents = workbook.worksheets[4];
+      if (sheetStudents) {
+        sheetStudents.getCell('L8').value = this.subjectInfo.grade_level; // Grade level → L8
+        sheetStudents.getCell('L9').value = this.subjectInfo.section; // Section → L9
+        const cellL10 = sheetStudents.getCell('L10');
+        const subjectName = this.subjectInfo.subjectName;
+        console.log(subjectName);
+        const validationList = cellL10.dataValidation?.formulae?.[0]
+          ?.replace(/[=']/g, '')
+          .split(',');
 
-      // ✅ 3. Helper to fill individual quarter sheets
-      const fillQuarterSheet = (
-        worksheetName: string,
-        data: any,
-        quarter: string
-      ) => {
-        const worksheet = workbook.getWorksheet(worksheetName);
-        if (!worksheet) throw new Error(`Worksheet ${worksheetName} not found`);
-        if (!data?.students?.length) return;
+        if (validationList && validationList.includes(subjectName)) {
+          cellL10.value = subjectName;
+        } else {
+          console.warn(
+            `⚠️ "${subjectName}" not found in dropdown. Setting it anyway.`
+          );
+          cellL10.value = subjectName;
+        }
+        sheetStudents.getCell(
+          'L11'
+        ).value = `${this.account.firstName} ${this.account.lastName}`; // Teacher → L11
 
-        const startRow = 12;
-        const colMap: Record<string, number> = {
-          lastName: 2,
-          firstName: 4,
-          middleInitial: 6,
-          sex: 7,
-          wwPercentageScore: 9,
-          ptPercentageScore: 13,
-          qaPercentageScore: 17,
-          wwWeightedScore: 20,
-          ptWeightedScore: 24,
-          qaWeightedScore: 29,
-          initialGrade: 32,
-          transmutedGrade: 35,
-          description: 36,
-        };
+        let row = 17; // starting row
+        for (const student of students) {
+          sheetStudents.getCell(`D${row}`).value = student.lastName; // Last name → column D
+          sheetStudents.getCell(`F${row}`).value = student.firstName; // First name → column F
+          row++;
+        }
+      }
 
-        // ✅ Fill Subject & Teacher info
-        worksheet.getRow(6).getCell(20).value =
-          this.subjectInfo?.school_year || ''; // T
-        worksheet.getRow(6).getCell(29).value =
-          this.subjectInfo?.grade_level || ''; // AC
-        worksheet.getRow(6).getCell(35).value = this.subjectInfo?.section || ''; // AI
-        worksheet.getRow(8).getCell(17).value =
-          this.subjectInfo?.subjectName || ''; // Q
-        worksheet
-          .getRow(8)
-          .getCell(
-            31
-          ).value = `${this.account.firstName} ${this.account.lastName}`; // AE
-        worksheet.getRow(8).getCell(5).value = quarter.toUpperCase(); // E
-        worksheet
-          .getRow(102)
-          .getCell(
-            2
-          ).value = `${this.account.firstName} ${this.account.lastName}`;
+      // 🔹 Sheet[6] → First Quarter
+      const sheetQ1 = workbook.worksheets[5];
+      if (sheetQ1) fillQuarterData(sheetQ1, hps['First Quarter'], students);
 
-        // ✅ Fill student rows
-        data.students.forEach((student: any, index: number) => {
-          const row = worksheet.getRow(startRow + index);
-          row.getCell(colMap.lastName).value = student.lastName;
-          row.getCell(colMap.firstName).value = student.firstName;
-          row.getCell(colMap.middleInitial).value = student.middleInitial || '';
-          row.getCell(colMap.sex).value = student.sex || '';
-          row.getCell(colMap.wwPercentageScore).value =
-            student.wwPercentageScore;
-          row.getCell(colMap.ptPercentageScore).value =
-            student.ptPercentageScore;
-          row.getCell(colMap.qaPercentageScore).value =
-            student.qaPercentageScore;
-          row.getCell(colMap.wwWeightedScore).value = student.wwWeightedScore;
-          row.getCell(colMap.ptWeightedScore).value = student.ptWeightedScore;
-          row.getCell(colMap.qaWeightedScore).value = student.qaWeightedScore;
-          row.getCell(colMap.initialGrade).value = student.initialGrade;
-          row.getCell(colMap.transmutedGrade).value = student.transmutedGrade;
-          row.getCell(colMap.description).value = student.description || '';
-          row.commit();
-        });
-      };
+      // 🔹 Sheet[7] → Second Quarter
+      const sheetQ2 = workbook.worksheets[6];
+      if (sheetQ2) fillQuarterData(sheetQ2, hps['Second Quarter'], students);
 
-      // ✅ 4. Fill both quarter sheets
-      fillQuarterSheet(
-        'FIRST QTR GRADE SHEET',
-        firstQuarterRes,
-        'First Quarter'
-      );
-      fillQuarterSheet(
-        'SECOND QTR GRADE SHEET',
-        secondQuarterRes,
-        'Second Quarter'
+      const sheetFinal = workbook.worksheets.find(
+        (sheet) => sheet.name === 'SEMESTER FINAL GRADE'
       );
 
-      // ✅ 5. Fill Final Semester Sheet (with subject + teacher info)
-      const finalWorksheet = workbook.getWorksheet('SEMESTER FINAL GRADE');
-      if (!finalWorksheet) throw new Error('Final worksheet not found');
+      if (sheetFinal) {
+        let semesterLabel = '';
 
-      // Subject & teacher info
-      finalWorksheet.getRow(6).getCell(20).value =
-        this.subjectInfo?.school_year || ''; // T
-      finalWorksheet.getRow(6).getCell(29).value =
-        this.subjectInfo?.grade_level || ''; // AC
-      finalWorksheet.getRow(6).getCell(35).value =
-        this.subjectInfo?.section || ''; // AI
-      finalWorksheet.getRow(8).getCell(17).value =
-        this.subjectInfo?.subjectName || ''; // Q
-      finalWorksheet.getRow(8).getCell(5).value =
-        `${this.subjectInfo?.semester} FINAL GRADE` || ''; // E
-      finalWorksheet
-        .getRow(8)
-        .getCell(
-          31
-        ).value = `${this.account.firstName} ${this.account.lastName}`; // AE
-      finalWorksheet
-        .getRow(102)
-        .getCell(
-          2
-        ).value = `${this.account.firstName} ${this.account.lastName}`;
+        if (this.subjectInfo.semester === 'FIRST SEMESTER') {
+          semesterLabel = 'FIRST SEMESTER FINAL GRADE';
+        } else if (this.subjectInfo.semester === 'SECOND SEMESTER') {
+          semesterLabel = 'SECOND SEMESTER FINAL GRADE';
+        }
 
-      // ✅ Fill student grades
-      const startRow = 12;
-      this.students.forEach((student: any, index: number) => {
-        const row = finalWorksheet.getRow(startRow + index);
-        row.getCell(2).value = student.lastName;
-        row.getCell(4).value = student.firstName;
-        row.getCell(5).value = student.middleInitial || '';
-        row.getCell(6).value = student.sex || '';
-        row.getCell(10).value = student.firstQuarter;
-        row.getCell(18).value = student.secondQuarter;
-        row.getCell(24).value = student.average;
-        row.getCell(29).value = student.average;
-        row.getCell(32).value = student.remarks || '';
-        row.getCell(36).value = student.description || '';
-        row.commit();
-      });
+        sheetFinal.getCell('E8').value = semesterLabel;
+      }
 
-      // ✅ 6. Save Excel file
+      // 🔹 Save
       const buffer = await workbook.xlsx.writeBuffer();
-      FileSaver.saveAs(
-        new Blob([buffer], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        }),
-        `Final Semester - ${this.subjectInfo?.subjectName} ${this.subjectInfo?.section}.xlsx`
-      );
-    } catch (error) {
-      console.error('Export to Excel failed:', error);
-      alert('Export failed. Check console.');
+      const fileName = `GRADES FOR K TO 12 ${this.subjectInfo.subjectName}.xlsx`;
+      FileSaver.saveAs(new Blob([buffer]), fileName);
+    } catch (err: any) {
+      console.error('💥 Export failed:', err);
+      alert(err.message || 'Export failed');
     } finally {
       this.loading = false;
+    }
+
+    // 🧩 Helper for each quarter
+    function fillQuarterData(sheet, quarterData, students) {
+      if (!quarterData) return;
+
+      const rowHps = 13;
+      const wwCols = 7; // G
+      const ptCols = 20; // T
+
+      // HPS
+      quarterData.writtenWorks.forEach((q, i) => {
+        sheet.getCell(rowHps, wwCols + i).value = q.hps;
+      });
+      quarterData.performanceTasks.forEach((q, i) => {
+        sheet.getCell(rowHps, ptCols + i).value = q.hps;
+      });
+      if (quarterData.quarterlyAssessments[0]) {
+        sheet.getCell('AG13').value = quarterData.quarterlyAssessments[0].hps;
+      }
+
+      // Students
+      let row = 14;
+      for (const student of students) {
+        // sheet.getCell(`C${row}`).value = student.lastName;
+        // sheet.getCell(`E${row}`).value = student.firstName;
+
+        quarterData.writtenWorks.forEach((q, i) => {
+          sheet.getCell(row, wwCols + i).value = student.scores[q.id] ?? '';
+        });
+        quarterData.performanceTasks.forEach((q, i) => {
+          sheet.getCell(row, ptCols + i).value = student.scores[q.id] ?? '';
+        });
+        if (quarterData.quarterlyAssessments[0]) {
+          const qaId = quarterData.quarterlyAssessments[0].id;
+          sheet.getCell(`AG${row}`).value = student.scores[qaId] ?? '';
+        }
+
+        row++;
+      }
     }
   }
 }

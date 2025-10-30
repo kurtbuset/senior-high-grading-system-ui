@@ -36,4 +36,8 @@ export class StudentService {
   getStudentInfo(id: number){
     return this.http.get<any>(`${studentUrl}/${id}`)
   }
+
+  getAllStudents(){
+    return this.http.get<any>(`${studentUrl}`)
+  }
 }

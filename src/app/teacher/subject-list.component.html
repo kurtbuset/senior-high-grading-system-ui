@@ -22,7 +22,7 @@
       <th style="width: 5%">Level</th>
       <th style="width: 10%">Section</th>
       <th style="width: 10%">Semester</th>
-      <th style="width: 15%">Actions</th>
+      <th style="width: 10%">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -35,12 +35,12 @@
       <td>{{ a.semester }}</td>
       <td>
         <div class="d-flex p-1">
-          <a [routerLink]="['./', a.id]" class="btn btn-sm btn-primary mx-2"
-            >Compute Grades</a
+          <a [routerLink]="['./', a.id]" class="btn btn-sm btn-outline-primary mx-2"
+            >View</a
           >
-          <a [routerLink]="['./students', a.id]" class="btn btn-sm btn-success"
+          <!-- <a [routerLink]="['./students', a.id]" class="btn btn-sm btn-success"
             >Assign Students</a
-          >
+          > -->
         </div>
       </td>
     </tr>
