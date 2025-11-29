@@ -13,6 +13,9 @@ import { FormsModule } from '@angular/forms'; // ⬅️ add this
   imports: [CommonModule, FormsModule], // ⬅️ include FormsModule
 })
 export class SubjectListComponent implements OnInit {
+  semesterFilter: string = '';
+  quarterFilter: string = '';
+
   history: any[] = [];
   groupedHistory: any[] = [];
   filteredHistory: any[] = []; // ⬅️ for search results
@@ -40,6 +43,41 @@ export class SubjectListComponent implements OnInit {
     });
 
     this.fetchHistory();
+  }
+
+  applyFilters() {
+    const term = this.searchTerm.toLowerCase().trim();
+
+    this.filteredHistory = this.groupedHistory
+      .map((group) => {
+        // Filter quarters by selected quarter
+        let quarters = group.quarters;
+        if (this.quarterFilter) {
+          quarters = quarters.filter((q) => q.quarter === this.quarterFilter);
+        }
+
+        // Only return group if it has matching quarters
+        if (quarters.length === 0) return null;
+
+        return {
+          ...group,
+          quarters,
+        };
+      })
+      .filter((g) => g !== null) // remove empty groups
+      .filter((g) => {
+        // Filter by semester
+        if (this.semesterFilter && g.semester !== this.semesterFilter)
+          return false;
+
+        // Search filter
+        return (
+          !term ||
+          g.subject_name?.toLowerCase().includes(term) ||
+          g.semester?.toLowerCase().includes(term) ||
+          g.teacher_name?.toLowerCase().includes(term)
+        );
+      });
   }
 
   private fetchHistory() {
@@ -81,6 +119,7 @@ export class SubjectListComponent implements OnInit {
         lock_status: rec.lock_status,
         reason_to_unlock: rec.reason_to_unlock,
         locked_batches: rec.locked_batches || [],
+        expanded: false,
       });
     }
 
@@ -92,10 +131,11 @@ export class SubjectListComponent implements OnInit {
     const term = this.searchTerm.toLowerCase().trim();
     this.filteredHistory = !term
       ? this.groupedHistory
-      : this.groupedHistory.filter((g) =>
-          g.subject_name?.toLowerCase().includes(term) ||
-          g.semester?.toLowerCase().includes(term) ||
-          g.teacher_name?.toLowerCase().includes(term)
+      : this.groupedHistory.filter(
+          (g) =>
+            g.subject_name?.toLowerCase().includes(term) ||
+            g.semester?.toLowerCase().includes(term) ||
+            g.teacher_name?.toLowerCase().includes(term)
         );
   }
 

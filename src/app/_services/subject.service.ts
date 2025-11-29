@@ -73,7 +73,8 @@ export class SubjectService {
   }
 
   deleteSubject(curriculumSubjectId: number) {
-    return this.http.delete(`${baseUrl}/curriculum-subjects/${curriculumSubjectId}`);
+    return this.http.delete(
+      `${baseUrl}/curriculum-subjects/${curriculumSubjectId}`
+    );
   }
-
 }

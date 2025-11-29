@@ -1,7 +1,7 @@
 <div class="w-100 d-flex justify-content-end my-3">
-  <!-- If NOT locked and NOT pending → show Lock button -->
+  <!-- If NOT locked AND NOT pending → show Lock button -->
   <button
-    *ngIf="lockStatus !== 'LOCKED'"
+    *ngIf="lockStatus !== 'LOCKED' && lockStatus !== 'PENDING'"
     class="btn btn-sml btn-danger ml-3"
     (click)="openLockModal()"
     [disabled]="loading"
@@ -9,7 +9,7 @@
     Lock Grades
   </button>
 
-  <!-- If LOCKED → hide Request Unlock -->
+  <!-- If LOCKED → show Unlock button -->
   <button
     *ngIf="lockStatus === 'LOCKED'"
     class="btn btn-sml btn-primary ml-3"
@@ -18,8 +18,16 @@
   >
     Unlock Grades
   </button>
-</div>
 
+  <!-- If PENDING → show Pending button (disabled) -->
+  <button
+    *ngIf="lockStatus === 'PENDING'"
+    class="btn btn-sml btn-warning ml-3"
+    disabled
+  >
+    Pending Approval
+  </button>
+</div>
 
 <!-- Request Unlock Modal -->
 <div
@@ -33,32 +41,50 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Unlock Grades</h3>
+        <h3 class="modal-title mb-0">Request to Unlock Grades</h3>
       </div>
+
       <div class="modal-body">
-        <p>Are you sure you want to unlock grades for {{quarter}}?</p>
+        <p>
+          Please provide a brief explanation why you want to unlock
+          <strong>{{ quarter }}</strong> grades:
+        </p>
+
+        <textarea
+          [(ngModel)]="unlockReason"
+          class="form-control"
+          rows="4"
+          placeholder="Enter your reason here..."
+        ></textarea>
       </div>
+
       <div class="modal-footer">
         <button
           type="button"
           class="btn btn-secondary"
           (click)="closeUnlockModal()"
         >
-          No
+          Cancel
         </button>
-        <button type="button" class="btn btn-success" (click)="submitUnlockRequest()">
-          Yes
+
+        <button
+          type="button"
+          class="btn btn-success"
+          [disabled]="loading || !unlockReason.trim()"
+          (click)="submitUnlockRequest()"
+        >
+          Submit Request
         </button>
       </div>
     </div>
   </div>
 </div>
+
 <div
   class="modal-backdrop fade"
   [ngClass]="{ show: showUnlockModal }"
   *ngIf="showUnlockModal"
 ></div>
-
 
 <div
   class="modal fade"
@@ -74,7 +100,7 @@
         <h3 class="modal-title">Lock Grades</h3>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to lock grades for {{quarter}}?</p>
+        <p>Are you sure you want to lock grades for {{ quarter }}?</p>
       </div>
       <div class="modal-footer">
         <button
@@ -96,8 +122,6 @@
   [ngClass]="{ show: showLockModal }"
   *ngIf="showLockModal"
 ></div>
-
-
 
 <table class="table table-bordered table-hover table-sm">
   <thead>

@@ -2,13 +2,13 @@
   <div class="mb-3 d-flex justify-content-between">
     <h3 class="mb-4y">Locked Subjects History</h3>
 
-      <input
-        type="text"
-        class="form-control w-25"
-        placeholder="Search..."
-        [(ngModel)]="searchTerm"
-        (input)="onSearch()"
-      />
+    <input
+      type="text"
+      class="form-control w-25"
+      placeholder="Search..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+    />
   </div>
 
   <!-- Loading Spinner -->
@@ -18,59 +18,90 @@
   </div>
 
   <!-- No Records -->
-  <div
-    *ngIf="!loading && filteredHistory.length === 0"
-    class="text-center my-5"
-  >
-    <p class="text-muted">✅ No locked subjects found for this homeroom.</p>
-  </div>
 
-  <div
-    class="table-responsive shadow-sm rounded"
-    *ngIf="!loading && filteredHistory.length > 0"
-  >
+  <div class="table-responsive shadow-sm rounded">
     <table class="table table-hover align-middle">
-      <thead class="table-primary text-center">
+      <thead class="table-primary text-center align-middle">
         <tr>
-          <!-- <th style="width: 5%">#</th> -->
-          <th style="width: 35%">Subject Name</th>
-          <th style="width: 15%">Semester</th>
-          <th style="width: 30%">Quarters</th>
+          <th style="width: 25%">Subject Name</th>
+
+          <!-- Semester Filter -->
+          <th style="width: 15%">
+            <div class="fw-semibold mb-1">Semester</div>
+
+            <select
+              class="form-select form-select-sm rounded-pill text-center"
+              [(ngModel)]="semesterFilter"
+              (change)="applyFilters()"
+              style="min-width: 140px"
+            >
+              <option value="">All Semesters</option>
+              <option value="FIRST SEMESTER">First Semester</option>
+              <option value="SECOND SEMESTER">Second Semester</option>
+            </select>
+          </th>
+
+          <!-- Quarter Filter -->
+          <th style="width: 15%">
+            <div class="fw-semibold mb-1">Quarter</div>
+
+            <select
+              class="form-select form-select-sm rounded-pill text-center"
+              [(ngModel)]="quarterFilter"
+              (change)="applyFilters()"
+              style="min-width: 140px"
+            >
+              <option value="">All Quarters</option>
+              <option value="First Quarter">1st Quarter</option>
+              <option value="Second Quarter">2nd Quarter</option>
+            </select>
+          </th>
+
+          <!-- Status Column -->
+          <th style="width: 15%">Status</th>
+
+          <!-- Teacher Column -->
           <th style="width: 20%">Teacher</th>
         </tr>
       </thead>
+
+      <tbody
+        *ngIf="!loading && filteredHistory.length === 0"
+        class="text-center my-5"
+      >
+        <tr>
+          <td colspan="5" class="text-center py-4">
+            <span class="text-muted fs-5">
+              No locked subjects found for this homeroom.
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
       <tbody>
-        <ng-container *ngFor="let group of filteredHistory; let i = index">
-          <tr
-            (click)="group.expanded = !group.expanded"
-            class="table-light"
-            style="cursor: pointer"
-          >
-            <!-- <td class="text-center">{{ i + 1 }}</td> -->
-            <td class="fw-bold">{{ group.subject_name }}</td>
-            <td class="text-center">{{ group.semester }}</td>
-            <td class="text-center align-middle">
-              <div class="d-flex justify-content-center flex-wrap">
-                <span
-                  *ngFor="let q of group.quarters"
-                  class="badge bg-info text-dark me-1 mb-1"
-                >
-                  {{ q.quarter }}
+        <ng-container *ngFor="let group of filteredHistory">
+          <ng-container *ngFor="let quarter of group.quarters">
+            <!-- CLICK ROW TO TOGGLE STUDENT GRADES -->
+            <tr
+              class="table-light"
+              (click)="quarter.expanded = !quarter.expanded"
+              style="cursor: pointer"
+            >
+              <td class="fw-bold">{{ group.subject_name }}</td>
+              <td class="text-center">{{ group.semester }}</td>
+
+              <!-- Quarter Badge -->
+              <td class="text-center">
+                <span class="badge bg-info text-dark">
+                  {{ quarter.quarter }}
                 </span>
-              </div>
-            </td>
+              </td>
 
-            <td class="text-center">{{ group.teacher_name }}</td>
-          </tr>
-
-          <!-- Expand Quarters -->
-          <tr *ngIf="group.expanded">
-            <td colspan="5" class="p-3">
-              <div *ngFor="let quarter of group.quarters" class="mb-4">
-                <h6 class="fw-bold text-primary d-flex align-items-center">
-                  📖 {{ quarter.quarter }}
+              <!-- STATUS COLUMN -->
+              <td class="text-center">
+                <div>
                   <span
-                    class="badge ms-2"
+                    class="badge"
                     [ngClass]="{
                       'bg-danger': quarter.lock_status === 'LOCKED',
                       'bg-warning text-dark': quarter.lock_status === 'PENDING',
@@ -79,66 +110,72 @@
                   >
                     {{ quarter.lock_status }}
                   </span>
+                </div>
 
-                  <!-- View Request Button for Registrar -->
-                  <button
-                    *ngIf="
-                      quarter.lock_status === 'PENDING' &&
-                      account.role === 'Registrar'
-                    "
-                    class="btn btn-sm btn-warning ms-2"
-                    (click)="openRequestModal(group, quarter)"
-                  >
-                    View Request
-                  </button>
+                <!-- View Request Button -->
+                <button
+                  *ngIf="quarter.lock_status === 'PENDING'"
+                  class="btn btn-sm btn-outline-primary mt-2"
+                  (click)="
+                    openRequestModal(group, quarter); $event.stopPropagation()
+                  "
+                >
+                  View Request
+                </button>
+              </td>
+
+              <td class="text-center">{{ group.teacher_name }}</td>
+            </tr>
+
+            <!-- EXPANDED STUDENT GRADE LIST -->
+            <tr *ngIf="quarter.expanded">
+              <td colspan="5" class="p-3">
+                <h6 class="fw-bold mb-3">
+                  Final Grades — {{ quarter.quarter }}
                 </h6>
 
-                <!-- Locked Batches -->
-                <div class="d-flex flex-wrap gap-3">
+                <div
+                  *ngIf="quarter.locked_batches.length === 0"
+                  class="text-muted fst-italic"
+                >
+                  No locked batch recorded for this quarter.
+                </div>
+
+                <div class="d-flex flex-wrap gap-5">
                   <div
                     *ngFor="let batch of quarter.locked_batches"
-                    class="card border-primary shadow-sm flex-fill"
-                    style="min-width: 280px; max-width: 350px"
+                    class="p-3 border rounded shadow-sm bg-light"
+                    style="flex: 1 1 calc(33.333% - 1rem); min-width: 280px"
                   >
-                    <div class="card-header bg-primary text-white py-2">
-                      <strong>
-                        📅 Locked at:
-                        {{ batch.locked_at | date : "MMM d, y h:mm a" }}
-                      </strong>
+                    <div class="fw-bold mb-2">
+                      🔒 Locked At:
+                      {{ batch.locked_at | date : "MMM d, y h:mm a" }}
                     </div>
-                    <div class="card-body p-0">
-                      <table class="table table-bordered table-sm mb-0">
-                        <thead class="table-light">
-                          <tr>
-                            <th style="width: 70%">Student Name</th>
-                            <th style="width: 30%">Final Grade</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let student of batch.students">
-                            <td>
-                              {{ student.lastName }}, {{ student.firstName }}
-                            </td>
-                            <td class="text-center fw-bold">
-                              <span
-                                class="badge"
-                                [ngClass]="{
-                                  'bg-success': student.final_grade >= 75,
-                                  'bg-danger': student.final_grade < 75
-                                }"
-                              >
-                                {{ student.final_grade }}
-                              </span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+
+                    <div class="d-flex flex-column gap-2">
+                      <div
+                        *ngFor="let student of batch.students"
+                        class="p-2 border rounded bg-white d-flex justify-content-between align-items-center"
+                      >
+                        <div class="fw-bold">
+                          {{ student.lastName }}, {{ student.firstName }}
+                        </div>
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'bg-success': student.final_grade >= 75,
+                            'bg-danger': student.final_grade < 75
+                          }"
+                        >
+                          {{ student.final_grade }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </ng-container>
         </ng-container>
       </tbody>
     </table>

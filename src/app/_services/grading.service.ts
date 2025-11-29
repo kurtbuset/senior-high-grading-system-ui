@@ -21,70 +21,82 @@ export class GradingService {
     return this.http.post(`${baseUrl}/quizzes`, value);
   }
 
-  getQuizzes(
+  getQuizzes(teacher_subject_id: string, values) {
+    return this.http.get<any>(`${baseUrl}/quizzes/${teacher_subject_id}`, {
+      params: values,
+    });
+  }
+
+  updateQuiz(id, params) {
+    return this.http.put(`${baseUrl}/quizzes/${id}`, params);
+  }
+
+  getStudentsWithoutScore(params: {
+    teacher_subject_id: string;
+    quiz_id: string;
+  }) {
+    return this.http.get(`${baseUrl}/quiz-scores`, { params });
+  }
+
+  getStudentsWithScore(id: number) {
+    return this.http.get(`${baseUrl}/quiz-scores/${id}`);
+  }
+
+  addStudentScore(params) {
+    return this.http.post(`${baseUrl}/quiz-scores`, params);
+  }
+
+  updateStudentScore(params) {
+    return this.http.put(`${baseUrl}/quiz-scores/update`, params);
+  }
+
+  addTransmutedGrade(params) {
+    return this.http.post(`${baseUrl}/final-grades`, params);
+  }
+
+  getQuarterlyGradeSheet(id: string, params: { quarter: string }) {
+    return this.http.get<any>(
+      `${baseUrl}/quizzes/quarterly-grade-sheet/${id}`,
+      { params }
+    );
+  }
+
+  getStudentsAndRawScores(id: string) {
+    return this.http.get<any>(
+      `${baseUrl}/quiz-scores/student-raw-scores/${id}`
+    );
+  }
+
+  getFinalSemesterGradeSheet(id: string) {
+    return this.http.get(`${baseUrl}/quizzes/semestral-final-grade/${id}`);
+  }
+
+  deleteQuiz(id) {
+    return this.http.delete(`${baseUrl}/quizzes/${id}`);
+  }
+
+  getSubjectsLockingHistory(id: number) {
+    return this.http.get<any>(`${baseUrl}/final-grades/${id}`);
+  }
+
+  lockSubject(params: { teacher_subject_id: string; quarter: string }) {
+    return this.http.post(`${baseUrl}/subject-quarter-locks`, params);
+  }
+
+  requestToUnlock(teacher_subject_id: string, payload: { quarter: string; reason_to_unlock: string }) {
+    return this.http.put(
+      `${baseUrl}/subject-quarter-locks/request/${teacher_subject_id}`,
+      payload
+    );
+  }
+
+  updateSubjectStatus(
     teacher_subject_id: string,
-    values
+    payload: { status: string; quarter: string }
   ) {
-    return this.http.get<any>(`${baseUrl}/quizzes/${teacher_subject_id}`, { params: values });
+    return this.http.put(
+      `${baseUrl}/subject-quarter-locks/${teacher_subject_id}`,
+      payload
+    );
   }
-
-  updateQuiz(id, params){
-    return this.http.put(`${baseUrl}/quizzes/${id}`, params)
-  }
-
-  getStudentsWithoutScore(params: { teacher_subject_id: string; quiz_id: string }){
-    return this.http.get(`${baseUrl}/quiz-scores`, { params })
-  }
-
-  getStudentsWithScore(id: number){
-    return this.http.get(`${baseUrl}/quiz-scores/${id}`)
-  }
-
-  addStudentScore(params){
-    return this.http.post(`${baseUrl}/quiz-scores`, params)
-  }
-
-  updateStudentScore(params){
-    return this.http.put(`${baseUrl}/quiz-scores/update`, params)
-  }
-
-  addTransmutedGrade(params){
-    return this.http.post(`${baseUrl}/final-grades`, params)
-  }
-
-  getQuarterlyGradeSheet(id: string, params: { quarter: string }){
-    return this.http.get<any>(`${baseUrl}/quizzes/quarterly-grade-sheet/${id}`, { params } )
-  }
-
-  getStudentsAndRawScores(id: string){
-    return this.http.get<any>(`${baseUrl}/quiz-scores/student-raw-scores/${id}`)
-  }
-
-  getFinalSemesterGradeSheet(id: string){
-    return this.http.get(`${baseUrl}/quizzes/semestral-final-grade/${id}`)
-  }
-
-  deleteQuiz(id){
-    return this.http.delete(`${baseUrl}/quizzes/${id}`)
-  }
-
-  getSubjectsLockingHistory(id: number){
-    return this.http.get<any>(`${baseUrl}/final-grades/${id}`)
-  }
-
-  lockSubject(params: { teacher_subject_id: string, quarter: string}){
-    return this.http.post(`${baseUrl}/subject-quarter-locks`, params)
-  }
-
-  requestToUnlock(teacher_subject_id: string, payload: { quarter: string }){
-    return this.http.put(`${baseUrl}/subject-quarter-locks/request/${teacher_subject_id}`, payload)
-  }
-
-  updateSubjectStatus(teacher_subject_id: string, payload: { status: string, quarter: string }) {
-  return this.http.put(
-    `${baseUrl}/subject-quarter-locks/${teacher_subject_id}`,
-    payload
-  );
-}
-
 }

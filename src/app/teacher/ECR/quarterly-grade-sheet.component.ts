@@ -126,27 +126,33 @@ export class QuarterlyGradeSheetComponent implements OnInit {
   }
 
   submitUnlockRequest(): void {
+    if (!this.unlockReason.trim()) {
+      this.alertService.error('Reason is required.');
+      return;
+    }
+
     this.loading = true;
+
     this.gradingService
       .requestToUnlock(this.teacherSubjectId, {
         quarter: this.quarter,
+        reason_to_unlock: this.unlockReason,
       })
       .pipe(first())
       .subscribe({
         next: () => {
           this.alertService.success(
-            'Unlocking Grades successfully!'
+            'Your unlock request has been submitted and is now pending.'
           );
           this.closeUnlockModal();
-          this.ngOnInit();
+          this.loadQuarterData();
           this.loading = false;
         },
         error: (err) => {
           console.error(err);
-          this.alertService.error('Failed to submit request.');
+          this.alertService.error('Failed to submit unlock request.');
           this.loading = false;
         },
       });
   }
-
 }
